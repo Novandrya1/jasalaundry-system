@@ -73,3 +73,5 @@ git remote set-url origin git@github.com:Novandrya1/jasalaundry-system.git
 ---
 
 **Happy Coding! 🎉**
+
+<!-- SSH Test: Script sudah siap digunakan -->
