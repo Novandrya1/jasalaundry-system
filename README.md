@@ -69,7 +69,7 @@ Edit file `.env`:
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=ta_laundry
+DB_DATABASE=laundry_db
 DB_USERNAME=root
 DB_PASSWORD=
 ```
@@ -196,9 +196,9 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 📞 Contact
 
-**Developer:** [Your Name]
-- Email: your.email@example.com
-- GitHub: [@yourusername](https://github.com/yourusername)
+**Developer:** Novandrya Ramadhan
+- Email: novandriy4@gmail.com
+- GitHub: [@novandrya1](https://github.com/jasalaundry-system)
 
 ## 🙏 Acknowledgments
 
