@@ -26,6 +26,7 @@ Route::middleware(['auth', 'role:pelanggan'])->group(function () {
     Route::get('/order', [PelangganController::class, 'showOrderForm'])->name('pelanggan.order');
     Route::post('/order', [PelangganController::class, 'storeOrder'])->name('pelanggan.order.store');
     Route::get('/riwayat-saya', [PelangganController::class, 'riwayat'])->name('pelanggan.riwayat');
+    Route::get('/transaksi/{transaksi}', [PelangganController::class, 'show'])->name('pelanggan.transaksi.show');
     Route::post('/klaim-promo', [PelangganController::class, 'klaimPromo'])->name('pelanggan.klaim-promo');
 });
 
@@ -49,5 +50,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 Route::middleware(['auth', 'role:kurir'])->prefix('kurir')->name('kurir.')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\KurirController::class, 'dashboard'])->name('dashboard');
     Route::get('/tugas', [\App\Http\Controllers\KurirController::class, 'tugas'])->name('tugas');
+    Route::get('/transaksi/{transaksi}', [\App\Http\Controllers\KurirController::class, 'show'])->name('transaksi.show');
     Route::patch('/transaksi/{transaksi}/status', [\App\Http\Controllers\KurirController::class, 'updateStatus'])->name('transaksi.status');
 });

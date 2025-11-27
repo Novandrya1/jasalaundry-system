@@ -49,6 +49,17 @@ class KurirController extends Controller
         return view('kurir.tugas', compact('transaksis'));
     }
     
+    public function show(Transaksi $transaksi)
+    {
+        // Pastikan transaksi ditugaskan ke kurir yang login
+        if ($transaksi->kurir_id !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki akses ke transaksi ini.');
+        }
+        
+        $transaksi->load(['user', 'kurir', 'detailTransaksis.paket', 'promoClaim.promo']);
+        return view('kurir.detail-transaksi', compact('transaksi'));
+    }
+    
     public function updateStatus(Request $request, Transaksi $transaksi)
     {
         if ($transaksi->kurir_id !== Auth::id()) {

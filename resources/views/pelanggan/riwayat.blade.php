@@ -72,6 +72,14 @@
                             </div>
                         </div>
                     @endif
+                    
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <a href="{{ route('pelanggan.transaksi.show', $transaksi) }}" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-eye"></i> Lihat Detail
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         @empty

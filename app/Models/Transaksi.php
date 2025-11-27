@@ -24,6 +24,8 @@ class Transaksi extends Model
         'alamat_jemput',
         'catatan',
         'tanggal_jemput',
+        'tanggal_proses_cuci',
+        'tanggal_siap_antar',
         'tanggal_selesai',
         'promo_claim_id',
         'diskon',
@@ -36,6 +38,8 @@ class Transaksi extends Model
             'total_harga' => 'decimal:2',
             'diskon' => 'decimal:2',
             'tanggal_jemput' => 'datetime',
+            'tanggal_proses_cuci' => 'datetime',
+            'tanggal_siap_antar' => 'datetime',
             'tanggal_selesai' => 'datetime',
         ];
     }

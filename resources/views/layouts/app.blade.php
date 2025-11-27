@@ -7,6 +7,69 @@
     <title>@yield('title', 'JasaLaundry')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        /* Mobile Responsive Fixes */
+        @media (max-width: 768px) {
+            .table-responsive {
+                font-size: 0.875rem;
+            }
+            .btn-group .btn {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.75rem;
+            }
+            .card-body {
+                padding: 1rem 0.75rem;
+            }
+            .navbar-nav .nav-link {
+                padding: 0.5rem 1rem;
+            }
+            .badge {
+                font-size: 0.7rem;
+            }
+            h1, h2 {
+                font-size: 1.5rem;
+            }
+            h3, h4 {
+                font-size: 1.25rem;
+            }
+            h5 {
+                font-size: 1.1rem;
+            }
+        }
+        
+        /* Table Mobile Optimization */
+        @media (max-width: 576px) {
+            .table-responsive table {
+                font-size: 0.75rem;
+            }
+            .table-responsive th,
+            .table-responsive td {
+                padding: 0.25rem;
+                vertical-align: middle;
+            }
+            .btn-sm {
+                padding: 0.125rem 0.25rem;
+                font-size: 0.7rem;
+            }
+        }
+        
+        /* Card Mobile Optimization */
+        .mobile-card {
+            margin-bottom: 1rem;
+        }
+        
+        @media (max-width: 576px) {
+            .mobile-card .card-body {
+                padding: 0.75rem;
+            }
+            .mobile-stack {
+                display: block !important;
+            }
+            .mobile-stack > * {
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Navbar -->
@@ -136,6 +199,13 @@
             @if(session('error'))
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="bi bi-exclamation-triangle"></i> {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
+            @if(session('info'))
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    <i class="bi bi-info-circle"></i> {{ session('info') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif

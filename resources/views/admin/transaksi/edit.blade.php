@@ -69,18 +69,26 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="berat_aktual" class="form-label">Berat Aktual (kg)</label>
+                                @php
+                                    $paket = $transaksi->detailTransaksis->first()->paket;
+                                    $isKg = $paket->satuan === 'kg';
+                                    $labelText = $isKg ? 'Berat Aktual' : 'Jumlah Aktual';
+                                    $placeholderText = $isKg ? '0.0' : '1';
+                                    $stepValue = $isKg ? '0.1' : '1';
+                                    $helpText = $isKg ? 'Masukkan berat setelah penimbangan' : 'Masukkan jumlah ' . strtolower($paket->nama_paket);
+                                @endphp
+                                <label for="berat_aktual" class="form-label">{{ $labelText }} ({{ $paket->satuan }})</label>
                                 <div class="input-group">
                                     <input type="number" class="form-control @error('berat_aktual') is-invalid @enderror" 
                                            id="berat_aktual" name="berat_aktual" 
                                            value="{{ old('berat_aktual', $transaksi->berat_aktual) }}" 
-                                           step="0.1" min="0" placeholder="0.0">
-                                    <span class="input-group-text">kg</span>
+                                           step="{{ $stepValue }}" min="0" placeholder="{{ $placeholderText }}">
+                                    <span class="input-group-text">{{ $paket->satuan }}</span>
                                     @error('berat_aktual')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <small class="text-muted">Masukkan berat setelah penimbangan</small>
+                                <small class="text-muted">{{ $helpText }}</small>
                             </div>
                         </div>
                         
@@ -173,12 +181,19 @@
                                 <div class="card-body">
                                     <h6><i class="bi bi-calculator"></i> Kalkulasi Harga</h6>
                                     <div class="row">
+                                        @php
+                                            $paket = $transaksi->detailTransaksis->first()->paket;
+                                            $isKg = $paket->satuan === 'kg';
+                                            $currentLabel = $isKg ? 'Berat Saat Ini' : 'Jumlah Saat Ini';
+                                            $priceLabel = 'Harga per ' . $paket->satuan;
+                                            $currentValue = $transaksi->berat_aktual ? $transaksi->berat_aktual . ' ' . $paket->satuan : ($isKg ? 'Belum ditimbang' : 'Belum dihitung');
+                                        @endphp
                                         <div class="col-md-4">
-                                            <strong>Berat Saat Ini:</strong> 
-                                            {{ $transaksi->berat_aktual ? $transaksi->berat_aktual . ' kg' : 'Belum ditimbang' }}
+                                            <strong>{{ $currentLabel }}:</strong> 
+                                            {{ $currentValue }}
                                         </div>
                                         <div class="col-md-4">
-                                            <strong>Harga per kg:</strong> 
+                                            <strong>{{ $priceLabel }}:</strong> 
                                             Rp {{ number_format($transaksi->detailTransaksis->first()->harga_satuan, 0, ',', '.') }}
                                         </div>
                                         <div class="col-md-4">
@@ -215,12 +230,13 @@
 @section('scripts')
 <script>
 document.getElementById('berat_aktual').addEventListener('input', function() {
-    const berat = parseFloat(this.value) || 0;
-    const hargaPerKg = {{ $transaksi->detailTransaksis->first()->harga_satuan }};
-    const total = berat * hargaPerKg;
+    const jumlah = parseFloat(this.value) || 0;
+    const hargaSatuan = {{ $transaksi->detailTransaksis->first()->harga_satuan }};
+    const total = jumlah * hargaSatuan;
+    const satuan = '{{ $transaksi->detailTransaksis->first()->paket->satuan }}';
     
     // Update tampilan kalkulasi secara real-time jika diperlukan
-    console.log('Berat:', berat, 'Total:', total);
+    console.log('Jumlah:', jumlah, satuan, 'Total:', total);
 });
 </script>
 @endsection

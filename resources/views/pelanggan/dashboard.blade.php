@@ -29,24 +29,24 @@
                     @endphp
                     <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
                         <div class="card position-relative" style="background: {{ $gradient }}; border: none; border-radius: 15px; overflow: hidden;">
-                            <div class="card-body text-white p-4" style="min-height: 180px;">
+                            <div class="card-body text-white p-3 p-md-4" style="min-height: 120px;">
                                 <div class="row h-100">
-                                    <div class="col-9">
-                                        <h3 class="mb-2"><i class="bi bi-gift"></i> {{ $promo->judul }}</h3>
-                                        <p class="mb-2">{{ $promo->deskripsi }}</p>
-                                        <div class="mb-2">
-                                            <span class="badge bg-white text-dark px-3 py-2 fs-6">
+                                    <div class="col-9 col-sm-9">
+                                        <h3 class="mb-1 mb-md-2 h5 h-md-4 h-lg-3"><i class="bi bi-gift"></i> {{ $promo->judul }}</h3>
+                                        <p class="mb-1 mb-md-2 small d-none d-sm-block">{{ $promo->deskripsi }}</p>
+                                        <div class="mb-1 mb-md-2">
+                                            <span class="badge bg-white text-dark px-2 py-1 small">
                                                 <i class="bi bi-percent"></i> Diskon {{ $promo->diskon_text }}
                                             </span>
                                         </div>
-                                        <small class="opacity-75">
-                                            <i class="bi bi-calendar"></i> Berlaku sampai {{ $promo->tanggal_selesai->format('d M Y') }}
+                                        <small class="opacity-75 d-block">
+                                            <i class="bi bi-calendar"></i> <span class="d-none d-sm-inline">Berlaku sampai</span> {{ $promo->tanggal_selesai->format('d M Y') }}
                                         </small>
                                     </div>
-                                    <div class="col-3 d-flex align-items-end justify-content-end">
-                                        <button class="btn btn-light shadow" onclick="klaimPromo({{ $promo->id }})" 
-                                                style="font-weight: 600; padding: 8px 16px;">
-                                            <i class="bi bi-hand-thumbs-up"></i> Klaim Promo
+                                    <div class="col-3 col-sm-3 d-flex align-items-center justify-content-center">
+                                        <button class="btn btn-light shadow btn-sm" onclick="klaimPromo({{ $promo->id }})" 
+                                                style="font-weight: 600; font-size: 0.75rem;">
+                                            <i class="bi bi-hand-thumbs-up"></i> <span class="d-none d-md-inline">Klaim</span>
                                         </button>
                                     </div>
                                 </div>
@@ -77,15 +77,15 @@
 
 <div class="row">
     @forelse($pakets as $paket)
-        <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card h-100 shadow-sm">
+        <div class="col-6 col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm mobile-card">
                 <div class="card-body">
-                    <h5 class="card-title text-primary">
+                    <h5 class="card-title text-primary h6 h-md-5">
                         <i class="bi bi-box"></i> {{ $paket->nama_paket }}
                     </h5>
-                    <p class="card-text">{{ $paket->deskripsi }}</p>
+                    <p class="card-text small d-none d-md-block">{{ $paket->deskripsi }}</p>
                     <div class="d-flex justify-content-between align-items-center">
-                        <span class="h5 text-success mb-0">
+                        <span class="h6 h-md-5 text-success mb-0">
                             Rp {{ number_format($paket->harga_per_kg, 0, ',', '.') }}
                         </span>
                         <small class="text-muted">per {{ $paket->satuan }}</small>
@@ -93,7 +93,7 @@
                 </div>
                 <div class="card-footer bg-transparent">
                     <a href="{{ route('pelanggan.order') }}" class="btn btn-outline-primary btn-sm w-100">
-                        <i class="bi bi-cart-plus"></i> Pilih Paket
+                        <i class="bi bi-cart-plus"></i> <span class="d-none d-sm-inline">Pilih Paket</span><span class="d-sm-none">Pilih</span>
                     </a>
                 </div>
             </div>

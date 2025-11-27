@@ -118,6 +118,17 @@ class PelangganController extends Controller
         return view('pelanggan.riwayat', compact('transaksis'));
     }
 
+    public function show(Transaksi $transaksi)
+    {
+        // Pastikan transaksi milik user yang login
+        if ($transaksi->user_id !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki akses ke transaksi ini.');
+        }
+        
+        $transaksi->load(['user', 'kurir', 'detailTransaksis.paket', 'promoClaim.promo']);
+        return view('pelanggan.detail-transaksi', compact('transaksi'));
+    }
+
     public function klaimPromo(Request $request)
     {
         $request->validate([

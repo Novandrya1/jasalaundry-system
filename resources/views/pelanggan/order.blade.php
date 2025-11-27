@@ -4,10 +4,10 @@
 
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card shadow">
+    <div class="col-12 col-md-8">
+        <div class="card shadow mobile-card">
             <div class="card-header bg-primary text-white">
-                <h4><i class="bi bi-plus-circle"></i> Pesan Laundry</h4>
+                <h4 class="h5 h-md-4"><i class="bi bi-plus-circle"></i> Pesan Laundry</h4>
             </div>
             <div class="card-body">
                 <form method="POST" action="{{ route('pelanggan.order.store') }}">
@@ -63,7 +63,7 @@
                     <div class="mb-3">
                         <label class="form-label">Metode Pembayaran</label>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-12 col-md-6 mb-2">
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="metode_bayar" id="tunai" value="tunai" {{ old('metode_bayar', 'tunai') == 'tunai' ? 'checked' : '' }}>
                                     <label class="form-check-label" for="tunai">
@@ -72,7 +72,7 @@
                                 </div>
                                 <small class="text-muted">Bayar saat pengantaran</small>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-12 col-md-6 mb-2">
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="metode_bayar" id="transfer" value="transfer" {{ old('metode_bayar') == 'transfer' ? 'checked' : '' }}>
                                     <label class="form-check-label" for="transfer">

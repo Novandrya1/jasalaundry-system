@@ -37,6 +37,12 @@ class TransaksiController extends Controller
 
     public function edit(Transaksi $transaksi)
     {
+        // Cek jika transaksi sudah selesai, redirect ke show
+        if ($transaksi->status_transaksi === 'selesai') {
+            return redirect()->route('admin.transaksi.show', $transaksi)
+                ->with('info', 'Transaksi yang sudah selesai tidak dapat diedit.');
+        }
+        
         $transaksi->load(['user', 'kurir', 'detailTransaksis.paket', 'promoClaim.promo']);
         $kurirs = User::where('role', 'kurir')->get();
         
@@ -45,6 +51,12 @@ class TransaksiController extends Controller
 
     public function update(Request $request, Transaksi $transaksi)
     {
+        // Cek jika transaksi sudah selesai, tidak boleh diupdate
+        if ($transaksi->status_transaksi === 'selesai') {
+            return redirect()->route('admin.transaksi.show', $transaksi)
+                ->with('error', 'Transaksi yang sudah selesai tidak dapat diubah.');
+        }
+        
         $request->validate([
             'berat_aktual' => 'nullable|numeric|min:0',
             'status_transaksi' => 'required|in:request_jemput,dijemput_kurir,proses_cuci,siap_antar,selesai',
@@ -57,14 +69,32 @@ class TransaksiController extends Controller
             // Update data transaksi
             $oldStatus = $transaksi->status_transaksi;
             
-            $transaksi->update([
+            $updateData = [
                 'berat_aktual' => $request->berat_aktual,
                 'status_transaksi' => $request->status_transaksi,
                 'status_bayar' => $request->status_bayar,
                 'kurir_id' => $request->kurir_id,
-                'tanggal_jemput' => $request->status_transaksi === 'dijemput_kurir' ? now() : $transaksi->tanggal_jemput,
-                'tanggal_selesai' => $request->status_transaksi === 'selesai' ? now() : $transaksi->tanggal_selesai,
-            ]);
+            ];
+            
+            // Set timestamp berdasarkan status yang berubah
+            if ($oldStatus !== $request->status_transaksi) {
+                switch ($request->status_transaksi) {
+                    case 'dijemput_kurir':
+                        $updateData['tanggal_jemput'] = now();
+                        break;
+                    case 'proses_cuci':
+                        $updateData['tanggal_proses_cuci'] = now();
+                        break;
+                    case 'siap_antar':
+                        $updateData['tanggal_siap_antar'] = now();
+                        break;
+                    case 'selesai':
+                        $updateData['tanggal_selesai'] = now();
+                        break;
+                }
+            }
+            
+            $transaksi->update($updateData);
 
             // Hitung ulang total harga jika berat aktual diubah
             if ($request->berat_aktual) {
