@@ -48,7 +48,7 @@ Aplikasi web untuk mengelola layanan laundry antar-jemput dengan sistem multi-ro
 
 ### 1. Clone Repository
 ```bash
-git clone https://github.com/username/ta-laundry.git
+git clone https://github.com/yourusername/ta-laundry.git
 cd ta-laundry
 ```
 
@@ -69,7 +69,7 @@ Edit file `.env`:
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=laundry_db
+DB_DATABASE=ta_laundry
 DB_USERNAME=root
 DB_PASSWORD=
 ```
@@ -79,38 +79,32 @@ DB_PASSWORD=
 php artisan migrate
 ```
 
-### 6. Seeder (Opsional)
+### 6. Create Admin User (Manual)
+Daftar manual di `/register` atau buat via tinker:
 ```bash
-php artisan db:seed
+php artisan tinker
+User::create(['name'=>'Admin','email'=>'admin@jasalaundry.com','password'=>bcrypt('password'),'role'=>'admin','phone'=>'628123456789','address'=>'Alamat Admin']);
 ```
 
-### 7. Storage Link
-```bash
-php artisan storage:link
-```
-
-### 8. Run Application
+### 7. Run Application
 ```bash
 php artisan serve
 ```
 
 Akses aplikasi di: `http://localhost:8000`
 
-## 👥 Default Users
+## 👥 Akun Demo
 
-Setelah seeding, gunakan akun berikut:
+Buat akun manual atau gunakan registrasi:
 
-### Admin
+### Admin (Buat Manual)
 - **Email:** admin@jasalaundry.com
 - **Password:** password
+- **Role:** admin
 
-### Kurir
-- **Email:** kurir@jasalaundry.com
-- **Password:** password
-
-### Pelanggan
-- **Email:** pelanggan@jasalaundry.com
-- **Password:** password
+### Kurir & Pelanggan
+- Daftar melalui `/register`
+- Admin dapat mengubah role kurir di menu "Kelola Kurir"
 
 ## 📱 Fitur WhatsApp Integration
 
@@ -196,9 +190,9 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 📞 Contact
 
-**Developer:** Novandrya Ramadhan
+**Developer:** Novandrya
 - Email: novandriy4@gmail.com
-- GitHub: [@novandrya1](https://github.com/jasalaundry-system)
+- GitHub: [@novandrya1](https://github.com/novandrya1)
 
 ## 🙏 Acknowledgments
 
