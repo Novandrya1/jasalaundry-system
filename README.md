@@ -201,6 +201,3 @@ Distributed under the MIT License. See `LICENSE` for more information.
 - [Chart.js](https://www.chartjs.org/) - Charts Library
 - [Bootstrap Icons](https://icons.getbootstrap.com/) - Icon Library
 
----
-
-⭐ **Star this repository if you find it helpful!**
