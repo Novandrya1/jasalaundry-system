@@ -8,8 +8,11 @@
         <h2><i class="bi bi-clock-history"></i> Riwayat & Laporan</h2>
         <p class="text-muted">Lihat semua transaksi dan buat laporan</p>
         @if(!request('tanggal_mulai') && !request('tanggal_selesai'))
-            <div class="alert alert-info">
-                <i class="bi bi-info-circle"></i> Menampilkan transaksi hari ini. Gunakan filter tanggal untuk melihat riwayat hari lain.
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <i class="bi bi-info-circle"></i> 
+                <strong>Info:</strong> Menampilkan transaksi hari ini ({{ date('d/m/Y') }}). 
+                Gunakan filter tanggal atau tombol shortcut di bawah untuk melihat riwayat periode lain.
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
     </div>
@@ -18,50 +21,50 @@
 <!-- Analytics Dashboard -->
 <div class="row mb-4">
     <div class="col-md-3 mb-3">
-        <div class="card bg-primary text-white">
+        <div class="card border-primary" style="border-width: 2px !important;">
             <div class="card-body d-flex align-items-center">
                 <div class="flex-grow-1">
-                    <h4>{{ $totalTransaksi }}</h4>
-                    <p class="mb-0">Total Transaksi</p>
+                    <h4 class="text-primary fw-bold mb-1">{{ $totalTransaksi }}</h4>
+                    <p class="mb-0 text-muted">Total Transaksi</p>
                 </div>
                 <div class="ms-3">
-                    <i class="bi bi-receipt fs-1"></i>
+                    <i class="bi bi-receipt fs-1 text-primary"></i>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-md-3 mb-3">
-        <div class="card bg-success text-white">
+        <div class="card border-success" style="border-width: 2px !important;">
             <div class="card-body d-flex align-items-center">
                 <div class="flex-grow-1">
-                    <h4>Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</h4>
-                    <p class="mb-0">Total Pendapatan</p>
+                    <h4 class="text-success fw-bold mb-1">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</h4>
+                    <p class="mb-0 text-muted">Total Pendapatan</p>
                 </div>
                 <div class="ms-3">
-                    <i class="bi bi-currency-dollar fs-1"></i>
+                    <i class="bi bi-currency-dollar fs-1 text-success"></i>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-md-3 mb-3">
-        <div class="card bg-info text-white">
+        <div class="card border-info" style="border-width: 2px !important;">
             <div class="card-body d-flex align-items-center">
                 <div class="flex-grow-1">
-                    <h4>Rp {{ number_format($pendapatanBulanIni, 0, ',', '.') }}</h4>
-                    <p class="mb-0">Bulan Ini</p>
+                    <h4 class="text-info fw-bold mb-1">Rp {{ number_format($pendapatanBulanIni, 0, ',', '.') }}</h4>
+                    <p class="mb-0 text-muted">Bulan Ini</p>
                 </div>
                 <div class="ms-3">
-                    <i class="bi bi-calendar-month fs-1"></i>
+                    <i class="bi bi-calendar-month fs-1 text-info"></i>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-md-3 mb-3">
-        <div class="card bg-warning text-white">
+        <div class="card border-warning" style="border-width: 2px !important;">
             <div class="card-body d-flex align-items-center">
                 <div class="flex-grow-1">
-                    <h4>Rp {{ number_format($rataRataHarian, 0, ',', '.') }}</h4>
-                    <p class="mb-0">
+                    <h4 class="text-warning fw-bold mb-1">Rp {{ number_format($rataRataHarian, 0, ',', '.') }}</h4>
+                    <p class="mb-0 text-muted">
                         @if(request('tanggal_mulai') && request('tanggal_selesai'))
                             Rata-rata/Hari
                         @else
@@ -70,7 +73,7 @@
                     </p>
                 </div>
                 <div class="ms-3">
-                    <i class="bi bi-graph-up fs-1"></i>
+                    <i class="bi bi-graph-up fs-1 text-warning"></i>
                 </div>
             </div>
         </div>
@@ -246,6 +249,20 @@ function cetakLaporan() {
 <div class="row">
     <div class="col-12">
         <div class="card shadow">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-list-ul"></i> 
+                    @if(!request('tanggal_mulai') && !request('tanggal_selesai'))
+                        Transaksi Hari Ini ({{ date('d/m/Y') }})
+                    @elseif(request('tanggal_mulai') && request('tanggal_selesai') && request('tanggal_mulai') == request('tanggal_selesai'))
+                        Transaksi {{ date('d/m/Y', strtotime(request('tanggal_mulai'))) }}
+                    @elseif(request('tanggal_mulai') && request('tanggal_selesai'))
+                        Transaksi {{ date('d/m/Y', strtotime(request('tanggal_mulai'))) }} - {{ date('d/m/Y', strtotime(request('tanggal_selesai'))) }}
+                    @else
+                        Daftar Transaksi
+                    @endif
+                </h5>
+            </div>
             <div class="card-body">
 
                 @if($transaksis->count() > 0)
@@ -331,10 +348,27 @@ function cetakLaporan() {
                         </div>
                     @endif
                 @else
-                    <div class="text-center py-5">
-                        <i class="bi bi-inbox fs-1 text-muted"></i>
-                        <h5 class="text-muted mt-2">Tidak ada data</h5>
-                        <p class="text-muted">Tidak ada transaksi yang sesuai dengan filter</p>
+                    <div class="text-center py-5" style="background-color: #f8f9fa; border-radius: 8px; border: 2px dashed #dee2e6;">
+                        <i class="bi bi-calendar-x fs-1" style="color: #6c757d;"></i>
+                        <h5 class="mt-3" style="color: #495057; font-weight: 600;">Tidak ada transaksi hari ini</h5>
+                        <p class="mb-4" style="color: #6c757d;">
+                            @if(!request('tanggal_mulai') && !request('tanggal_selesai'))
+                                Belum ada transaksi untuk hari ini ({{ date('d/m/Y') }})
+                            @else
+                                Tidak ada transaksi pada periode yang dipilih
+                            @endif
+                        </p>
+                        <div class="d-flex gap-2 justify-content-center flex-wrap">
+                            <a href="{{ route('admin.riwayat.index', ['tanggal_mulai' => date('Y-m-d', strtotime('-1 day')), 'tanggal_selesai' => date('Y-m-d', strtotime('-1 day'))]) }}" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-calendar-minus"></i> Lihat Kemarin
+                            </a>
+                            <a href="{{ route('admin.riwayat.index', ['tanggal_mulai' => date('Y-m-01'), 'tanggal_selesai' => date('Y-m-d')]) }}" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-calendar-month"></i> Lihat Bulan Ini
+                            </a>
+                            <a href="{{ route('admin.riwayat.index', ['tanggal_mulai' => date('Y-m-d', strtotime('-7 days')), 'tanggal_selesai' => date('Y-m-d')]) }}" class="btn btn-outline-success btn-sm">
+                                <i class="bi bi-calendar-week"></i> 7 Hari Terakhir
+                            </a>
+                        </div>
                     </div>
                 @endif
             </div>
@@ -351,23 +385,26 @@ console.log('Chart Data:', {!! json_encode($chartData) !!});
 console.log('Status Labels:', {!! json_encode($statusLabels) !!});
 console.log('Status Data:', {!! json_encode($statusData) !!});
 
-// Grafik Pendapatan 7 Hari Terakhir
+// Grafik Pendapatan
 const pendapatanCtx = document.getElementById('pendapatanChart').getContext('2d');
+const chartData = {!! json_encode($chartData) !!};
+const hasChartData = chartData.some(value => value > 0);
+
 const pendapatanChart = new Chart(pendapatanCtx, {
     type: 'line',
     data: {
         labels: {!! json_encode($chartLabels) !!},
         datasets: [{
             label: 'Pendapatan (Rp)',
-            data: {!! json_encode($chartData) !!},
-            borderColor: 'rgb(75, 192, 192)',
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            data: chartData,
+            borderColor: hasChartData ? 'rgb(75, 192, 192)' : '#dee2e6',
+            backgroundColor: hasChartData ? 'rgba(75, 192, 192, 0.2)' : 'rgba(222, 226, 230, 0.2)',
             tension: 0.1,
             fill: true,
-            pointBackgroundColor: 'rgb(75, 192, 192)',
+            pointBackgroundColor: hasChartData ? 'rgb(75, 192, 192)' : '#dee2e6',
             pointBorderColor: '#fff',
             pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'rgb(75, 192, 192)'
+            pointHoverBorderColor: hasChartData ? 'rgb(75, 192, 192)' : '#dee2e6'
         }]
     },
     options: {
@@ -398,39 +435,67 @@ const pendapatanChart = new Chart(pendapatanCtx, {
     }
 });
 
+if (!hasChartData) {
+    // Overlay text untuk grafik kosong
+    const canvas = pendapatanCtx.canvas;
+    const rect = canvas.getBoundingClientRect();
+    const overlay = document.createElement('div');
+    overlay.style.position = 'absolute';
+    overlay.style.top = '50%';
+    overlay.style.left = '50%';
+    overlay.style.transform = 'translate(-50%, -50%)';
+    overlay.style.color = '#6c757d';
+    overlay.style.fontSize = '14px';
+    overlay.style.pointerEvents = 'none';
+    overlay.textContent = 'Tidak ada data pendapatan';
+    canvas.parentElement.style.position = 'relative';
+    canvas.parentElement.appendChild(overlay);
+}
+
 // Grafik Status Transaksi
 const statusCtx = document.getElementById('statusChart').getContext('2d');
-const statusChart = new Chart(statusCtx, {
-    type: 'doughnut',
-    data: {
-        labels: {!! json_encode($statusLabels) !!},
-        datasets: [{
-            data: {!! json_encode($statusData) !!},
-            backgroundColor: [
-                '#ffc107',
-                '#17a2b8',
-                '#007bff',
-                '#28a745',
-                '#343a40'
-            ]
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'bottom'
-            },
-            tooltip: {
-                callbacks: {
-                    label: function(context) {
-                        return context.label + ': ' + context.parsed + ' transaksi';
+const statusData = {!! json_encode($statusData) !!};
+const hasStatusData = statusData.some(value => value > 0);
+
+if (hasStatusData) {
+    const statusChart = new Chart(statusCtx, {
+        type: 'doughnut',
+        data: {
+            labels: {!! json_encode($statusLabels) !!},
+            datasets: [{
+                data: statusData,
+                backgroundColor: [
+                    '#ffc107',
+                    '#17a2b8',
+                    '#007bff',
+                    '#28a745',
+                    '#343a40'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.label + ': ' + context.parsed + ' transaksi';
+                        }
                     }
                 }
             }
         }
-    }
-});
+    });
+} else {
+    // Tampilkan pesan tidak ada data
+    statusCtx.font = '16px Arial';
+    statusCtx.fillStyle = '#6c757d';
+    statusCtx.textAlign = 'center';
+    statusCtx.fillText('Tidak ada data', statusCtx.canvas.width / 2, statusCtx.canvas.height / 2);
+}
 </script>
 @endsection

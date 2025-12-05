@@ -168,9 +168,22 @@ class RiwayatController extends Controller
             for ($i = 6; $i >= 0; $i--) {
                 $date = Carbon::now()->subDays($i);
                 $chartLabels[] = $date->format('d/m');
-                $pendapatan = Transaksi::whereDate('created_at', $date)
-                    ->where('status_bayar', 'lunas')
-                    ->sum('total_harga') ?? 0;
+                
+                // Query dengan filter yang sama seperti main query
+                $chartQuery = Transaksi::whereBetween('created_at', [$date->startOfDay(), $date->copy()->endOfDay()])
+                    ->where('status_bayar', 'lunas');
+                
+                if ($request->status) {
+                    $chartQuery->where('status_transaksi', $request->status);
+                }
+                if ($request->kurir_id) {
+                    $chartQuery->where('kurir_id', $request->kurir_id);
+                }
+                if ($request->metode_bayar) {
+                    $chartQuery->where('metode_bayar', $request->metode_bayar);
+                }
+                
+                $pendapatan = $chartQuery->sum('total_harga') ?? 0;
                 $chartData[] = (float) $pendapatan;
             }
         }
@@ -215,7 +228,7 @@ class RiwayatController extends Controller
         
         // Pastikan ada data minimal untuk grafik
         if (array_sum($statusData) === 0) {
-            $statusData = [1, 0, 0, 0, 0]; // Dummy data agar grafik muncul
+            $statusData = [0, 0, 0, 0, 0]; // Data kosong untuk grafik
         }
         
         if (array_sum($chartData) === 0) {
