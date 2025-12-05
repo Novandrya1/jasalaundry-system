@@ -13,7 +13,9 @@ class AdminController extends Controller
     public function dashboard()
     {
         $totalPesananHariIni = Transaksi::whereDate('created_at', Carbon::today())->count();
-        $pesananBaru = Transaksi::where('status_transaksi', 'request_jemput')->count();
+        $pesananBaru = Transaksi::where('status_transaksi', 'request_jemput')
+            ->whereDate('created_at', Carbon::today())
+            ->count();
         $pendapatanBulanIni = Transaksi::whereMonth('created_at', Carbon::now()->month)
             ->whereYear('created_at', Carbon::now()->year)
             ->where('status_bayar', 'lunas')
@@ -21,6 +23,7 @@ class AdminController extends Controller
         $totalPelanggan = User::where('role', 'pelanggan')->count();
         
         $transaksiTerbaru = Transaksi::with(['user', 'detailTransaksis.paket'])
+            ->whereDate('created_at', Carbon::today())
             ->orderBy('created_at', 'desc')
             ->limit(5)
             ->get();
