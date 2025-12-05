@@ -5,7 +5,7 @@
 @section('content')
 <div class="row fade-in-up">
     <div class="col-12 mb-4">
-        <h1 class="page-title"><i class="bi bi-speedometer2 me-2"></i>Dashboard Admin</h1>
+        <h1 class="page-title">Dashboard Admin</h1>
         <p class="welcome-text fs-5">Selamat datang kembali, <strong>{{ auth()->user()->name }}</strong> 👋</p>
     </div>
 </div>
@@ -92,7 +92,7 @@
 <!-- Menu Cepat -->
 <div class="row mb-5">
     <div class="col-12 mb-4">
-        <h2 class="section-title"><i class="bi bi-lightning-charge me-2"></i>Menu Cepat</h2>
+        <h2 class="section-title">Menu Cepat</h2>
     </div>
     
     <div class="col-6 col-lg-4 mb-4">
