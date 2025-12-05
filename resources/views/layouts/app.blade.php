@@ -31,29 +31,67 @@
         }
         
         .navbar {
-            background: var(--gradient-blue) !important;
-            backdrop-filter: blur(10px);
-            box-shadow: var(--shadow-medium);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: #1e40af !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-bottom: none;
+            padding: 1rem 0;
         }
         
         .navbar-brand {
             font-family: 'Poppins', sans-serif;
             font-weight: 700;
             font-size: 1.5rem;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: white !important;
+            text-decoration: none;
+        }
+        
+        .navbar-brand:hover {
+            color: #dbeafe !important;
         }
         
         .nav-link {
             font-weight: 500;
+            color: rgba(255, 255, 255, 0.9) !important;
             transition: all 0.3s ease;
             border-radius: 8px;
-            margin: 0 2px;
+            margin: 0 4px;
+            padding: 0.5rem 1rem !important;
         }
         
         .nav-link:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15) !important;
+            color: white !important;
             transform: translateY(-1px);
+        }
+        
+        .navbar-nav .nav-link.active {
+            background: rgba(255, 255, 255, 0.2) !important;
+            color: white !important;
+        }
+        
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+        }
+        
+        .dropdown-item {
+            padding: 0.5rem 1rem;
+            transition: all 0.2s ease;
+        }
+        
+        .dropdown-item:hover {
+            background: #f8f9fa;
+            color: #1e40af;
+        }
+        
+        .navbar-toggler {
+            border: none;
+            padding: 0.25rem 0.5rem;
+        }
+        
+        .navbar-toggler:focus {
+            box-shadow: none;
         }
         
         .card {
@@ -169,10 +207,7 @@
         .page-title {
             font-family: 'Poppins', sans-serif;
             font-weight: 700;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #1e293b;
             margin-bottom: 0.5rem;
         }
         
@@ -274,10 +309,10 @@
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="#">
-                <i class="bi bi-droplet-half"></i> JasaLaundry
+            <a class="navbar-brand" href="{{ auth()->user()->role === 'admin' ? route('admin.dashboard') : (auth()->user()->role === 'pelanggan' ? route('pelanggan.dashboard') : route('kurir.dashboard')) }}">
+                <i class="bi bi-droplet-half me-2"></i>JasaLaundry
             </a>
             
             @auth
