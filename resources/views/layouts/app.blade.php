@@ -311,7 +311,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="{{ auth()->user()->role === 'admin' ? route('admin.dashboard') : (auth()->user()->role === 'pelanggan' ? route('pelanggan.dashboard') : route('kurir.dashboard')) }}">
+            <a class="navbar-brand" href="{{ auth()->check() ? (auth()->user()->role === 'admin' ? route('admin.dashboard') : (auth()->user()->role === 'pelanggan' ? route('pelanggan.dashboard') : route('kurir.dashboard'))) : route('login') }}">
                 <i class="bi bi-droplet-half me-2"></i>JasaLaundry
             </a>
             
