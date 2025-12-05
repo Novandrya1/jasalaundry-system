@@ -3,87 +3,104 @@
 @section('title', 'Dashboard Kurir')
 
 @section('content')
-<div class="row">
+<div class="row fade-in-up">
     <div class="col-12">
-        <h2><i class="bi bi-truck"></i> Dashboard Kurir</h2>
-        <p class="text-muted">Selamat datang, {{ auth()->user()->name }}</p>
+        <h1 class="page-title">Dashboard Kurir</h1>
+        <p class="welcome-text">Selamat datang, {{ auth()->user()->name }}! Kelola tugas pengantaran Anda dengan efisien.</p>
     </div>
 </div>
 
-<!-- Statistik Cards -->
-<div class="row mb-4">
-    <div class="col-4 col-md-4 mb-3">
-        <div class="card bg-warning text-white h-100 mobile-card">
+<!-- Statistics Cards -->
+<div class="row mb-4 fade-in-up stagger-1">
+    <div class="col-md-3 mb-3">
+        <div class="card border-warning" style="border-width: 2px !important;">
             <div class="card-body d-flex align-items-center">
                 <div class="flex-grow-1">
-                    <h3 class="mb-0 h4 h-md-3">{{ $tugasBaru }}</h3>
-                    <p class="mb-0 small">Tugas Baru</p>
+                    <h4 class="text-warning fw-bold mb-1">{{ $tugasBaru }}</h4>
+                    <p class="mb-0 text-muted">Tugas Baru</p>
                 </div>
-                <div class="ms-2 d-none d-sm-block">
-                    <i class="bi bi-exclamation-circle fs-3 fs-md-1"></i>
+                <div class="ms-3">
+                    <i class="bi bi-exclamation-circle fs-1 text-warning"></i>
                 </div>
             </div>
         </div>
     </div>
-    
-    <div class="col-4 col-md-4 mb-3">
-        <div class="card bg-primary text-white h-100 mobile-card">
+    <div class="col-md-3 mb-3">
+        <div class="card border-primary" style="border-width: 2px !important;">
             <div class="card-body d-flex align-items-center">
                 <div class="flex-grow-1">
-                    <h3 class="mb-0 h4 h-md-3">{{ $tugasProses }}</h3>
-                    <p class="mb-0 small">Dalam Proses</p>
+                    <h4 class="text-primary fw-bold mb-1">{{ $tugasProses }}</h4>
+                    <p class="mb-0 text-muted">Dalam Proses</p>
                 </div>
-                <div class="ms-2 d-none d-sm-block">
-                    <i class="bi bi-clock fs-3 fs-md-1"></i>
+                <div class="ms-3">
+                    <i class="bi bi-clock fs-1 text-primary"></i>
                 </div>
             </div>
         </div>
     </div>
-    
-    <div class="col-4 col-md-4 mb-3">
-        <div class="card bg-success text-white h-100 mobile-card">
+    <div class="col-md-3 mb-3">
+        <div class="card border-success" style="border-width: 2px !important;">
             <div class="card-body d-flex align-items-center">
                 <div class="flex-grow-1">
-                    <h3 class="mb-0 h4 h-md-3">{{ $tugasSelesai }}</h3>
-                    <p class="mb-0 small">Selesai</p>
+                    <h4 class="text-success fw-bold mb-1">{{ $tugasSelesai }}</h4>
+                    <p class="mb-0 text-muted">Selesai Hari Ini</p>
                 </div>
-                <div class="ms-2 d-none d-sm-block">
-                    <i class="bi bi-check-circle fs-3 fs-md-1"></i>
+                <div class="ms-3">
+                    <i class="bi bi-check-circle fs-1 text-success"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card border-info" style="border-width: 2px !important;">
+            <div class="card-body d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <h4 class="text-info fw-bold mb-1">{{ $totalTugas }}</h4>
+                    <p class="mb-0 text-muted">Total Tugas</p>
+                </div>
+                <div class="ms-3">
+                    <i class="bi bi-list-task fs-1 text-info"></i>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Menu Cepat -->
-<div class="row mb-4">
+<!-- Quick Actions -->
+<div class="row mb-4 fade-in-up stagger-2">
     <div class="col-12">
         <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0 section-title"><i class="bi bi-lightning"></i> Aksi Cepat</h5>
+            </div>
             <div class="card-body">
-                <h5><i class="bi bi-lightning"></i> Menu Cepat</h5>
                 <div class="row">
-                    <div class="col-6 col-md-3 mb-2">
-                        <a href="{{ route('kurir.tugas') }}" class="btn btn-outline-primary w-100 btn-sm">
-                            <i class="bi bi-list-task d-block fs-5 fs-md-4"></i>
-                            <small>Semua Tugas</small>
+                    <div class="col-md-3 mb-3">
+                        <a href="{{ route('kurir.tugas') }}" class="btn btn-primary w-100 menu-card">
+                            <i class="bi bi-list-task fs-4 d-block mb-2"></i>
+                            <strong>Semua Tugas</strong>
+                            <small class="d-block text-white-50">Lihat semua tugas</small>
                         </a>
                     </div>
-                    <div class="col-6 col-md-3 mb-2">
-                        <a href="{{ route('kurir.tugas', ['status' => 'dijemput_kurir']) }}" class="btn btn-outline-warning w-100 btn-sm">
-                            <i class="bi bi-truck d-block fs-5 fs-md-4"></i>
-                            <small>Tugas Baru</small>
+                    <div class="col-md-3 mb-3">
+                        <a href="{{ route('kurir.tugas', ['status' => 'dijemput_kurir']) }}" class="btn btn-outline-warning w-100 menu-card">
+                            <i class="bi bi-truck fs-4 d-block mb-2"></i>
+                            <strong>Tugas Baru</strong>
+                            <small class="d-block text-muted">Penjemputan baru</small>
                         </a>
                     </div>
-                    <div class="col-6 col-md-3 mb-2">
-                        <a href="{{ route('kurir.tugas', ['status' => 'siap_antar']) }}" class="btn btn-outline-success w-100 btn-sm">
-                            <i class="bi bi-box-arrow-up d-block fs-5 fs-md-4"></i>
-                            <small>Siap Antar</small>
+                    <div class="col-md-3 mb-3">
+                        <a href="{{ route('kurir.tugas', ['status' => 'siap_antar']) }}" class="btn btn-outline-success w-100 menu-card">
+                            <i class="bi bi-box-arrow-up fs-4 d-block mb-2"></i>
+                            <strong>Siap Antar</strong>
+                            <small class="d-block text-muted">Pengantaran</small>
                         </a>
                     </div>
-                    <div class="col-6 col-md-3 mb-2">
-                        <a href="{{ route('kurir.tugas', ['status' => 'selesai']) }}" class="btn btn-outline-dark w-100 btn-sm">
-                            <i class="bi bi-check-all d-block fs-5 fs-md-4"></i>
-                            <small>Selesai</small>
+                    <div class="col-md-3 mb-3">
+                        <a href="{{ route('kurir.tugas', ['status' => 'selesai']) }}" class="btn btn-outline-dark w-100 menu-card">
+                            <i class="bi bi-check-all fs-4 d-block mb-2"></i>
+                            <strong>Selesai</strong>
+                            <small class="d-block text-muted">Tugas selesai</small>
                         </a>
                     </div>
                 </div>
@@ -93,11 +110,11 @@
 </div>
 
 <!-- Tugas Terbaru -->
-<div class="row">
+<div class="row fade-in-up stagger-3">
     <div class="col-12">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"><i class="bi bi-clock-history"></i> Tugas Terbaru</h5>
+                <h5 class="mb-0 section-title"><i class="bi bi-clock-history"></i> Tugas Terbaru</h5>
                 <a href="{{ route('kurir.tugas') }}" class="btn btn-sm btn-outline-primary">Lihat Semua</a>
             </div>
             <div class="card-body">

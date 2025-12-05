@@ -22,7 +22,10 @@ class KurirController extends Controller
             
         $tugasSelesai = Transaksi::where('kurir_id', $kurirId)
             ->where('status_transaksi', 'selesai')
+            ->whereDate('updated_at', \Carbon\Carbon::today())
             ->count();
+            
+        $totalTugas = Transaksi::where('kurir_id', $kurirId)->count();
             
         $transaksiTerbaru = Transaksi::with(['user', 'detailTransaksis.paket'])
             ->where('kurir_id', $kurirId)
@@ -31,7 +34,7 @@ class KurirController extends Controller
             ->get();
             
         return view('kurir.dashboard', compact(
-            'tugasBaru', 'tugasProses', 'tugasSelesai', 'transaksiTerbaru'
+            'tugasBaru', 'tugasProses', 'tugasSelesai', 'totalTugas', 'transaksiTerbaru'
         ));
     }
     
