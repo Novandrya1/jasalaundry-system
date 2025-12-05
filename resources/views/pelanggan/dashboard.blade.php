@@ -3,17 +3,110 @@
 @section('title', 'Dashboard Pelanggan')
 
 @section('content')
-<div class="row">
+<div class="row fade-in-up">
     <div class="col-12">
-        <h2><i class="bi bi-house"></i> Selamat Datang, {{ auth()->user()->name }}!</h2>
-        <p class="text-muted">Pilih paket laundry yang Anda inginkan</p>
+        <h1 class="page-title">Dashboard Pelanggan</h1>
+        <p class="welcome-text">Selamat datang, {{ auth()->user()->name }}! Kelola pesanan laundry Anda dengan mudah.</p>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4 fade-in-up stagger-1">
+    <div class="col-md-3 mb-3">
+        <div class="card border-primary" style="border-width: 2px !important;">
+            <div class="card-body d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <h4 class="text-primary fw-bold mb-1">{{ $totalPesanan }}</h4>
+                    <p class="mb-0 text-muted">Total Pesanan</p>
+                </div>
+                <div class="ms-3">
+                    <i class="bi bi-receipt fs-1 text-primary"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card border-warning" style="border-width: 2px !important;">
+            <div class="card-body d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <h4 class="text-warning fw-bold mb-1">{{ $pesananAktif }}</h4>
+                    <p class="mb-0 text-muted">Pesanan Aktif</p>
+                </div>
+                <div class="ms-3">
+                    <i class="bi bi-clock fs-1 text-warning"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card border-success" style="border-width: 2px !important;">
+            <div class="card-body d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <h4 class="text-success fw-bold mb-1">{{ $pesananSelesai }}</h4>
+                    <p class="mb-0 text-muted">Pesanan Selesai</p>
+                </div>
+                <div class="ms-3">
+                    <i class="bi bi-check-circle fs-1 text-success"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card border-info" style="border-width: 2px !important;">
+            <div class="card-body d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <h4 class="text-info fw-bold mb-1">{{ $promoTersedia }}</h4>
+                    <p class="mb-0 text-muted">Promo Tersedia</p>
+                </div>
+                <div class="ms-3">
+                    <i class="bi bi-gift fs-1 text-info"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mb-4 fade-in-up stagger-2">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0 section-title"><i class="bi bi-lightning"></i> Aksi Cepat</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <a href="{{ route('pelanggan.order') }}" class="btn btn-primary w-100 menu-card">
+                            <i class="bi bi-plus-circle fs-4 d-block mb-2"></i>
+                            <strong>Pesan Laundry</strong>
+                            <small class="d-block text-white-50">Buat pesanan baru</small>
+                        </a>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <a href="{{ route('pelanggan.riwayat') }}" class="btn btn-outline-primary w-100 menu-card">
+                            <i class="bi bi-clock-history fs-4 d-block mb-2"></i>
+                            <strong>Riwayat Pesanan</strong>
+                            <small class="d-block text-muted">Lihat pesanan Anda</small>
+                        </a>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <button class="btn btn-outline-success w-100 menu-card" onclick="scrollToPromo()">
+                            <i class="bi bi-gift fs-4 d-block mb-2"></i>
+                            <strong>Lihat Promo</strong>
+                            <small class="d-block text-muted">Klaim promo menarik</small>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <!-- Promo Carousel -->
 @if($promos && $promos->count() > 0)
-<div class="row mb-4">
+<div class="row mb-4 fade-in-up stagger-3" id="promo-section">
     <div class="col-12">
+        <h5 class="section-title"><i class="bi bi-gift"></i> Promo Spesial</h5>
         <div id="promoCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
             <div class="carousel-inner">
                 @foreach($promos as $index => $promo)
@@ -61,17 +154,10 @@
 </div>
 @endif
 
-<div class="row">
-    <div class="col-12 mb-3">
-        <a href="{{ route('pelanggan.order') }}" class="btn btn-primary btn-lg">
-            <i class="bi bi-plus-circle"></i> Pesan Laundry Sekarang
-        </a>
-    </div>
-</div>
-
-<div class="row">
+<!-- Paket Laundry -->
+<div class="row mb-4 fade-in-up stagger-4">
     <div class="col-12">
-        <h4><i class="bi bi-box"></i> Paket Laundry Tersedia</h4>
+        <h5 class="section-title"><i class="bi bi-box"></i> Paket Laundry Tersedia</h5>
     </div>
 </div>
 
@@ -172,12 +258,12 @@
 </div>
 
 <!-- Tentang JasaLaundry -->
-<div class="row">
+<div class="row fade-in-up stagger-4">
     <div class="col-12">
-        <div class="card bg-primary text-white">
+        <div class="card border-primary" style="border-width: 2px !important; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
             <div class="card-body text-center">
-                <h4><i class="bi bi-droplet-half"></i> Tentang JasaLaundry</h4>
-                <p class="mb-0">JasaLaundry adalah layanan laundry antar-jemput terpercaya dengan pengalaman lebih dari 5 tahun. Kami menggunakan teknologi modern dan deterjen berkualitas untuk memberikan hasil terbaik. Dengan tim kurir profesional dan sistem tracking real-time, kepuasan pelanggan adalah prioritas utama kami.</p>
+                <h4 class="text-primary mb-3"><i class="bi bi-droplet-half"></i> Tentang JasaLaundry</h4>
+                <p class="mb-0 text-dark" style="line-height: 1.6;">JasaLaundry adalah layanan laundry antar-jemput terpercaya dengan pengalaman lebih dari 5 tahun. Kami menggunakan teknologi modern dan deterjen berkualitas untuk memberikan hasil terbaik. Dengan tim kurir profesional dan sistem tracking real-time, kepuasan pelanggan adalah prioritas utama kami.</p>
             </div>
         </div>
     </div>
@@ -209,6 +295,12 @@ function klaimPromo(promoId) {
             alert('Terjadi kesalahan. Silakan coba lagi.');
         });
     }
+}
+
+function scrollToPromo() {
+    document.getElementById('promo-section').scrollIntoView({ 
+        behavior: 'smooth' 
+    });
 }
 </script>
 @endsection

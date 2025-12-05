@@ -17,7 +17,21 @@ class PelangganController extends Controller
     {
         $pakets = Paket::active()->get();
         $promos = \App\Models\Promo::active()->latest()->limit(3)->get();
-        return view('pelanggan.dashboard', compact('pakets', 'promos'));
+        
+        // Statistik untuk dashboard
+        $totalPesanan = Transaksi::where('user_id', Auth::id())->count();
+        $pesananAktif = Transaksi::where('user_id', Auth::id())
+            ->whereNotIn('status_transaksi', ['selesai'])
+            ->count();
+        $pesananSelesai = Transaksi::where('user_id', Auth::id())
+            ->where('status_transaksi', 'selesai')
+            ->count();
+        $promoTersedia = \App\Models\Promo::active()->count();
+        
+        return view('pelanggan.dashboard', compact(
+            'pakets', 'promos', 'totalPesanan', 'pesananAktif', 
+            'pesananSelesai', 'promoTersedia'
+        ));
     }
 
     public function showOrderForm()
