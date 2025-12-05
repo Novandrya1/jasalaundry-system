@@ -7,6 +7,11 @@
     <div class="col-12">
         <h2><i class="bi bi-clock-history"></i> Riwayat & Laporan</h2>
         <p class="text-muted">Lihat semua transaksi dan buat laporan</p>
+        @if(!request('tanggal_mulai') && !request('tanggal_selesai'))
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> Menampilkan transaksi hari ini. Gunakan filter tanggal untuk melihat riwayat hari lain.
+            </div>
+        @endif
     </div>
 </div>
 
@@ -170,12 +175,21 @@
                         </div>
                         
                         <div class="col-md-12 mb-3">
-                            <div class="d-flex gap-2">
+                            <div class="d-flex gap-2 flex-wrap">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="bi bi-search"></i> Filter
                                 </button>
                                 <a href="{{ route('admin.riwayat.index') }}" class="btn btn-secondary">
-                                    <i class="bi bi-arrow-clockwise"></i> Reset
+                                    <i class="bi bi-arrow-clockwise"></i> Hari Ini
+                                </a>
+                                <a href="{{ route('admin.riwayat.index', ['tanggal_mulai' => date('Y-m-d', strtotime('-1 day')), 'tanggal_selesai' => date('Y-m-d', strtotime('-1 day'))]) }}" class="btn btn-outline-primary">
+                                    <i class="bi bi-calendar-minus"></i> Kemarin
+                                </a>
+                                <a href="{{ route('admin.riwayat.index', ['tanggal_mulai' => date('Y-m-d', strtotime('-7 days')), 'tanggal_selesai' => date('Y-m-d')]) }}" class="btn btn-outline-primary">
+                                    <i class="bi bi-calendar-week"></i> 7 Hari Terakhir
+                                </a>
+                                <a href="{{ route('admin.riwayat.index', ['tanggal_mulai' => date('Y-m-01'), 'tanggal_selesai' => date('Y-m-d')]) }}" class="btn btn-outline-primary">
+                                    <i class="bi bi-calendar-month"></i> Bulan Ini
                                 </a>
                                 <button type="button" class="btn btn-success" onclick="cetakLaporan()">
                                     <i class="bi bi-printer"></i> Cetak Laporan

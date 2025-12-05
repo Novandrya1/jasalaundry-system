@@ -24,13 +24,17 @@ class RiwayatController extends Controller
             $query->where('status_bayar', $request->status_bayar);
         }
         
-        // Filter berdasarkan tanggal
-        if ($request->tanggal_mulai) {
-            $query->whereDate('created_at', '>=', $request->tanggal_mulai);
-        }
-        
-        if ($request->tanggal_selesai) {
-            $query->whereDate('created_at', '<=', $request->tanggal_selesai);
+        // Filter berdasarkan tanggal - default hari ini jika tidak ada filter
+        if ($request->tanggal_mulai || $request->tanggal_selesai) {
+            if ($request->tanggal_mulai) {
+                $query->whereDate('created_at', '>=', $request->tanggal_mulai);
+            }
+            if ($request->tanggal_selesai) {
+                $query->whereDate('created_at', '<=', $request->tanggal_selesai);
+            }
+        } else {
+            // Default: tampilkan transaksi hari ini saja
+            $query->whereDate('created_at', Carbon::today());
         }
         
         // Filter berdasarkan kurir
