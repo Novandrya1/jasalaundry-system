@@ -61,7 +61,13 @@
             <div class="card-body d-flex align-items-center">
                 <div class="flex-grow-1">
                     <h4>Rp {{ number_format($rataRataHarian, 0, ',', '.') }}</h4>
-                    <p class="mb-0">Rata-rata/Hari</p>
+                    <p class="mb-0">
+                        @if(request('tanggal_mulai') && request('tanggal_selesai'))
+                            Rata-rata/Hari
+                        @else
+                            Hari Ini
+                        @endif
+                    </p>
                 </div>
                 <div class="ms-3">
                     <i class="bi bi-graph-up fs-1"></i>
@@ -76,7 +82,13 @@
     <div class="col-md-8">
         <div class="card">
             <div class="card-header">
-                <h5><i class="bi bi-bar-chart"></i> Grafik Pendapatan 7 Hari Terakhir</h5>
+                <h5><i class="bi bi-bar-chart"></i> Grafik Pendapatan 
+                @if(request('tanggal_mulai') && request('tanggal_selesai'))
+                    ({{ date('d/m/Y', strtotime(request('tanggal_mulai'))) }} - {{ date('d/m/Y', strtotime(request('tanggal_selesai'))) }})
+                @else
+                    (7 Hari Terakhir)
+                @endif
+                </h5>
             </div>
             <div class="card-body">
                 <canvas id="pendapatanChart" height="100"></canvas>
@@ -86,7 +98,13 @@
     <div class="col-md-4">
         <div class="card">
             <div class="card-header">
-                <h5><i class="bi bi-pie-chart"></i> Status Transaksi</h5>
+                <h5><i class="bi bi-pie-chart"></i> Status Transaksi 
+                @if(request('tanggal_mulai') || request('tanggal_selesai') || request('status') || request('status_bayar') || request('kurir_id') || request('metode_bayar'))
+                    (Filtered)
+                @else
+                    (Hari Ini)
+                @endif
+                </h5>
             </div>
             <div class="card-body">
                 <canvas id="statusChart" height="200"></canvas>
@@ -185,9 +203,7 @@
                                 <a href="{{ route('admin.riwayat.index', ['tanggal_mulai' => date('Y-m-d', strtotime('-1 day')), 'tanggal_selesai' => date('Y-m-d', strtotime('-1 day'))]) }}" class="btn btn-outline-primary">
                                     <i class="bi bi-calendar-minus"></i> Kemarin
                                 </a>
-                                <a href="{{ route('admin.riwayat.index', ['tanggal_mulai' => date('Y-m-d', strtotime('-7 days')), 'tanggal_selesai' => date('Y-m-d')]) }}" class="btn btn-outline-primary">
-                                    <i class="bi bi-calendar-week"></i> 7 Hari Terakhir
-                                </a>
+
                                 <a href="{{ route('admin.riwayat.index', ['tanggal_mulai' => date('Y-m-01'), 'tanggal_selesai' => date('Y-m-d')]) }}" class="btn btn-outline-primary">
                                     <i class="bi bi-calendar-month"></i> Bulan Ini
                                 </a>

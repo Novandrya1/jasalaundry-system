@@ -27,14 +27,17 @@ class RiwayatController extends Controller
         // Filter berdasarkan tanggal - default hari ini jika tidak ada filter
         if ($request->tanggal_mulai || $request->tanggal_selesai) {
             if ($request->tanggal_mulai) {
-                $query->whereDate('created_at', '>=', $request->tanggal_mulai);
+                $startDate = Carbon::parse($request->tanggal_mulai)->startOfDay();
+                $query->where('created_at', '>=', $startDate);
             }
             if ($request->tanggal_selesai) {
-                $query->whereDate('created_at', '<=', $request->tanggal_selesai);
+                $endDate = Carbon::parse($request->tanggal_selesai)->endOfDay();
+                $query->where('created_at', '<=', $endDate);
             }
         } else {
             // Default: tampilkan transaksi hari ini saja
-            $query->whereDate('created_at', Carbon::today());
+            $today = Carbon::today();
+            $query->whereBetween('created_at', [$today->startOfDay(), $today->copy()->endOfDay()]);
         }
         
         // Filter berdasarkan kurir
@@ -52,41 +55,162 @@ class RiwayatController extends Controller
         // Data untuk filter
         $kurirs = \App\Models\User::where('role', 'kurir')->get();
         
-        // Statistik
-        $totalTransaksi = $query->count();
-        $totalPendapatan = $query->where('status_bayar', 'lunas')->sum('total_harga');
+        // Statistik berdasarkan filter yang sama
+        $statistikQuery = Transaksi::query();
         
-        // Analytics data
+        // Apply same filters for statistics
+        if ($request->status) {
+            $statistikQuery->where('status_transaksi', $request->status);
+        }
+        if ($request->status_bayar) {
+            $statistikQuery->where('status_bayar', $request->status_bayar);
+        }
+        if ($request->tanggal_mulai || $request->tanggal_selesai) {
+            if ($request->tanggal_mulai) {
+                $startDate = Carbon::parse($request->tanggal_mulai)->startOfDay();
+                $statistikQuery->where('created_at', '>=', $startDate);
+            }
+            if ($request->tanggal_selesai) {
+                $endDate = Carbon::parse($request->tanggal_selesai)->endOfDay();
+                $statistikQuery->where('created_at', '<=', $endDate);
+            }
+        } else {
+            $today = Carbon::today();
+            $statistikQuery->whereBetween('created_at', [$today->startOfDay(), $today->copy()->endOfDay()]);
+        }
+        if ($request->kurir_id) {
+            $statistikQuery->where('kurir_id', $request->kurir_id);
+        }
+        if ($request->metode_bayar) {
+            $statistikQuery->where('metode_bayar', $request->metode_bayar);
+        }
+        
+        $totalTransaksi = $statistikQuery->count();
+        $totalPendapatan = (clone $statistikQuery)->where('status_bayar', 'lunas')->sum('total_harga');
+        
+        // Analytics data berdasarkan filter
         $pendapatanBulanIni = Transaksi::whereMonth('created_at', Carbon::now()->month)
             ->whereYear('created_at', Carbon::now()->year)
             ->where('status_bayar', 'lunas')
             ->sum('total_harga') ?? 0;
             
-        $totalHarian = Transaksi::where('status_bayar', 'lunas')
-            ->whereDate('created_at', '>=', Carbon::now()->subDays(30))
-            ->sum('total_harga') ?? 0;
-        $rataRataHarian = $totalHarian > 0 ? $totalHarian / 30 : 0;
-        
-        // Data untuk grafik pendapatan 7 hari terakhir
-        $chartLabels = [];
-        $chartData = [];
-        for ($i = 6; $i >= 0; $i--) {
-            $date = Carbon::now()->subDays($i);
-            $chartLabels[] = $date->format('d/m');
-            $pendapatan = Transaksi::whereDate('created_at', $date)
-                ->where('status_bayar', 'lunas')
-                ->sum('total_harga') ?? 0;
-            $chartData[] = (float) $pendapatan;
+        // Hitung rata-rata berdasarkan periode filter
+        $rataRataHarian = 0;
+        if ($request->tanggal_mulai && $request->tanggal_selesai) {
+            $startDate = Carbon::parse($request->tanggal_mulai);
+            $endDate = Carbon::parse($request->tanggal_selesai);
+            $daysDiff = $startDate->diffInDays($endDate) + 1;
+            $rataRataHarian = $daysDiff > 0 ? $totalPendapatan / $daysDiff : 0;
+        } else {
+            $rataRataHarian = $totalPendapatan; // Hari ini
         }
         
-        // Data untuk grafik status transaksi
+        // Data untuk grafik berdasarkan filter
+        if ($request->tanggal_mulai && $request->tanggal_selesai) {
+            $startDate = Carbon::parse($request->tanggal_mulai);
+            $endDate = Carbon::parse($request->tanggal_selesai);
+            $daysDiff = $startDate->diffInDays($endDate);
+            
+            $chartLabels = [];
+            $chartData = [];
+            
+            if ($daysDiff <= 7) {
+                for ($date = $startDate->copy(); $date <= $endDate; $date->addDay()) {
+                    $chartLabels[] = $date->format('d/m');
+                    
+                    // Query dengan filter yang sama seperti main query
+                    $chartQuery = Transaksi::whereBetween('created_at', [$date->startOfDay(), $date->copy()->endOfDay()])
+                        ->where('status_bayar', 'lunas');
+                    
+                    if ($request->status) {
+                        $chartQuery->where('status_transaksi', $request->status);
+                    }
+                    if ($request->kurir_id) {
+                        $chartQuery->where('kurir_id', $request->kurir_id);
+                    }
+                    if ($request->metode_bayar) {
+                        $chartQuery->where('metode_bayar', $request->metode_bayar);
+                    }
+                    
+                    $pendapatan = $chartQuery->sum('total_harga') ?? 0;
+                    $chartData[] = (float) $pendapatan;
+                }
+            } else {
+                $weeks = ceil($daysDiff / 7);
+                for ($i = 0; $i < $weeks; $i++) {
+                    $weekStart = $startDate->copy()->addWeeks($i);
+                    $weekEnd = $weekStart->copy()->addDays(6);
+                    if ($weekEnd > $endDate) $weekEnd = $endDate;
+                    
+                    $chartLabels[] = $weekStart->format('d/m') . '-' . $weekEnd->format('d/m');
+                    
+                    // Query dengan filter yang sama seperti main query
+                    $chartQuery = Transaksi::whereBetween('created_at', [$weekStart, $weekEnd->endOfDay()])
+                        ->where('status_bayar', 'lunas');
+                    
+                    if ($request->status) {
+                        $chartQuery->where('status_transaksi', $request->status);
+                    }
+                    if ($request->kurir_id) {
+                        $chartQuery->where('kurir_id', $request->kurir_id);
+                    }
+                    if ($request->metode_bayar) {
+                        $chartQuery->where('metode_bayar', $request->metode_bayar);
+                    }
+                    
+                    $pendapatan = $chartQuery->sum('total_harga') ?? 0;
+                    $chartData[] = (float) $pendapatan;
+                }
+            }
+        } else {
+            $chartLabels = [];
+            $chartData = [];
+            for ($i = 6; $i >= 0; $i--) {
+                $date = Carbon::now()->subDays($i);
+                $chartLabels[] = $date->format('d/m');
+                $pendapatan = Transaksi::whereDate('created_at', $date)
+                    ->where('status_bayar', 'lunas')
+                    ->sum('total_harga') ?? 0;
+                $chartData[] = (float) $pendapatan;
+            }
+        }
+        
+        // Data untuk grafik status transaksi berdasarkan filter
         $statusLabels = ['Menunggu', 'Dijemput', 'Proses', 'Siap Antar', 'Selesai'];
+        $statusQuery = Transaksi::query();
+        
+        if ($request->status) {
+            $statusQuery->where('status_transaksi', $request->status);
+        }
+        if ($request->status_bayar) {
+            $statusQuery->where('status_bayar', $request->status_bayar);
+        }
+        if ($request->tanggal_mulai || $request->tanggal_selesai) {
+            if ($request->tanggal_mulai) {
+                $startDate = Carbon::parse($request->tanggal_mulai)->startOfDay();
+                $statusQuery->where('created_at', '>=', $startDate);
+            }
+            if ($request->tanggal_selesai) {
+                $endDate = Carbon::parse($request->tanggal_selesai)->endOfDay();
+                $statusQuery->where('created_at', '<=', $endDate);
+            }
+        } else {
+            $today = Carbon::today();
+            $statusQuery->whereBetween('created_at', [$today->startOfDay(), $today->copy()->endOfDay()]);
+        }
+        if ($request->kurir_id) {
+            $statusQuery->where('kurir_id', $request->kurir_id);
+        }
+        if ($request->metode_bayar) {
+            $statusQuery->where('metode_bayar', $request->metode_bayar);
+        }
+        
         $statusData = [
-            Transaksi::where('status_transaksi', 'request_jemput')->count(),
-            Transaksi::where('status_transaksi', 'dijemput_kurir')->count(),
-            Transaksi::where('status_transaksi', 'proses_cuci')->count(),
-            Transaksi::where('status_transaksi', 'siap_antar')->count(),
-            Transaksi::where('status_transaksi', 'selesai')->count(),
+            (clone $statusQuery)->where('status_transaksi', 'request_jemput')->count(),
+            (clone $statusQuery)->where('status_transaksi', 'dijemput_kurir')->count(),
+            (clone $statusQuery)->where('status_transaksi', 'proses_cuci')->count(),
+            (clone $statusQuery)->where('status_transaksi', 'siap_antar')->count(),
+            (clone $statusQuery)->where('status_transaksi', 'selesai')->count(),
         ];
         
         // Pastikan ada data minimal untuk grafik
@@ -95,7 +219,7 @@ class RiwayatController extends Controller
         }
         
         if (array_sum($chartData) === 0) {
-            $chartData = [0, 0, 0, 0, 0, 0, 0]; // Dummy data agar grafik muncul
+            $chartData = array_fill(0, count($chartLabels), 0);
         }
         
         return view('admin.riwayat.index', compact(
