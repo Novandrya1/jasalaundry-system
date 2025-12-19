@@ -118,3 +118,31 @@
     </div>
 </div>
 @endsection
+
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tipeDiskon = document.getElementById('tipe_diskon');
+    const diskonPersen = document.getElementById('diskon_persen');
+    const diskonNominal = document.getElementById('diskon_nominal');
+    
+    function toggleDiskonFields() {
+        if (tipeDiskon.value === 'persen') {
+            diskonPersen.disabled = false;
+            diskonNominal.disabled = true;
+            diskonNominal.value = 0;
+        } else {
+            diskonPersen.disabled = true;
+            diskonPersen.value = 0;
+            diskonNominal.disabled = false;
+        }
+    }
+    
+    // Initial setup
+    toggleDiskonFields();
+    
+    // Listen for changes
+    tipeDiskon.addEventListener('change', toggleDiskonFields);
+});
+</script>
+@endsection

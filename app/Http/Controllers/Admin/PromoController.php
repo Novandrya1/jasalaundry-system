@@ -31,7 +31,16 @@ class PromoController extends Controller
             'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
         ]);
 
-        Promo::create($request->all());
+        $data = $request->all();
+        
+        // Set default values based on discount type
+        if ($data['tipe_diskon'] === 'nominal') {
+            $data['diskon_persen'] = 0;
+        } else {
+            $data['diskon_nominal'] = 0;
+        }
+
+        Promo::create($data);
 
         return redirect()->route('admin.promo.index')
             ->with('success', 'Promo berhasil ditambahkan.');
@@ -55,7 +64,16 @@ class PromoController extends Controller
             'is_active' => 'boolean',
         ]);
 
-        $promo->update($request->all());
+        $data = $request->all();
+        
+        // Set default values based on discount type
+        if ($data['tipe_diskon'] === 'nominal') {
+            $data['diskon_persen'] = 0;
+        } else {
+            $data['diskon_nominal'] = 0;
+        }
+
+        $promo->update($data);
 
         return redirect()->route('admin.promo.index')
             ->with('success', 'Promo berhasil diperbarui.');
