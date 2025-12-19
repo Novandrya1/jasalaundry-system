@@ -17,7 +17,7 @@
             <div class="card-body d-flex align-items-center">
                 <div class="flex-grow-1">
                     <h4 class="text-warning fw-bold mb-1">{{ $tugasBaru }}</h4>
-                    <p class="mb-0 text-muted">Tugas Baru</p>
+                    <p class="mb-0 text-muted">Tugas Baru Hari Ini</p>
                 </div>
                 <div class="ms-3">
                     <i class="bi bi-exclamation-circle fs-1 text-warning"></i>
@@ -114,8 +114,11 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0 section-title"><i class="bi bi-clock-history"></i> Tugas Terbaru</h5>
-                <a href="{{ route('kurir.tugas') }}" class="btn btn-sm btn-outline-primary">Lihat Semua</a>
+                <h5 class="mb-0 section-title"><i class="bi bi-calendar-day"></i> Tugas Hari Ini</h5>
+                <div>
+                    <a href="{{ route('kurir.tugas') }}" class="btn btn-sm btn-outline-secondary me-2">Riwayat</a>
+                    <a href="{{ route('kurir.tugas') }}" class="btn btn-sm btn-outline-primary">Lihat Semua</a>
+                </div>
             </div>
             <div class="card-body">
                 @if($transaksiTerbaru->count() > 0)
@@ -144,8 +147,9 @@
                     </div>
                 @else
                     <div class="text-center py-4">
-                        <i class="bi bi-inbox fs-1 text-muted"></i>
-                        <p class="text-muted mt-2">Belum ada tugas yang ditugaskan</p>
+                        <i class="bi bi-calendar-x fs-1 text-muted"></i>
+                        <p class="text-muted mt-2">Belum ada tugas untuk hari ini</p>
+                        <small class="text-muted">Tugas sebelumnya tersimpan di <a href="{{ route('kurir.tugas') }}" class="text-decoration-none">riwayat</a></small>
                     </div>
                 @endif
             </div>

@@ -21,6 +21,7 @@
                                 <tr>
                                     <th>Tanggal</th>
                                     <th>Pelanggan</th>
+                                    <th>Email</th>
                                     <th>Promo</th>
                                     <th>Diskon</th>
                                     <th>Kode Promo</th>
@@ -34,7 +35,15 @@
                                         <td>{{ $claim->created_at->format('d/m/Y H:i') }}</td>
                                         <td>
                                             <strong>{{ $claim->user->name }}</strong><br>
-                                            <small class="text-muted">{{ $claim->user->phone }}</small>
+                                            <small class="text-muted">{{ $claim->user->phone }}</small><br>
+                                            <button class="btn btn-outline-info btn-xs mt-1" 
+                                                    onclick="showUserDetail({{ $claim->user->id }}, '{{ $claim->user->name }}', '{{ $claim->user->email }}', '{{ $claim->user->phone }}', '{{ $claim->user->address }}', '{{ $claim->user->created_at->format('d/m/Y') }}')" 
+                                                    title="Detail Pelanggan">
+                                                <i class="bi bi-person-lines-fill"></i> Detail
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <small class="text-muted">{{ $claim->user->email }}</small>
                                         </td>
                                         <td>
                                             <strong>{{ $claim->promo->judul }}</strong><br>
@@ -116,4 +125,106 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Detail Pelanggan -->
+<div class="modal fade" id="userDetailModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-person-circle"></i> Detail Pelanggan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>Nama:</strong>
+                    </div>
+                    <div class="col-md-8" id="userName"></div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>Email:</strong>
+                    </div>
+                    <div class="col-md-8" id="userEmail"></div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>No. HP:</strong>
+                    </div>
+                    <div class="col-md-8" id="userPhone"></div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>Alamat:</strong>
+                    </div>
+                    <div class="col-md-8" id="userAddress"></div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>Terdaftar:</strong>
+                    </div>
+                    <div class="col-md-8" id="userRegistered"></div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>Riwayat Transaksi:</strong>
+                    </div>
+                    <div class="col-md-8" id="userTransactions">
+                        <div class="spinner-border spinner-border-sm" role="status"></div>
+                        Loading...
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('scripts')
+<script>
+function showUserDetail(userId, name, email, phone, address, registered) {
+    // Set basic info
+    document.getElementById('userName').textContent = name;
+    document.getElementById('userEmail').textContent = email;
+    document.getElementById('userPhone').textContent = phone;
+    document.getElementById('userAddress').textContent = address || 'Belum diisi';
+    document.getElementById('userRegistered').textContent = registered;
+    
+    // Reset transactions
+    document.getElementById('userTransactions').innerHTML = '<div class="spinner-border spinner-border-sm" role="status"></div> Loading...';
+    
+    // Show modal
+    new bootstrap.Modal(document.getElementById('userDetailModal')).show();
+    
+    // Load transaction history
+    fetch(`/admin/user/${userId}/transactions`)
+        .then(response => response.json())
+        .then(data => {
+            let html = '';
+            if (data.transactions && data.transactions.length > 0) {
+                html = `<small class="text-success">Total: ${data.total} transaksi</small><br>`;
+                data.transactions.slice(0, 3).forEach(t => {
+                    html += `<small class="text-muted">• ${t.kode_invoice} - ${t.status}</small><br>`;
+                });
+                if (data.transactions.length > 3) {
+                    html += `<small class="text-info">... dan ${data.transactions.length - 3} lainnya</small>`;
+                }
+            } else {
+                html = '<small class="text-muted">Belum ada transaksi</small>';
+            }
+            document.getElementById('userTransactions').innerHTML = html;
+        })
+        .catch(error => {
+            document.getElementById('userTransactions').innerHTML = '<small class="text-danger">Gagal memuat data</small>';
+        });
+}
+</script>
 @endsection

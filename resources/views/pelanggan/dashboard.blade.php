@@ -104,51 +104,81 @@
 
 <!-- Promo Carousel -->
 @if($promos && $promos->count() > 0)
-<div class="row mb-4 fade-in-up stagger-3" id="promo-section">
+<div class="row mb-4 fade-in-up" id="promo-section">
     <div class="col-12">
-        <h5 class="section-title"><i class="bi bi-gift"></i> Promo Spesial</h5>
-        <div id="promoCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="section-title mb-0"><i class="bi bi-fire text-danger"></i> Promo Spesial</h5>
+            <div class="carousel-nav-buttons">
+                <button class="btn btn-sm btn-outline-secondary rounded-circle" type="button" data-bs-target="#promoCarousel" data-bs-slide="prev">
+                    <i class="bi bi-chevron-left"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-secondary rounded-circle" type="button" data-bs-target="#promoCarousel" data-bs-slide="next">
+                    <i class="bi bi-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="promoCarousel" class="carousel slide shadow-sm" data-bs-ride="carousel" style="border-radius: 20px; overflow: hidden;">
+            <div class="carousel-indicators" style="bottom: 0;">
+                @foreach($promos as $index => $promo)
+                    <button type="button" data-bs-target="#promoCarousel" data-bs-slide-to="{{ $index }}" class="{{ $index === 0 ? 'active' : '' }}" aria-current="true"></button>
+                @endforeach
+            </div>
+
             <div class="carousel-inner">
                 @foreach($promos as $index => $promo)
                     @php
                         $gradients = [
-                            'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                            'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-                            'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-                            'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
-                            'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
+                            'linear-gradient(135deg, #FF6B6B 0%, #ED0E11 100%)', // Red
+                            'linear-gradient(135deg, #4158D0 0%, #C850C0 100%)', // Purple/Blue
+                            'linear-gradient(135deg, #0093E9 0%, #80D0C7 100%)', // Teal
+                            'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)'  // Green
                         ];
                         $gradient = $gradients[$index % count($gradients)];
                     @endphp
-                    <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                        <div class="card position-relative" style="background: {{ $gradient }}; border: none; border-radius: 15px; overflow: hidden;">
-                            <div class="card-body text-white p-3 p-md-4" style="min-height: 120px;">
-                                <div class="row h-100">
-                                    <div class="col-9 col-sm-9">
-                                        <h3 class="mb-1 mb-md-2 h5 h-md-4 h-lg-3"><i class="bi bi-gift"></i> {{ $promo->judul }}</h3>
-                                        <p class="mb-1 mb-md-2 small d-none d-sm-block">{{ $promo->deskripsi }}</p>
-                                        <div class="mb-1 mb-md-2">
-                                            <span class="badge bg-white text-dark px-2 py-1 small">
-                                                <i class="bi bi-percent"></i> Diskon {{ $promo->diskon_text }}
-                                            </span>
+                    <div class="carousel-item {{ $index === 0 ? 'active' : '' }}" data-bs-interval="5000">
+                        <div class="promo-card position-relative" style="background: {{ $gradient }}; min-height: 160px; border: none; padding: 25px;">
+                            <div class="promo-bg-icon">
+                                <i class="bi bi-ticket-perforated"></i>
+                            </div>
+
+                            <div class="row align-items-center position-relative" style="z-index: 2;">
+                                <div class="col-8 col-md-9">
+                                    <span class="badge bg-white text-dark mb-2 px-3 py-2 rounded-pill shadow-sm" style="font-size: 0.7rem; font-weight: 700;">
+                                        <i class="bi bi-stars text-warning"></i> LIMITED OFFER
+                                    </span>
+                                    <h3 class="text-white fw-bold mb-1" style="font-size: 1.25rem;">{{ $promo->judul }}</h3>
+                                    <p class="text-white text-opacity-75 mb-3 d-none d-md-block" style="font-size: 0.9rem; max-width: 80%;">
+                                        {{ Str::limit($promo->deskripsi, 80) }}
+                                    </p>
+                                    
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="promo-discount-tag">
+                                            <span class="small opacity-75 d-block text-white" style="font-size: 0.7rem;">Diskon</span>
+                                            <span class="fw-bold text-white" style="font-size: 1.1rem;">{{ $promo->diskon_text }}</span>
                                         </div>
-                                        <small class="opacity-75 d-block">
-                                            <i class="bi bi-calendar"></i> <span class="d-none d-sm-inline">Berlaku sampai</span> {{ $promo->tanggal_selesai->format('d M Y') }}
-                                        </small>
+                                        <div class="vr bg-white opacity-25" style="height: 30px;"></div>
+                                        <div class="promo-expiry">
+                                            <span class="small opacity-75 d-block text-white" style="font-size: 0.7rem;">Hingga</span>
+                                            <span class="fw-bold text-white" style="font-size: 0.9rem;">{{ $promo->tanggal_selesai->format('d M Y') }}</span>
+                                        </div>
                                     </div>
-                                    <div class="col-3 col-sm-3 d-flex align-items-center justify-content-center">
-                                        <button class="btn btn-light shadow btn-sm" onclick="klaimPromo({{ $promo->id }})" 
-                                                style="font-weight: 600; font-size: 0.75rem;">
-                                            <i class="bi bi-hand-thumbs-up"></i> <span class="d-none d-md-inline">Klaim</span>
-                                        </button>
-                                    </div>
+                                </div>
+                                
+                                <div class="col-4 col-md-3 text-end">
+                                    <button id="btn-klaim-{{ $promo->id }}" class="btn btn-light btn-claim-modern" onclick="klaimPromo({{ $promo->id }})">
+                                        <span class="btn-text">Klaim <i class="bi bi-arrow-right-short"></i></span>
+                                        <span class="btn-loading d-none">
+                                            <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                                            Loading...
+                                        </span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 @endforeach
             </div>
-
         </div>
     </div>
 </div>
@@ -263,7 +293,7 @@
         <div class="card border-primary" style="border-width: 2px !important; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
             <div class="card-body text-center">
                 <h4 class="text-primary mb-3"><i class="bi bi-droplet-half"></i> Tentang JasaLaundry</h4>
-                <p class="mb-0 text-dark" style="line-height: 1.6;">JasaLaundry adalah layanan laundry antar-jemput terpercaya dengan pengalaman lebih dari 5 tahun. Kami menggunakan teknologi modern dan deterjen berkualitas untuk memberikan hasil terbaik. Dengan tim kurir profesional dan sistem tracking real-time, kepuasan pelanggan adalah prioritas utama kami.</p>
+                <p class="mb-0 text-dark" style="line-height: 1.6;">JasaLaundry adalah layanan laundry antar-jemput terpercaya dengan pengalaman lebih dari 3 tahun. Kami menggunakan teknologi modern dan deterjen berkualitas untuk memberikan hasil terbaik. Dengan tim kurir profesional, kepuasan pelanggan adalah prioritas utama kami.</p>
             </div>
         </div>
     </div>
@@ -274,6 +304,15 @@
 <script>
 function klaimPromo(promoId) {
     if (confirm('Yakin ingin mengklaim promo ini? Anda akan mendapat kode promo setelah disetujui admin.')) {
+        const btn = document.getElementById(`btn-klaim-${promoId}`);
+        const btnText = btn.querySelector('.btn-text');
+        const btnLoading = btn.querySelector('.btn-loading');
+        
+        // Show loading state
+        btn.disabled = true;
+        btnText.classList.add('d-none');
+        btnLoading.classList.remove('d-none');
+        
         fetch('/klaim-promo', {
             method: 'POST',
             headers: {
@@ -289,10 +328,18 @@ function klaimPromo(promoId) {
                 location.reload();
             } else {
                 alert(data.message || 'Gagal mengklaim promo.');
+                // Reset button state
+                btn.disabled = false;
+                btnText.classList.remove('d-none');
+                btnLoading.classList.add('d-none');
             }
         })
         .catch(error => {
             alert('Terjadi kesalahan. Silakan coba lagi.');
+            // Reset button state
+            btn.disabled = false;
+            btnText.classList.remove('d-none');
+            btnLoading.classList.add('d-none');
         });
     }
 }

@@ -40,6 +40,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/promo-claim', [\App\Http\Controllers\Admin\PromoClaimController::class, 'index'])->name('promo-claim.index');
     Route::patch('/promo-claim/{claim}/approve', [\App\Http\Controllers\Admin\PromoClaimController::class, 'approve'])->name('promo-claim.approve');
     Route::patch('/promo-claim/{claim}/reject', [\App\Http\Controllers\Admin\PromoClaimController::class, 'reject'])->name('promo-claim.reject');
+    Route::get('/user/{userId}/transactions', [\App\Http\Controllers\Admin\PromoClaimController::class, 'getUserTransactions'])->name('user.transactions');
     Route::get('/riwayat', [\App\Http\Controllers\Admin\RiwayatController::class, 'index'])->name('riwayat.index');
     Route::get('/riwayat/{transaksi}/cetak', [\App\Http\Controllers\Admin\RiwayatController::class, 'cetak'])->name('riwayat.cetak');
     Route::get('/riwayat/cetak-laporan', [\App\Http\Controllers\Admin\RiwayatController::class, 'cetakLaporan'])->name('riwayat.cetak-laporan');

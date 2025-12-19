@@ -14,6 +14,7 @@ class KurirController extends Controller
         
         $tugasBaru = Transaksi::where('kurir_id', $kurirId)
             ->where('status_transaksi', 'dijemput_kurir')
+            ->whereDate('created_at', \Carbon\Carbon::today())
             ->count();
             
         $tugasProses = Transaksi::where('kurir_id', $kurirId)
@@ -29,6 +30,7 @@ class KurirController extends Controller
             
         $transaksiTerbaru = Transaksi::with(['user', 'detailTransaksis.paket'])
             ->where('kurir_id', $kurirId)
+            ->whereDate('created_at', \Carbon\Carbon::today())
             ->orderBy('created_at', 'desc')
             ->limit(5)
             ->get();

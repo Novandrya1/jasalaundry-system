@@ -55,4 +55,18 @@ class PromoClaimController extends Controller
             ->with('success', 'Promo berhasil ditolak!')
             ->with('whatsapp_url', $whatsappUrl);
     }
+    
+    public function getUserTransactions($userId)
+    {
+        $transactions = \App\Models\Transaksi::where('user_id', $userId)
+            ->select('kode_invoice', 'status_transaksi as status', 'created_at')
+            ->orderBy('created_at', 'desc')
+            ->limit(10)
+            ->get();
+            
+        return response()->json([
+            'transactions' => $transactions,
+            'total' => \App\Models\Transaksi::where('user_id', $userId)->count()
+        ]);
+    }
 }

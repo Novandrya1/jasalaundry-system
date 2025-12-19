@@ -453,7 +453,7 @@
     <!-- Footer -->
     <footer class="bg-light py-4 mt-5">
         <div class="container text-center">
-            <p class="mb-0">&copy; 2024 JasaLaundry. Semua hak dilindungi.</p>
+            <p class="mb-0">&copy; 2025 JasaLaundry. Semua hak dilindungi.</p>
         </div>
     </footer>
 
