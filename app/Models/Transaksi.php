@@ -29,6 +29,9 @@ class Transaksi extends Model
         'tanggal_selesai',
         'promo_claim_id',
         'diskon',
+        'snap_token',
+        'payment_url',
+        'paid_at',
     ];
 
     protected function casts(): array
@@ -41,6 +44,7 @@ class Transaksi extends Model
             'tanggal_proses_cuci' => 'datetime',
             'tanggal_siap_antar' => 'datetime',
             'tanggal_selesai' => 'datetime',
+            'paid_at' => 'datetime',
         ];
     }
 

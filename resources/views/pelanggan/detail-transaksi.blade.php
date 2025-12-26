@@ -44,6 +44,8 @@
                         <strong>Metode Pembayaran:</strong><br>
                         @if($transaksi->metode_bayar === 'tunai')
                             <span class="badge bg-info">Tunai (COD)</span>
+                        @elseif($transaksi->metode_bayar === 'qris')
+                            <span class="badge bg-success">QRIS</span>
                         @else
                             <span class="badge bg-warning">Transfer Bank</span>
                         @endif
@@ -184,13 +186,24 @@
             <div class="card-body text-center">
                 @if($transaksi->status_bayar === 'belum_bayar')
                     <span class="badge bg-danger fs-6 mb-2">Belum Bayar</span>
-                    @if($transaksi->metode_bayar === 'transfer')
+                    @if($transaksi->metode_bayar === 'qris' && $transaksi->payment_url)
+                        <div class="alert alert-info">
+                            <small>Link pembayaran QRIS telah dikirim via WhatsApp</small>
+                            <br>
+                            <a href="{{ $transaksi->payment_url }}" target="_blank" class="btn btn-success btn-sm mt-2">
+                                <i class="bi bi-qr-code"></i> Bayar Sekarang
+                            </a>
+                        </div>
+                    @elseif($transaksi->metode_bayar === 'transfer')
                         <div class="alert alert-warning">
                             <small>Silakan transfer ke rekening yang telah diberikan dan kirim bukti transfer ke admin.</small>
                         </div>
                     @endif
                 @else
                     <span class="badge bg-success fs-6 mb-2">Lunas</span>
+                    @if($transaksi->paid_at)
+                        <br><small class="text-muted">Dibayar: {{ $transaksi->paid_at->format('d/m/Y H:i') }}</small>
+                    @endif
                 @endif
                 
                 <div class="mt-2">
