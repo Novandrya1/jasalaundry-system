@@ -108,7 +108,7 @@
             margin-top: 0.5rem;
             backdrop-filter: blur(10px);
             background: rgba(255, 255, 255, 0.95);
-            z-index: 1050 !important;
+            z-index: 9999 !important;
             position: absolute !important;
         }
         
@@ -366,7 +366,7 @@
         
         /* Alert Notifications */
         .alert {
-            z-index: 1040;
+            z-index: 1000 !important;
             position: relative;
             margin-bottom: 1rem;
         }
