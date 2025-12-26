@@ -108,6 +108,8 @@
             margin-top: 0.5rem;
             backdrop-filter: blur(10px);
             background: rgba(255, 255, 255, 0.95);
+            z-index: 1050 !important;
+            position: absolute !important;
         }
         
         .dropdown-item {
@@ -360,6 +362,13 @@
             h5 {
                 font-size: 1.1rem;
             }
+        }
+        
+        /* Alert Notifications */
+        .alert {
+            z-index: 1040;
+            position: relative;
+            margin-bottom: 1rem;
         }
         
         /* Table Mobile Optimization */
