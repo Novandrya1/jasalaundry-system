@@ -31,67 +31,156 @@
         }
         
         .navbar {
-            background: #1e40af !important;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%) !important;
+            box-shadow: 0 4px 20px rgba(30, 64, 175, 0.3);
             border-bottom: none;
             padding: 1rem 0;
+            backdrop-filter: blur(10px);
         }
         
         .navbar-brand {
             font-family: 'Poppins', sans-serif;
             font-weight: 700;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             color: white !important;
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
         .navbar-brand:hover {
             color: #dbeafe !important;
+            transform: scale(1.05);
+        }
+        
+        .navbar-brand .brand-icon {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
         }
         
         .nav-link {
             font-weight: 500;
             color: rgba(255, 255, 255, 0.9) !important;
-            transition: all 0.3s ease;
-            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 12px;
             margin: 0 4px;
-            padding: 0.5rem 1rem !important;
+            padding: 0.75rem 1.25rem !important;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .nav-link:hover::before {
+            left: 100%;
         }
         
         .nav-link:hover {
             background: rgba(255, 255, 255, 0.15) !important;
             color: white !important;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
         
         .navbar-nav .nav-link.active {
-            background: rgba(255, 255, 255, 0.2) !important;
+            background: rgba(255, 255, 255, 0.25) !important;
             color: white !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
         
         .dropdown-menu {
             border: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            border-radius: 8px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            border-radius: 16px;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
         }
         
         .dropdown-item {
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1rem;
             transition: all 0.2s ease;
+            border-radius: 12px;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
         }
         
         .dropdown-item:hover {
-            background: #f8f9fa;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             color: #1e40af;
+            transform: translateX(4px);
+        }
+        
+        .dropdown-divider {
+            margin: 0.5rem 0;
+            border-color: #e2e8f0;
         }
         
         .navbar-toggler {
-            border: none;
-            padding: 0.25rem 0.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-toggler:hover {
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.1);
         }
         
         .navbar-toggler:focus {
-            box-shadow: none;
+            box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
+        }
+        
+        .badge-notification {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            min-width: 20px;
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .nav-item.dropdown .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
         }
         
         .card {
@@ -312,7 +401,10 @@
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="{{ auth()->check() ? (auth()->user()->role === 'admin' ? route('admin.dashboard') : (auth()->user()->role === 'pelanggan' ? route('pelanggan.dashboard') : route('kurir.dashboard'))) : route('login') }}">
-                <i class="bi bi-droplet-half me-2"></i>JasaLaundry
+                <div class="brand-icon">
+                    <i class="bi bi-droplet-half"></i>
+                </div>
+                JasaLaundry
             </a>
             
             @auth
@@ -324,71 +416,76 @@
                 <ul class="navbar-nav me-auto">
                     @if(auth()->user()->role === 'pelanggan')
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('pelanggan.dashboard') }}">
+                            <a class="nav-link {{ request()->routeIs('pelanggan.dashboard') ? 'active' : '' }}" href="{{ route('pelanggan.dashboard') }}">
                                 <i class="bi bi-house"></i> Beranda
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('pelanggan.order') }}">
+                            <a class="nav-link {{ request()->routeIs('pelanggan.order') ? 'active' : '' }}" href="{{ route('pelanggan.order') }}">
                                 <i class="bi bi-plus-circle"></i> Pesan Laundry
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('pelanggan.riwayat') }}">
+                            <a class="nav-link {{ request()->routeIs('pelanggan.riwayat') ? 'active' : '' }}" href="{{ route('pelanggan.riwayat') }}">
                                 <i class="bi bi-clock-history"></i> Riwayat
                             </a>
                         </li>
                     @elseif(auth()->user()->role === 'kurir')
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('kurir.dashboard') }}">
+                            <a class="nav-link {{ request()->routeIs('kurir.dashboard') ? 'active' : '' }}" href="{{ route('kurir.dashboard') }}">
                                 <i class="bi bi-speedometer2"></i> Dashboard
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('kurir.tugas') }}">
+                            <a class="nav-link {{ request()->routeIs('kurir.tugas') ? 'active' : '' }}" href="{{ route('kurir.tugas') }}">
                                 <i class="bi bi-list-task"></i> Tugas Saya
                             </a>
                         </li>
                     @elseif(auth()->user()->role === 'admin')
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.dashboard') }}">
+                            <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
                                 <i class="bi bi-speedometer2"></i> Dashboard
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.paket.index') }}">
-                                <i class="bi bi-box"></i> Kelola Paket
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {{ request()->routeIs('admin.paket.*') || request()->routeIs('admin.promo.*') ? 'active' : '' }}" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-gear"></i> Kelola Data
                             </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{ route('admin.paket.index') }}">
+                                    <i class="bi bi-box text-primary"></i> Kelola Paket
+                                </a></li>
+                                <li><a class="dropdown-item" href="{{ route('admin.promo.index') }}">
+                                    <i class="bi bi-gift text-success"></i> Kelola Promo
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ route('admin.promo-claim.index') }}">
+                                    <i class="bi bi-check-circle text-warning"></i> Validasi Promo
+                                    @php
+                                        $pendingClaims = \App\Models\PromoClaim::where('status', 'pending')->count();
+                                    @endphp
+                                    @if($pendingClaims > 0)
+                                        <span class="badge-notification">{{ $pendingClaims }}</span>
+                                    @endif
+                                </a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {{ request()->routeIs('admin.transaksi.*') || request()->routeIs('admin.kurir.*') ? 'active' : '' }}" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-people"></i> Kelola Operasional
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{ route('admin.transaksi.index') }}">
+                                    <i class="bi bi-receipt text-info"></i> Kelola Transaksi
+                                </a></li>
+                                <li><a class="dropdown-item" href="{{ route('admin.kurir.index') }}">
+                                    <i class="bi bi-truck text-primary"></i> Kelola Kurir
+                                </a></li>
+                            </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.transaksi.index') }}">
-                                <i class="bi bi-receipt"></i> Kelola Transaksi
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.kurir.index') }}">
-                                <i class="bi bi-people"></i> Kelola Kurir
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.promo.index') }}">
-                                <i class="bi bi-gift"></i> Kelola Promo
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.promo-claim.index') }}">
-                                <i class="bi bi-check-circle"></i> Validasi Promo
-                                @php
-                                    $pendingClaims = \App\Models\PromoClaim::where('status', 'pending')->count();
-                                @endphp
-                                @if($pendingClaims > 0)
-                                    <span class="badge bg-danger">{{ $pendingClaims }}</span>
-                                @endif
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.riwayat.index') }}">
-                                <i class="bi bi-clock-history"></i> Riwayat & Laporan
+                            <a class="nav-link {{ request()->routeIs('admin.riwayat.*') ? 'active' : '' }}" href="{{ route('admin.riwayat.index') }}">
+                                <i class="bi bi-bar-chart"></i> Laporan
                             </a>
                         </li>
                     @endif
@@ -397,13 +494,20 @@
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-person-circle"></i> {{ auth()->user()->name }}
+                            <div class="user-avatar">
+                                <i class="bi bi-person-circle"></i>
+                            </div>
+                            <span class="d-none d-md-inline">{{ auth()->user()->name }}</span>
                         </a>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><h6 class="dropdown-header">
+                                <i class="bi bi-person-badge"></i> {{ ucfirst(auth()->user()->role) }}
+                            </h6></li>
+                            <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form action="{{ route('logout') }}" method="POST" class="d-inline">
                                     @csrf
-                                    <button type="submit" class="dropdown-item">
+                                    <button type="submit" class="dropdown-item text-danger">
                                         <i class="bi bi-box-arrow-right"></i> Logout
                                     </button>
                                 </form>
