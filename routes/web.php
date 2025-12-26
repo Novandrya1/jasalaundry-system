@@ -55,8 +55,4 @@ Route::middleware(['auth', 'role:kurir'])->prefix('kurir')->name('kurir.')->grou
     Route::patch('/transaksi/{transaksi}/status', [\App\Http\Controllers\KurirController::class, 'updateStatus'])->name('transaksi.status');
 });
 
-// Payment Routes
-Route::post('/payment/webhook', [\App\Http\Controllers\PaymentController::class, 'webhook'])->name('payment.webhook');
-Route::get('/payment/status/{kodeInvoice}', [\App\Http\Controllers\PaymentController::class, 'checkStatus'])->name('payment.status');
-Route::get('/payment/demo/{kodeInvoice}', [\App\Http\Controllers\PaymentController::class, 'demoPayment'])->name('payment.demo');
-Route::post('/payment/demo/{kodeInvoice}/confirm', [\App\Http\Controllers\PaymentController::class, 'confirmDemoPayment'])->name('payment.demo.confirm');
+
