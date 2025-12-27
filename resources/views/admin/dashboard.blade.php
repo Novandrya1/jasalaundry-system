@@ -236,6 +236,7 @@
                                     <th class="fw-semibold">Status</th>
                                     <th class="fw-semibold">Total</th>
                                     <th class="fw-semibold">Tanggal</th>
+                                    <th class="fw-semibold text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -281,6 +282,34 @@
                                             <span class="text-muted">{{ $transaksi->created_at->format('d/m/Y') }}</span><br>
                                             <small class="text-muted">{{ $transaksi->created_at->format('H:i') }}</small>
                                         </td>
+                                        <td class="text-center">
+                                            <div class="btn-group" role="group">
+                                                <a href="{{ route('admin.transaksi.edit', $transaksi) }}" 
+                                                   class="btn btn-sm btn-outline-primary" 
+                                                   title="Edit Transaksi">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                @if($transaksi->status_transaksi !== 'selesai')
+                                                    <div class="btn-group" role="group">
+                                                        <button type="button" class="btn btn-sm btn-outline-success dropdown-toggle" 
+                                                                data-bs-toggle="dropdown" title="Update Status">
+                                                            <i class="bi bi-arrow-repeat"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            @if($transaksi->status_transaksi === 'request_jemput')
+                                                                <li><a class="dropdown-item" href="#" onclick="updateStatus({{ $transaksi->id }}, 'dijemput_kurir')">Dijemput Kurir</a></li>
+                                                            @elseif($transaksi->status_transaksi === 'dijemput_kurir')
+                                                                <li><a class="dropdown-item" href="#" onclick="updateStatus({{ $transaksi->id }}, 'proses_cuci')">Proses Cuci</a></li>
+                                                            @elseif($transaksi->status_transaksi === 'proses_cuci')
+                                                                <li><a class="dropdown-item" href="#" onclick="updateStatus({{ $transaksi->id }}, 'siap_antar')">Siap Antar</a></li>
+                                                            @elseif($transaksi->status_transaksi === 'siap_antar')
+                                                                <li><a class="dropdown-item" href="#" onclick="updateStatus({{ $transaksi->id }}, 'selesai')">Selesai</a></li>
+                                                            @endif
+                                                        </ul>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -299,4 +328,45 @@
         </div>
     </div>
 </div>
+
+<!-- Form tersembunyi untuk update status -->
+<form id="updateStatusForm" method="POST" style="display: none;">
+    @csrf
+    @method('PATCH')
+    <input type="hidden" name="status_transaksi" id="newStatus">
+</form>
+
+<script>
+function updateStatus(transaksiId, newStatus) {
+    const statusNames = {
+        'dijemput_kurir': 'Dijemput Kurir',
+        'proses_cuci': 'Proses Cuci', 
+        'siap_antar': 'Siap Antar',
+        'selesai': 'Selesai'
+    };
+    
+    if (confirm(`Apakah Anda yakin ingin mengubah status menjadi "${statusNames[newStatus]}"?`)) {
+        const form = document.getElementById('updateStatusForm');
+        const statusInput = document.getElementById('newStatus');
+        
+        form.action = `/admin/transaksi/${transaksiId}`;
+        statusInput.value = newStatus;
+        
+        // Tambahkan input tersembunyi untuk status_bayar dan berat_aktual
+        const statusBayarInput = document.createElement('input');
+        statusBayarInput.type = 'hidden';
+        statusBayarInput.name = 'status_bayar';
+        statusBayarInput.value = 'belum_bayar';
+        form.appendChild(statusBayarInput);
+        
+        const beratInput = document.createElement('input');
+        beratInput.type = 'hidden';
+        beratInput.name = 'berat_aktual';
+        beratInput.value = '';
+        form.appendChild(beratInput);
+        
+        form.submit();
+    }
+}
+</script>
 @endsection

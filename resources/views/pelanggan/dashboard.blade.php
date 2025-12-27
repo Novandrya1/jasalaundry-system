@@ -313,7 +313,7 @@ function klaimPromo(promoId) {
         btnText.classList.add('d-none');
         btnLoading.classList.remove('d-none');
         
-        fetch('/klaim-promo', {
+        fetch('/pelanggan/promo/klaim', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

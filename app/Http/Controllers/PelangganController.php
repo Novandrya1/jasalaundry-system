@@ -44,10 +44,16 @@ class PelangganController extends Controller
     {
         $request->validate([
             'paket_id' => 'required|exists:pakets,id',
-            'alamat_jemput' => 'required|string',
-            'catatan' => 'nullable|string',
-            'metode_bayar' => 'required|in:tunai,qris',
-            'kode_promo' => 'nullable|string',
+            'alamat_jemput' => 'required|string|min:10',
+            'catatan' => 'nullable|string|max:500',
+            'metode_bayar' => 'required|in:tunai,transfer',
+            'kode_promo' => 'nullable|string|max:20',
+        ], [
+            'paket_id.required' => 'Silakan pilih paket laundry.',
+            'alamat_jemput.required' => 'Alamat penjemputan wajib diisi.',
+            'alamat_jemput.min' => 'Alamat penjemputan minimal 10 karakter.',
+            'metode_bayar.required' => 'Silakan pilih metode pembayaran.',
+            'metode_bayar.in' => 'Metode pembayaran tidak valid.',
         ]);
 
         DB::beginTransaction();
@@ -109,61 +115,6 @@ class PelangganController extends Controller
             // Tandai promo sebagai digunakan
             if ($promoClaimId) {
                 PromoClaim::find($promoClaimId)->update(['is_used' => true]);
-            }
-
-            // Handle QRIS payment
-            if ($request->metode_bayar === 'qris') {
-                // Check if Midtrans is properly configured
-                if (config('midtrans.server_key') === 'SB-Mid-server-YOUR_SERVER_KEY') {
-                    // Fallback: Create transaction without Midtrans for demo
-                    $demoPaymentUrl = route('payment.demo', $transaksi->kode_invoice);
-                    
-                    $transaksi->update([
-                        'payment_url' => $demoPaymentUrl
-                    ]);
-                    
-                    // Send demo payment link via WhatsApp
-                    $message = "Halo {$transaksi->user->name},\n\nPesanan laundry Anda telah dibuat!\n\nKode Invoice: {$transaksi->kode_invoice}\nTotal: Rp " . number_format($transaksi->total_harga, 0, ',', '.') . "\n\n[DEMO MODE] Link pembayaran QRIS:\n{$demoPaymentUrl}\n\nTerima kasih - JasaLaundry";
-                    
-                    $whatsappUrl = \App\Services\WhatsAppService::sendNotification(
-                        $transaksi->user->phone,
-                        $message
-                    );
-                    
-                    DB::commit();
-                    
-                    return redirect()->route('pelanggan.riwayat')
-                        ->with('success', 'Pesanan berhasil dibuat! Link pembayaran QRIS (DEMO) telah dikirim via WhatsApp.')
-                        ->with('whatsapp_url', $whatsappUrl);
-                } else {
-                    // Use real Midtrans integration
-                    $midtransService = new \App\Services\MidtransService();
-                    $paymentResult = $midtransService->createTransaction($transaksi);
-                    
-                    if ($paymentResult['success']) {
-                        $transaksi->update([
-                            'snap_token' => $paymentResult['snap_token'],
-                            'payment_url' => $paymentResult['redirect_url']
-                        ]);
-                        
-                        // Send payment link via WhatsApp
-                        $message = "Halo {$transaksi->user->name},\n\nPesanan laundry Anda telah dibuat!\n\nKode Invoice: {$transaksi->kode_invoice}\nTotal: Rp " . number_format($transaksi->total_harga, 0, ',', '.') . "\n\nSilakan lakukan pembayaran melalui link QRIS berikut:\n{$paymentResult['redirect_url']}\n\nTerima kasih - JasaLaundry";
-                        
-                        $whatsappUrl = \App\Services\WhatsAppService::sendNotification(
-                            $transaksi->user->phone,
-                            $message
-                        );
-                        
-                        DB::commit();
-                        
-                        return redirect()->route('pelanggan.riwayat')
-                            ->with('success', 'Pesanan berhasil dibuat! Link pembayaran QRIS telah dikirim via WhatsApp.')
-                            ->with('whatsapp_url', $whatsappUrl);
-                    } else {
-                        DB::rollback();
-                        return back()->with('error', 'Gagal membuat link pembayaran: ' . $paymentResult['message']);
-                    }
-                }
             }
 
             DB::commit();

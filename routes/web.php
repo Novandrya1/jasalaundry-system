@@ -21,13 +21,13 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Pelanggan Routes
-Route::middleware(['auth', 'role:pelanggan'])->group(function () {
-    Route::get('/dashboard', [PelangganController::class, 'dashboard'])->name('pelanggan.dashboard');
-    Route::get('/order', [PelangganController::class, 'showOrderForm'])->name('pelanggan.order');
-    Route::post('/order', [PelangganController::class, 'storeOrder'])->name('pelanggan.order.store');
-    Route::get('/riwayat-saya', [PelangganController::class, 'riwayat'])->name('pelanggan.riwayat');
-    Route::get('/transaksi/{transaksi}', [PelangganController::class, 'show'])->name('pelanggan.transaksi.show');
-    Route::post('/klaim-promo', [PelangganController::class, 'klaimPromo'])->name('pelanggan.klaim-promo');
+Route::middleware(['auth', 'role:pelanggan'])->prefix('pelanggan')->name('pelanggan.')->group(function () {
+    Route::get('/dashboard', [PelangganController::class, 'dashboard'])->name('dashboard');
+    Route::get('/order', [PelangganController::class, 'showOrderForm'])->name('order');
+    Route::post('/order', [PelangganController::class, 'storeOrder'])->name('order.store');
+    Route::get('/riwayat', [PelangganController::class, 'riwayat'])->name('riwayat');
+    Route::get('/transaksi/{transaksi}', [PelangganController::class, 'show'])->name('transaksi.show');
+    Route::post('/promo/klaim', [PelangganController::class, 'klaimPromo'])->name('promo.klaim');
 });
 
 // Admin Routes

@@ -1,0 +1,74 @@
+/* Kurir Dashboard Custom Styles */
+.dashboard-animation {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.dashboard-animation.delay-1 {
+    animation-delay: 0.1s;
+}
+
+.dashboard-animation.delay-2 {
+    animation-delay: 0.2s;
+}
+
+.dashboard-animation.delay-3 {
+    animation-delay: 0.3s;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 576px) {
+    .stat-card .card-body {
+        padding: 1rem !important;
+    }
+    
+    .stat-number {
+        font-size: 2rem !important;
+    }
+    
+    .stat-icon {
+        width: 45px !important;
+        height: 45px !important;
+        font-size: 1.2rem !important;
+    }
+    
+    .quick-action-card .card-body {
+        padding: 1rem !important;
+    }
+    
+    .task-item .card-body {
+        padding: 1rem !important;
+    }
+    
+    .status-badge {
+        font-size: 0.75rem !important;
+        padding: 0.4rem 0.8rem !important;
+    }
+    
+    .action-btn {
+        width: 35px !important;
+        height: 35px !important;
+        font-size: 0.9rem !important;
+    }
+}
+
+/* Hover Effects */
+.stat-card:hover .stat-icon {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+}
+
+.quick-action-card:hover .stat-icon {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+}
