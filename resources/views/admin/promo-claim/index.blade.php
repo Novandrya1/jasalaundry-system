@@ -3,83 +3,200 @@
 @section('title', 'Validasi Promo')
 
 @section('content')
-<div class="row">
-    <div class="col-12">
-        <h2><i class="bi bi-check-circle"></i> Validasi Klaim Promo</h2>
-        <p class="text-muted">Setujui atau tolak klaim promo dari pelanggan</p>
+<style>
+.page-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    color: white;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.claim-card {
+    border: none;
+    border-radius: 16px;
+    background: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.table-modern {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table-modern th {
+    background: #f8fafc;
+    border: none;
+    padding: 1rem;
+    font-weight: 600;
+    color: #374151;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.table-modern td {
+    border: none;
+    padding: 1rem;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+.table-modern tr:hover {
+    background: #f8fafc;
+}
+
+.customer-info {
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.25rem;
+}
+
+.promo-title {
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.25rem;
+}
+
+.status-badge {
+    padding: 0.4rem 0.8rem;
+    border-radius: 15px;
+    font-weight: 600;
+    font-size: 0.75rem;
+}
+
+.action-btn {
+    border-radius: 8px;
+    padding: 0.4rem 0.6rem;
+    margin: 0 0.1rem;
+}
+
+.promo-code {
+    background: #f1f5f9;
+    color: #374151;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+}
+
+.empty-state {
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    color: #cbd5e1;
+    margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .page-header {
+        padding: 1.5rem;
+    }
+    .table-responsive {
+        font-size: 0.85rem;
+    }
+    .action-btn {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.8rem;
+    }
+}
+</style>
+
+<!-- Header -->
+<div class="page-header">
+    <div class="row align-items-center">
+        <div class="col-md-8">
+            <h1 class="mb-2 fw-bold"><i class="bi bi-check-circle"></i> Validasi Klaim Promo</h1>
+            <p class="mb-0 opacity-90">Setujui atau tolak klaim promo dari pelanggan</p>
+        </div>
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            @php
+                $pendingCount = $claims->where('status', 'pending')->count();
+            @endphp
+            @if($pendingCount > 0)
+                <span class="badge bg-warning text-dark fs-6">
+                    {{ $pendingCount }} Menunggu Validasi
+                </span>
+            @endif
+        </div>
     </div>
 </div>
 
 <div class="row">
     <div class="col-12">
-        <div class="card shadow">
-            <div class="card-body">
+        <div class="claim-card">
+            <div class="card-body p-0">
                 @if($claims->count() > 0)
                     <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead class="table-dark">
+                        <table class="table table-modern mb-0">
+                            <thead>
                                 <tr>
-                                    <th>Tanggal</th>
-                                    <th>Pelanggan</th>
-                                    <th>Email</th>
-                                    <th>Promo</th>
-                                    <th>Diskon</th>
-                                    <th>Kode Promo</th>
-                                    <th>Status</th>
-                                    <th>Aksi</th>
+                                    <th width="12%">Tanggal</th>
+                                    <th width="18%">Pelanggan</th>
+                                    <th width="15%">Promo</th>
+                                    <th width="10%">Diskon</th>
+                                    <th width="12%">Kode Promo</th>
+                                    <th width="15%">Status</th>
+                                    <th width="18%" class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($claims as $claim)
                                     <tr>
-                                        <td>{{ $claim->created_at->format('d/m/Y H:i') }}</td>
                                         <td>
-                                            <strong>{{ $claim->user->name }}</strong><br>
-                                            <small class="text-muted">{{ $claim->user->phone }}</small><br>
-                                            <button class="btn btn-outline-info btn-xs mt-1" 
-                                                    onclick="showUserDetail({{ $claim->user->id }}, '{{ $claim->user->name }}', '{{ $claim->user->email }}', '{{ $claim->user->phone }}', '{{ $claim->user->address }}', '{{ $claim->user->created_at->format('d/m/Y') }}')" 
+                                            <div class="text-muted small">
+                                                <i class="bi bi-calendar me-1"></i>
+                                                {{ $claim->created_at->format('d/m/Y') }}<br>
+                                                <small>{{ $claim->created_at->format('H:i') }}</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="customer-info">{{ $claim->user->name }}</div>
+                                            <small class="text-muted d-block">{{ $claim->user->phone }}</small>
+                                            <button class="btn btn-outline-info btn-sm mt-1" 
+                                                    onclick="showUserDetail({{ $claim->user->id }}, '{{ $claim->user->name }}', '{{ $claim->user->email }}', '{{ $claim->user->phone }}', '{{ addslashes($claim->user->address) }}', '{{ $claim->user->created_at->format('d/m/Y') }}')" 
                                                     title="Detail Pelanggan">
                                                 <i class="bi bi-person-lines-fill"></i> Detail
                                             </button>
                                         </td>
                                         <td>
-                                            <small class="text-muted">{{ $claim->user->email }}</small>
+                                            <div class="promo-title">{{ $claim->promo->judul }}</div>
+                                            <small class="text-muted">{{ Str::limit($claim->promo->deskripsi, 30) }}</small>
                                         </td>
                                         <td>
-                                            <strong>{{ $claim->promo->judul }}</strong><br>
-                                            <small class="text-muted">{{ Str::limit($claim->promo->deskripsi, 40) }}</small>
+                                            <span class="badge bg-success text-white">{{ $claim->promo->diskon_text }}</span>
                                         </td>
                                         <td>
-                                            <span class="badge bg-success">{{ $claim->promo->diskon_text }}</span>
-                                        </td>
-                                        <td>
-                                            <code>{{ $claim->kode_promo }}</code>
+                                            <span class="promo-code">{{ $claim->kode_promo }}</span>
                                         </td>
                                         <td>
                                             @if($claim->status === 'pending')
-                                                <span class="badge bg-warning">Menunggu Validasi</span>
+                                                <span class="status-badge bg-warning text-dark">Menunggu Validasi</span>
                                             @elseif($claim->status === 'approved')
-                                                <span class="badge bg-success">Disetujui</span>
+                                                <span class="status-badge bg-success text-white">Disetujui</span>
                                                 @if($claim->approved_at)
-                                                    <br><small class="text-muted">{{ $claim->approved_at->format('d/m/Y H:i') }}</small>
+                                                    <br><small class="text-muted">{{ $claim->approved_at->format('d/m H:i') }}</small>
                                                 @endif
                                             @elseif($claim->status === 'rejected')
-                                                <span class="badge bg-danger">Ditolak</span>
+                                                <span class="status-badge bg-danger text-white">Ditolak</span>
                                             @elseif($claim->status === 'used')
-                                                <span class="badge bg-dark">Sudah Digunakan</span>
+                                                <span class="status-badge bg-dark text-white">Sudah Digunakan</span>
                                                 @if($claim->used_at)
-                                                    <br><small class="text-muted">{{ $claim->used_at->format('d/m/Y H:i') }}</small>
+                                                    <br><small class="text-muted">{{ $claim->used_at->format('d/m H:i') }}</small>
                                                 @endif
                                             @endif
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             @if($claim->status === 'pending')
-                                                <div class="btn-group" role="group">
+                                                <div class="d-flex gap-1 justify-content-center">
                                                     <form action="{{ route('admin.promo-claim.approve', $claim) }}" 
                                                           method="POST" class="d-inline">
                                                         @csrf
                                                         @method('PATCH')
-                                                        <button type="submit" class="btn btn-success btn-sm" 
+                                                        <button type="submit" class="action-btn btn btn-success btn-sm" 
                                                                 onclick="return confirm('Setujui klaim promo ini?')" title="Setujui">
                                                             <i class="bi bi-check"></i>
                                                         </button>
@@ -88,7 +205,7 @@
                                                           method="POST" class="d-inline">
                                                         @csrf
                                                         @method('PATCH')
-                                                        <button type="submit" class="btn btn-danger btn-sm" 
+                                                        <button type="submit" class="action-btn btn btn-danger btn-sm" 
                                                                 onclick="return confirm('Tolak klaim promo ini?')" title="Tolak">
                                                             <i class="bi bi-x"></i>
                                                         </button>
@@ -96,7 +213,7 @@
                                                 </div>
                                             @elseif($claim->status === 'approved')
                                                 <a href="{{ \App\Services\WhatsAppService::sendNotification($claim->user->phone, 'Kode Promo Anda: ' . $claim->kode_promo . '. Gunakan saat memesan laundry untuk mendapat diskon ' . $claim->promo->diskon_text . '. - JasaLaundry') }}" 
-                                                   target="_blank" class="btn btn-outline-success btn-sm" title="Kirim Ulang Kode">
+                                                   target="_blank" class="action-btn btn btn-outline-success btn-sm" title="Kirim Ulang Kode">
                                                     <i class="bi bi-whatsapp"></i>
                                                 </a>
                                             @else
@@ -110,15 +227,15 @@
                     </div>
 
                     @if($claims->hasPages())
-                        <div class="d-flex justify-content-center mt-3">
+                        <div class="d-flex justify-content-center p-3">
                             {{ $claims->links() }}
                         </div>
                     @endif
                 @else
-                    <div class="text-center py-5">
-                        <i class="bi bi-inbox fs-1 text-muted"></i>
-                        <h5 class="text-muted mt-2">Belum ada klaim promo</h5>
-                        <p class="text-muted">Klaim promo dari pelanggan akan muncul di sini</p>
+                    <div class="empty-state">
+                        <i class="bi bi-inbox"></i>
+                        <h4 class="text-muted mb-2">Belum ada klaim promo</h4>
+                        <p class="text-muted mb-4">Klaim promo dari pelanggan akan muncul di sini untuk divalidasi</p>
                     </div>
                 @endif
             </div>
