@@ -230,7 +230,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('pelanggan.riwayat') ? 'active' : '' }}" href="{{ route('pelanggan.riwayat') }}">
+                            <a class="nav-link {{ request()->routeIs('pelanggan.riwayat') && request()->get('tab') === 'pesanan' ? 'active' : '' }}" href="{{ route('pelanggan.riwayat', ['tab' => 'pesanan']) }}">
+                                <i class="bi bi-box-seam"></i> Pesanan Saya
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('pelanggan.riwayat') && request()->get('tab') === 'riwayat' ? 'active' : '' }}" href="{{ route('pelanggan.riwayat', ['tab' => 'riwayat']) }}">
                                 <i class="bi bi-clock-history"></i> Riwayat
                             </a>
                         </li>

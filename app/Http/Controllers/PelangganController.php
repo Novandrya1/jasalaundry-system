@@ -28,9 +28,17 @@ class PelangganController extends Controller
             ->count();
         $promoTersedia = \App\Models\Promo::active()->count();
         
+        // Pesanan Saya (transaksi yang belum selesai)
+        $pesananSaya = Transaksi::with(['detailTransaksis.paket', 'kurir'])
+            ->where('user_id', Auth::id())
+            ->where('status_transaksi', '!=', 'selesai')
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+        
         return view('pelanggan.dashboard', compact(
             'pakets', 'promos', 'totalPesanan', 'pesananAktif', 
-            'pesananSelesai', 'promoTersedia'
+            'pesananSelesai', 'promoTersedia', 'pesananSaya'
         ));
     }
 
@@ -128,14 +136,29 @@ class PelangganController extends Controller
         }
     }
 
-    public function riwayat()
+    public function riwayat(Request $request)
     {
-        $transaksis = Transaksi::with(['detailTransaksis.paket', 'kurir'])
-            ->where('user_id', Auth::id())
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        $tab = $request->get('tab', 'pesanan');
+        $showAll = $request->get('all', false);
+        
+        if ($tab === 'riwayat') {
+            $query = Transaksi::with(['detailTransaksis.paket', 'kurir'])
+                ->where('user_id', Auth::id())
+                ->where('status_transaksi', 'selesai')
+                ->orderBy('updated_at', 'desc');
+            
+            $transaksis = $showAll ? $query->paginate(10) : $query->limit(5)->get();
+        } else {
+            $tab = 'pesanan';
+            $query = Transaksi::with(['detailTransaksis.paket', 'kurir'])
+                ->where('user_id', Auth::id())
+                ->where('status_transaksi', '!=', 'selesai')
+                ->orderBy('created_at', 'desc');
+            
+            $transaksis = $showAll ? $query->paginate(10) : $query->limit(5)->get();
+        }
 
-        return view('pelanggan.riwayat', compact('transaksis'));
+        return view('pelanggan.riwayat', compact('transaksis', 'tab', 'showAll'));
     }
 
     public function show(Transaksi $transaksi)

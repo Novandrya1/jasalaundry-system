@@ -11,10 +11,26 @@
                 <!-- Header -->
                 <div class="text-center mb-3 mb-lg-4">
                     <div class="order-icon mb-2 mb-lg-3">
-                        <i class="bi bi-clock-history"></i>
+                        @if($tab === 'riwayat')
+                            <i class="bi bi-check-circle"></i>
+                        @else
+                            <i class="bi bi-box-seam"></i>
+                        @endif
                     </div>
-                    <h3 class="fw-bold mb-1 mb-lg-2 h4 h-lg-3">Riwayat Pesanan</h3>
-                    <p class="text-muted small">Semua pesanan laundry Anda</p>
+                    <h3 class="fw-bold mb-1 mb-lg-2 h4 h-lg-3">
+                        @if($tab === 'riwayat')
+                            Riwayat Selesai
+                        @else
+                            Pesanan Saya
+                        @endif
+                    </h3>
+                    <p class="text-muted small">
+                        @if($tab === 'riwayat')
+                            Transaksi yang sudah selesai
+                        @else
+                            Pesanan yang sedang berjalan
+                        @endif
+                    </p>
                 </div>
 
                 <!-- Quick Stats -->
@@ -24,13 +40,15 @@
                     </div>
                     <div class="card-body">
                         <div class="summary-item">
-                            <span class="text-muted">Total Pesanan:</span>
-                            <span class="fw-semibold">{{ $transaksis->total() }}</span>
+                            <span class="text-muted">Total {{ $tab === 'riwayat' ? 'Riwayat' : 'Pesanan' }}:</span>
+                            <span class="fw-semibold">{{ $showAll && method_exists($transaksis, 'total') ? $transaksis->total() : $transaksis->count() }}</span>
                         </div>
+                        @if($showAll && method_exists($transaksis, 'currentPage'))
                         <div class="summary-item">
                             <span class="text-muted">Halaman:</span>
                             <span class="fw-semibold text-primary">{{ $transaksis->currentPage() }} dari {{ $transaksis->lastPage() }}</span>
                         </div>
+                        @endif
                     </div>
                 </div>
 
@@ -54,6 +72,15 @@
 
         <!-- Right Content - History List -->
         <div class="col-lg-8 col-xl-9 order-1 order-lg-2">
+            @if(!$showAll)
+                <div class="alert alert-info d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-info-circle me-2"></i>Menampilkan 5 {{ $tab === 'riwayat' ? 'riwayat' : 'pesanan' }} terbaru</span>
+                    <a href="{{ route('pelanggan.riwayat', ['tab' => $tab, 'all' => 1]) }}" class="btn btn-sm btn-primary">
+                        <i class="bi bi-list me-1"></i>Lihat Semua {{ $tab === 'riwayat' ? 'Riwayat' : 'Pesanan' }}
+                    </a>
+                </div>
+            @endif
+            
             <div class="card border-0 shadow-sm">
                 <div class="card-body p-3 p-md-4 p-lg-5">
                     @forelse($transaksis as $transaksi)
@@ -190,8 +217,13 @@
                             <div class="empty-icon mb-3">
                                 <i class="bi bi-inbox"></i>
                             </div>
-                            <h5 class="text-muted mb-2">Belum ada riwayat pesanan</h5>
-                            <p class="text-muted mb-4">Anda belum pernah melakukan pemesanan laundry</p>
+                            @if($tab === 'riwayat')
+                                <h5 class="text-muted mb-2">Belum ada riwayat selesai</h5>
+                                <p class="text-muted mb-4">Transaksi yang sudah selesai akan muncul di sini</p>
+                            @else
+                                <h5 class="text-muted mb-2">Belum ada pesanan aktif</h5>
+                                <p class="text-muted mb-4">Anda belum memiliki pesanan yang sedang berjalan</p>
+                            @endif
                             <a href="{{ route('pelanggan.order') }}" class="btn btn-primary">
                                 <i class="bi bi-plus-circle me-2"></i>Pesan Sekarang
                             </a>
@@ -199,9 +231,9 @@
                     @endforelse
 
                     <!-- Pagination -->
-                    @if($transaksis->hasPages())
+                    @if($showAll && method_exists($transaksis, 'hasPages') && $transaksis->hasPages())
                         <div class="d-flex justify-content-center mt-4">
-                            {{ $transaksis->links() }}
+                            {{ $transaksis->appends(['tab' => $tab, 'all' => 1])->links() }}
                         </div>
                     @endif
                 </div>

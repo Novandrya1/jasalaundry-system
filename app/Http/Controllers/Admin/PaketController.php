@@ -50,10 +50,12 @@ class PaketController extends Controller
             'harga_per_kg' => 'required|numeric|min:0',
             'deskripsi' => 'nullable|string',
             'satuan' => 'required|in:kg,pcs',
-            'is_active' => 'boolean',
         ]);
 
-        $paket->update($request->all());
+        $data = $request->only(['nama_paket', 'harga_per_kg', 'deskripsi', 'satuan']);
+        $data['is_active'] = $request->has('is_active') ? 1 : 0;
+
+        $paket->update($data);
 
         return redirect()->route('admin.paket.index')->with('success', 'Paket berhasil diperbarui.');
     }

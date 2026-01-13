@@ -219,12 +219,12 @@
         </a>
     </div>
     <div class="col-md-4">
-        <a href="{{ route('pelanggan.riwayat') }}" class="quick-action-card d-block">
+        <a href="{{ route('pelanggan.riwayat', ['tab' => 'pesanan']) }}" class="quick-action-card d-block">
             <div class="stats-icon mx-auto" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
                 <i class="bi bi-clock-history"></i>
             </div>
-            <h6 class="fw-bold mb-2">Riwayat Pesanan</h6>
-            <p class="text-muted small mb-0">Lihat semua pesanan Anda</p>
+            <h6 class="fw-bold mb-2">Pesanan Saya</h6>
+            <p class="text-muted small mb-0">Lihat pesanan yang sedang berjalan</p>
         </a>
     </div>
     <div class="col-md-4">
@@ -237,6 +237,68 @@
         </button>
     </div>
 </div>
+
+<!-- Pesanan Saya -->
+@if($pesananSaya && $pesananSaya->count() > 0)
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="section-title mb-0">
+                <i class="bi bi-box-seam me-2"></i>
+                Pesanan Saya
+            </h5>
+            <a href="{{ route('pelanggan.riwayat', ['tab' => 'pesanan']) }}" class="btn btn-sm btn-outline-primary">
+                Lihat Semua <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+    </div>
+    @foreach($pesananSaya as $transaksi)
+        <div class="col-12 mb-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-3">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <div class="d-flex align-items-start mb-2">
+                                <div class="me-3">
+                                    @if($transaksi->status_transaksi === 'request_jemput')
+                                        <span class="badge bg-warning text-dark">⏳ Menunggu</span>
+                                    @elseif($transaksi->status_transaksi === 'dijemput_kurir')
+                                        <span class="badge bg-info text-white">🚛 Dijemput</span>
+                                    @elseif($transaksi->status_transaksi === 'proses_cuci')
+                                        <span class="badge bg-primary text-white">🧽 Dicuci</span>
+                                    @elseif($transaksi->status_transaksi === 'siap_antar')
+                                        <span class="badge bg-success text-white">📦 Siap Antar</span>
+                                    @endif
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1 fw-bold">{{ $transaksi->kode_invoice }}</h6>
+                                    <small class="text-muted d-block mb-1">
+                                        <i class="bi bi-calendar me-1"></i>{{ $transaksi->created_at->format('d M Y, H:i') }}
+                                    </small>
+                                    <small class="text-muted d-block">
+                                        <i class="bi bi-geo-alt me-1"></i>{{ Str::limit($transaksi->alamat_jemput, 60) }}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-md-end mt-2 mt-md-0">
+                            @if($transaksi->berat_aktual)
+                                <div class="mb-1">
+                                    <span class="badge bg-info">{{ $transaksi->berat_aktual }} kg</span>
+                                </div>
+                            @endif
+                            <h6 class="text-success mb-2">Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}</h6>
+                            <a href="{{ route('pelanggan.transaksi.show', $transaksi) }}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-eye me-1"></i>Detail
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+</div>
+@endif
 
 <!-- Promo Carousel -->
 @if($promos && $promos->count() > 0)
