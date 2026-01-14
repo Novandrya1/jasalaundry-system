@@ -252,22 +252,38 @@ class RiwayatController extends Controller
     {
         $query = Transaksi::with(['user', 'kurir', 'detailTransaksis.paket']);
         
-        // Apply same filters as index
+        // Filter berdasarkan status
         if ($request->status) {
             $query->where('status_transaksi', $request->status);
         }
+        
+        // Filter berdasarkan status bayar
         if ($request->status_bayar) {
             $query->where('status_bayar', $request->status_bayar);
         }
-        if ($request->tanggal_mulai) {
-            $query->whereDate('created_at', '>=', $request->tanggal_mulai);
+        
+        // Filter berdasarkan tanggal - default hari ini jika tidak ada filter
+        if ($request->tanggal_mulai || $request->tanggal_selesai) {
+            if ($request->tanggal_mulai) {
+                $startDate = Carbon::parse($request->tanggal_mulai)->startOfDay();
+                $query->where('created_at', '>=', $startDate);
+            }
+            if ($request->tanggal_selesai) {
+                $endDate = Carbon::parse($request->tanggal_selesai)->endOfDay();
+                $query->where('created_at', '<=', $endDate);
+            }
+        } else {
+            // Default: cetak transaksi hari ini saja
+            $today = Carbon::today();
+            $query->whereBetween('created_at', [$today->startOfDay(), $today->copy()->endOfDay()]);
         }
-        if ($request->tanggal_selesai) {
-            $query->whereDate('created_at', '<=', $request->tanggal_selesai);
-        }
+        
+        // Filter berdasarkan kurir
         if ($request->kurir_id) {
             $query->where('kurir_id', $request->kurir_id);
         }
+        
+        // Filter berdasarkan metode bayar
         if ($request->metode_bayar) {
             $query->where('metode_bayar', $request->metode_bayar);
         }
