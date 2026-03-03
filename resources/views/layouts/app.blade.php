@@ -264,6 +264,9 @@
                                 <li><a class="dropdown-item" href="{{ route('admin.paket.index') }}">
                                     <i class="bi bi-box text-primary"></i> Kelola Paket
                                 </a></li>
+                                <li><a class="dropdown-item" href="{{ route('admin.outlet.index') }}">
+                                    <i class="bi bi-shop text-info"></i> Kelola Outlet
+                                </a></li>
                                 <li><a class="dropdown-item" href="{{ route('admin.promo.index') }}">
                                     <i class="bi bi-gift text-success"></i> Kelola Promo
                                 </a></li>

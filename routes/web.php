@@ -37,6 +37,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('transaksi', \App\Http\Controllers\Admin\TransaksiController::class);
     Route::resource('kurir', \App\Http\Controllers\Admin\KurirController::class);
     Route::resource('promo', \App\Http\Controllers\Admin\PromoController::class);
+    Route::resource('outlet', \App\Http\Controllers\Admin\OutletController::class);
     Route::get('/promo-claim', [\App\Http\Controllers\Admin\PromoClaimController::class, 'index'])->name('promo-claim.index');
     Route::patch('/promo-claim/{claim}/approve', [\App\Http\Controllers\Admin\PromoClaimController::class, 'approve'])->name('promo-claim.approve');
     Route::patch('/promo-claim/{claim}/reject', [\App\Http\Controllers\Admin\PromoClaimController::class, 'reject'])->name('promo-claim.reject');

@@ -9,6 +9,7 @@ Aplikasi web untuk mengelola layanan laundry antar-jemput dengan sistem multi-ro
 - **Pemesanan Laundry** dengan pilihan paket dan metode pembayaran
 - **Sistem Promo** - klaim promo dari carousel dan gunakan kode diskon
 - **Riwayat Transaksi** lengkap dengan status real-time
+- **Lokasi Outlet** - lihat semua outlet dengan jam operasional dan maps
 - **Integrasi WhatsApp** untuk notifikasi otomatis
 
 ### 🚚 **Kurir**
@@ -21,9 +22,10 @@ Aplikasi web untuk mengelola layanan laundry antar-jemput dengan sistem multi-ro
 ### 👨‍💼 **Admin**
 - **Dashboard Analytics** dengan grafik dan statistik
 - **Kelola Paket** laundry dengan CRUD lengkap
+- **Kelola Outlet** - manajemen lokasi outlet dengan jam operasional
 - **Manajemen Transaksi** dengan update berat dan harga
 - **Kelola Kurir** dan penugasan
-- **Sistem Promo** - buat dan kelola promo
+- **Sistem Promo** - buat dan kelola promo (persen/nominal)
 - **Validasi Promo** - approve/reject klaim pelanggan
 - **Laporan & Analytics** dengan grafik pendapatan dan filter cetak
 - **WhatsApp Notifications** otomatis untuk update status
@@ -155,6 +157,7 @@ Format nomor: `62812345678` (tanpa +, dimulai dengan 62)
 ### Tables Utama
 - `users` - Data pengguna (admin, kurir, pelanggan)
 - `pakets` - Paket laundry dan harga
+- `outlets` - Lokasi outlet dengan jam operasional
 - `transaksis` - Data transaksi utama
 - `detail_transaksis` - Detail item transaksi
 - `promos` - Data promo dan diskon

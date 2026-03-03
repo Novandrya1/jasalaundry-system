@@ -17,6 +17,7 @@ class PelangganController extends Controller
     {
         $pakets = Paket::active()->get();
         $promos = \App\Models\Promo::active()->latest()->limit(3)->get();
+        $outlets = \App\Models\Outlet::active()->get();
         
         // Statistik untuk dashboard
         $totalPesanan = Transaksi::where('user_id', Auth::id())->count();
@@ -37,7 +38,7 @@ class PelangganController extends Controller
             ->get();
         
         return view('pelanggan.dashboard', compact(
-            'pakets', 'promos', 'totalPesanan', 'pesananAktif', 
+            'pakets', 'promos', 'outlets', 'totalPesanan', 'pesananAktif', 
             'pesananSelesai', 'promoTersedia', 'pesananSaya'
         ));
     }

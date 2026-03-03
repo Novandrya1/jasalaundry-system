@@ -387,6 +387,57 @@
 </div>
 @endif
 
+<!-- Lokasi Outlet -->
+@if($outlets && $outlets->count() > 0)
+<div class="row mb-4">
+    <div class="col-12">
+        <h5 class="section-title">
+            <i class="bi bi-shop me-2"></i>
+            Lokasi Outlet Kami
+        </h5>
+    </div>
+    @foreach($outlets as $outlet)
+        <div class="col-md-6 mb-3">
+            <div class="info-card">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-start mb-3">
+                        <div class="stats-icon me-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; width: 50px; height: 50px; font-size: 1.2rem;">
+                            <i class="bi bi-shop"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="fw-bold mb-1">{{ $outlet->nama_outlet }}</h6>
+                            <span class="badge bg-success">Buka</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <small class="text-muted d-block mb-1">
+                            <i class="bi bi-geo-alt text-primary me-2"></i>
+                            {{ $outlet->alamat }}
+                        </small>
+                        <small class="text-muted d-block mb-1">
+                            <i class="bi bi-telephone text-success me-2"></i>
+                            {{ $outlet->telepon }}
+                        </small>
+                        <small class="text-muted d-block">
+                            <i class="bi bi-clock text-warning me-2"></i>
+                            {{ $outlet->jam_buka }} - {{ $outlet->jam_tutup }}
+                        </small>
+                    </div>
+                    
+                    @if($outlet->maps_url)
+                        <a href="{{ $outlet->maps_url }}" target="_blank" class="btn btn-sm btn-outline-primary w-100 mt-2">
+                            <i class="bi bi-map me-2"></i>
+                            Lihat di Maps
+                        </a>
+                    @endif
+                </div>
+            </div>
+        </div>
+    @endforeach
+</div>
+@endif
+
 <!-- Paket Laundry -->
 <div class="row mb-4">
     <div class="col-12">
