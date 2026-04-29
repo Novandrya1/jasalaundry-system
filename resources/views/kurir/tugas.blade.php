@@ -134,8 +134,11 @@
                     <label for="status" class="form-label fw-medium">Filter Status Tugas</label>
                     <select class="form-select" id="status" name="status">
                         <option value="">Semua Status</option>
+                        <option value="request_jemput" {{ request('status') == 'request_jemput' ? 'selected' : '' }}>
+                            🕐 Perlu Dijemput
+                        </option>
                         <option value="dijemput_kurir" {{ request('status') == 'dijemput_kurir' ? 'selected' : '' }}>
-                            🚛 Tugas Baru (Dijemput Kurir)
+                            🚛 Sudah Dijemput
                         </option>
                         <option value="proses_cuci" {{ request('status') == 'proses_cuci' ? 'selected' : '' }}>
                             🧽 Sedang Dicuci
@@ -175,6 +178,12 @@
                     $statusText = '';
                     
                     switch($transaksi->status_transaksi) {
+                        case 'request_jemput':
+                            $statusClass = 'status-dijemput';
+                            $statusIcon = 'bi-clock';
+                            $statusBg = 'bg-warning bg-opacity-10 text-warning';
+                            $statusText = 'bg-warning text-dark';
+                            break;
                         case 'dijemput_kurir':
                             $statusClass = 'status-dijemput';
                             $statusIcon = 'bi-truck';
@@ -213,8 +222,10 @@
                                     <div class="flex-grow-1">
                                         <div class="d-flex align-items-center mb-2">
                                             <h5 class="mb-0 fw-bold me-3">{{ $transaksi->kode_invoice }}</h5>
-                                            @if($transaksi->status_transaksi === 'dijemput_kurir')
-                                                <span class="status-badge {{ $statusText }}">🚛 Tugas Baru</span>
+                                            @if($transaksi->status_transaksi === 'request_jemput')
+                                                <span class="status-badge {{ $statusText }}">🕐 Perlu Dijemput</span>
+                                            @elseif($transaksi->status_transaksi === 'dijemput_kurir')
+                                                <span class="status-badge {{ $statusText }}">🚛 Sudah Dijemput</span>
                                             @elseif($transaksi->status_transaksi === 'proses_cuci')
                                                 <span class="status-badge {{ $statusText }}">🧽 Sedang Dicuci</span>
                                             @elseif($transaksi->status_transaksi === 'siap_antar')
@@ -276,7 +287,17 @@
                                     </small>
                                     
                                     <!-- Status Action -->
-                                    @if($transaksi->status_transaksi === 'siap_antar')
+                                    @if($transaksi->status_transaksi === 'request_jemput')
+                                        <form method="POST" action="{{ route('kurir.transaksi.status', $transaksi) }}" class="mb-3">
+                                            @csrf
+                                            @method('PATCH')
+                                            <input type="hidden" name="status_transaksi" value="dijemput_kurir">
+                                            <button type="submit" class="btn btn-warning w-100"
+                                                    onclick="return confirm('Konfirmasi bahwa Anda sudah menjemput laundry?')">
+                                                <i class="bi bi-truck"></i> Konfirmasi Jemput
+                                            </button>
+                                        </form>
+                                    @elseif($transaksi->status_transaksi === 'siap_antar')
                                         <form method="POST" action="{{ route('kurir.transaksi.status', $transaksi) }}" class="mb-3">
                                             @csrf
                                             @method('PATCH')

@@ -20,6 +20,8 @@
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
         
         /* Navbar Styles */
@@ -197,6 +199,9 @@
             h3, h4 {
                 font-size: 1.25rem;
             }
+            footer p {
+                font-size: 11px !important;
+            }
         }
     </style>
 </head>
@@ -333,7 +338,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="py-4">
+    <main class="py-4" style="min-height: calc(100vh - 200px);">
         <div class="container">
             <!-- Alert Messages -->
             @if(session('success'))
@@ -367,9 +372,9 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-light py-4 mt-5">
-        <div class="container text-center">
-            <p class="mb-0">&copy; 2025 JasaLaundry. Semua hak dilindungi.</p>
+    <footer class="py-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin-top: auto !important;">
+        <div class="container text-center text-white">
+            <p class="mb-0 small">&copy; 2025 JasaLaundry. Semua hak dilindungi.</p>
         </div>
     </footer>
 

@@ -29,7 +29,6 @@
                                     <th>Nama Outlet</th>
                                     <th>Alamat</th>
                                     <th>Telepon</th>
-                                    <th>Jam Operasional</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -40,7 +39,6 @@
                                         <td><strong>{{ $outlet->nama_outlet }}</strong></td>
                                         <td>{{ Str::limit($outlet->alamat, 50) }}</td>
                                         <td>{{ $outlet->telepon }}</td>
-                                        <td>{{ $outlet->jam_buka }} - {{ $outlet->jam_tutup }}</td>
                                         <td>
                                             @if($outlet->is_active)
                                                 <span class="badge bg-success">Aktif</span>

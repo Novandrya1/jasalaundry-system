@@ -19,12 +19,9 @@ class TransaksiController extends Controller
             $query->where('status_transaksi', $request->status);
         }
         
-        // Filter berdasarkan tanggal - default hari ini
+        // Filter berdasarkan tanggal
         if ($request->tanggal) {
             $query->whereDate('created_at', $request->tanggal);
-        } else {
-            // Default: tampilkan transaksi hari ini saja
-            $query->whereDate('created_at', \Carbon\Carbon::today());
         }
         
         $transaksis = $query->orderBy('created_at', 'desc')->paginate(10);

@@ -74,22 +74,30 @@
                             
                             <div class="packages-grid">
                                 @foreach($pakets as $paket)
-                                <div class="package-option" data-package-id="{{ $paket->id }}" 
+                                <div class="package-option" 
+                                     data-package-id="{{ $paket->id }}"
                                      data-package-name="{{ $paket->nama_paket }}" 
                                      data-package-price="Rp {{ number_format($paket->harga_per_kg, 0, ',', '.') }}/{{ $paket->satuan }}">
-                                    <input type="radio" name="paket_id" value="{{ $paket->id }}" id="paket_{{ $paket->id }}" class="d-none">
+                                    <input type="radio" name="paket_id" value="{{ $paket->id }}" id="paket_{{ $paket->id }}" 
+                                           class="d-none" {{ old('paket_id') == $paket->id ? 'checked' : '' }}>
                                     <label for="paket_{{ $paket->id }}" class="package-label">
                                         <div class="package-content">
                                             <div class="package-icon">
-                                                <i class="bi bi-droplet-half"></i>
+                                                <i class="bi bi-droplet-fill"></i>
                                             </div>
                                             <h6 class="package-name">{{ $paket->nama_paket }}</h6>
                                             <div class="package-price">Rp {{ number_format($paket->harga_per_kg, 0, ',', '.') }}<span>/{{ $paket->satuan }}</span></div>
+                                            @if($paket->deskripsi)
+                                            <div class="package-details mt-2">
+                                                <small class="text-muted d-block">{{ $paket->deskripsi }}</small>
+                                            </div>
+                                            @endif
                                         </div>
                                     </label>
                                 </div>
                                 @endforeach
                             </div>
+                            
                             @error('paket_id')
                                 <div class="error-msg"><i class="bi bi-exclamation-circle"></i> {{ $message }}</div>
                             @enderror
@@ -292,6 +300,18 @@
     position: relative;
 }
 
+.section-subtitle {
+    font-weight: 600;
+    color: #1f2937;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.section-subtitle i {
+    color: #3b82f6;
+}
+
 .step-header {
     display: flex;
     align-items: center;
@@ -355,6 +375,17 @@
     margin: 0;
     cursor: pointer;
     text-align: center;
+}
+
+.package-details {
+    text-align: left;
+    padding-top: 0.75rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.package-details small {
+    font-size: 0.75rem;
+    line-height: 1.5;
 }
 
 .package-icon {

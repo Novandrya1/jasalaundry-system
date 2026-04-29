@@ -113,9 +113,22 @@
 
 <div class="row">
     <div class="col-12">
-        <div class="paket-card">
+        @php
+        $paketLaundry = $pakets->filter(function($p) {
+            return !str_contains(strtolower($p->nama_paket), '(antar)');
+        });
+        $paketJemputAntar = $pakets->filter(function($p) {
+            return str_contains(strtolower($p->nama_paket), '(antar)');
+        });
+        @endphp
+        
+        <!-- Paket Laundry -->
+        <div class="paket-card mb-4">
+            <div class="card-header bg-white border-bottom">
+                <h5 class="mb-0 fw-bold"><i class="bi bi-droplet-fill text-primary me-2"></i>Paket Laundry</h5>
+            </div>
             <div class="card-body p-0">
-                @if($pakets->count() > 0)
+                @if($paketLaundry->count() > 0)
                     <div class="table-responsive">
                         <table class="table table-modern mb-0">
                             <thead>
@@ -130,9 +143,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($pakets as $index => $paket)
+                                @foreach($paketLaundry as $index => $paket)
                                     <tr>
-                                        <td class="text-muted">{{ $pakets->firstItem() + $index }}</td>
+                                        <td class="text-muted">{{ $loop->iteration }}</td>
                                         <td>
                                             <div class="paket-name">{{ $paket->nama_paket }}</div>
                                         </td>
@@ -180,25 +193,107 @@
                             </tbody>
                         </table>
                     </div>
-
-                    <!-- Pagination -->
-                    @if($pakets->hasPages())
-                        <div class="d-flex justify-content-center p-3">
-                            {{ $pakets->links() }}
-                        </div>
-                    @endif
                 @else
-                    <div class="empty-state">
-                        <i class="bi bi-inbox"></i>
-                        <h4 class="text-muted mb-2">Belum ada paket laundry</h4>
-                        <p class="text-muted mb-4">Tambahkan paket laundry pertama untuk memulai layanan</p>
-                        <a href="{{ route('admin.paket.create') }}" class="btn btn-primary">
-                            <i class="bi bi-plus-circle"></i> Tambah Paket Pertama
-                        </a>
+                    <div class="p-4 text-center text-muted">
+                        <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                        Belum ada paket laundry
                     </div>
                 @endif
             </div>
         </div>
+        
+        <!-- Paket Jemput & Antar -->
+        <div class="paket-card">
+            <div class="card-header bg-white border-bottom">
+                <h5 class="mb-0 fw-bold"><i class="bi bi-truck text-primary me-2"></i>Paket Jemput & Antar</h5>
+            </div>
+            <div class="card-body p-0">
+                @if($paketJemputAntar->count() > 0)
+                    <div class="table-responsive">
+                        <table class="table table-modern mb-0">
+                            <thead>
+                                <tr>
+                                    <th width="5%">No</th>
+                                    <th width="25%">Nama Paket</th>
+                                    <th width="15%">Harga</th>
+                                    <th width="10%">Satuan</th>
+                                    <th width="10%">Status</th>
+                                    <th width="25%">Deskripsi</th>
+                                    <th width="10%" class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($paketJemputAntar as $index => $paket)
+                                    <tr>
+                                        <td class="text-muted">{{ $loop->iteration }}</td>
+                                        <td>
+                                            <div class="paket-name">{{ $paket->nama_paket }}</div>
+                                        </td>
+                                        <td>
+                                            <div class="paket-price">
+                                                Rp {{ number_format($paket->harga_per_kg, 0, ',', '.') }}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-info text-white">{{ $paket->satuan }}</span>
+                                        </td>
+                                        <td>
+                                            @if($paket->is_active)
+                                                <span class="status-badge bg-success text-white">Aktif</span>
+                                            @else
+                                                <span class="status-badge bg-secondary text-white">Nonaktif</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <span class="text-muted">{{ Str::limit($paket->deskripsi, 50) }}</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="d-flex gap-1 justify-content-center">
+                                                <a href="{{ route('admin.paket.show', $paket) }}" 
+                                                   class="action-btn btn btn-outline-info btn-sm" title="Lihat">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                                <a href="{{ route('admin.paket.edit', $paket) }}" 
+                                                   class="action-btn btn btn-outline-warning btn-sm" title="Edit">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <form action="{{ route('admin.paket.destroy', $paket) }}" 
+                                                      method="POST" class="d-inline"
+                                                      onsubmit="return confirm('Yakin ingin menghapus paket ini?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="action-btn btn btn-outline-danger btn-sm" title="Hapus">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <div class="p-4 text-center text-muted">
+                        <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                        Belum ada paket jemput & antar
+                    </div>
+                @endif
+            </div>
+        </div>
+        
+        @if($pakets->count() == 0)
+        <div class="paket-card mt-4">
+            <div class="empty-state">
+                <i class="bi bi-inbox"></i>
+                <h4 class="text-muted mb-2">Belum ada paket laundry</h4>
+                <p class="text-muted mb-4">Tambahkan paket laundry pertama untuk memulai layanan</p>
+                <a href="{{ route('admin.paket.create') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Tambah Paket Pertama
+                </a>
+            </div>
+        </div>
+        @endif
     </div>
 </div>
 @endsection

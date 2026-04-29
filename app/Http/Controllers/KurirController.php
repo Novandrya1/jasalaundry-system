@@ -100,13 +100,18 @@ class KurirController extends Controller
         }
         
         $request->validate([
-            'status_transaksi' => 'required|in:dijemput_kurir,siap_antar,selesai',
+            'status_transaksi' => 'required|in:dijemput_kurir,selesai',
         ]);
         
-        $transaksi->update([
-            'status_transaksi' => $request->status_transaksi,
-            'tanggal_selesai' => $request->status_transaksi === 'selesai' ? now() : null,
-        ]);
+        $updateData = ['status_transaksi' => $request->status_transaksi];
+        
+        if ($request->status_transaksi === 'dijemput_kurir') {
+            $updateData['tanggal_jemput'] = now();
+        } elseif ($request->status_transaksi === 'selesai') {
+            $updateData['tanggal_selesai'] = now();
+        }
+        
+        $transaksi->update($updateData);
         
         return back()->with('success', 'Status transaksi berhasil diperbarui.');
     }

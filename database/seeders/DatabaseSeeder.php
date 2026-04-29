@@ -47,36 +47,68 @@ class DatabaseSeeder extends Seeder
             'address' => 'Jl. Pelanggan No. 1',
         ]);
 
-        // Buat Paket Laundry
+        // Buat Paket Laundry (8 paket sesuai dashboard)
+        Paket::create([
+            'nama_paket' => 'Cuci Kering + Setrika',
+            'harga_per_kg' => 7000,
+            'deskripsi' => 'Layanan cuci, kering, dan setrika lengkap',
+            'satuan' => 'kg',
+            'is_active' => true,
+        ]);
+
+        Paket::create([
+            'nama_paket' => 'Laundry Cepat',
+            'harga_per_kg' => 9000,
+            'deskripsi' => 'Layanan laundry kilat selesai 1 hari',
+            'satuan' => 'kg',
+            'is_active' => true,
+        ]);
+
+        Paket::create([
+            'nama_paket' => 'Setrika Wangi + Lipat',
+            'harga_per_kg' => 5000,
+            'deskripsi' => 'Layanan setrika dengan pewangi dan lipat rapi',
+            'satuan' => 'kg',
+            'is_active' => true,
+        ]);
+
         Paket::create([
             'nama_paket' => 'Cuci Kering',
-            'harga_per_kg' => 5000,
+            'harga_per_kg' => 6000,
             'deskripsi' => 'Layanan cuci dan kering pakaian',
             'satuan' => 'kg',
             'is_active' => true,
         ]);
 
         Paket::create([
-            'nama_paket' => 'Cuci Setrika',
-            'harga_per_kg' => 7000,
-            'deskripsi' => 'Layanan cuci, kering, dan setrika pakaian',
-            'satuan' => 'kg',
-            'is_active' => true,
-        ]);
-
-        Paket::create([
             'nama_paket' => 'Cuci Express',
-            'harga_per_kg' => 10000,
-            'deskripsi' => 'Layanan cuci kilat selesai dalam 24 jam',
+            'harga_per_kg' => 13000,
+            'deskripsi' => 'Layanan cuci express dengan antar jemput',
             'satuan' => 'kg',
             'is_active' => true,
         ]);
 
         Paket::create([
-            'nama_paket' => 'Cuci Sepatu',
-            'harga_per_kg' => 15000,
-            'deskripsi' => 'Layanan cuci sepatu',
-            'satuan' => 'pcs',
+            'nama_paket' => 'Cuci Karpet & Bed Cover',
+            'harga_per_kg' => 20000,
+            'deskripsi' => 'Layanan cuci karpet dan bed cover',
+            'satuan' => 'kg',
+            'is_active' => true,
+        ]);
+
+        Paket::create([
+            'nama_paket' => 'Setrika Wangi + Lipat (Antar)',
+            'harga_per_kg' => 7500,
+            'deskripsi' => 'Layanan setrika dengan antar jemput',
+            'satuan' => 'kg',
+            'is_active' => true,
+        ]);
+
+        Paket::create([
+            'nama_paket' => 'Cuci Kering (Antar)',
+            'harga_per_kg' => 6000,
+            'deskripsi' => 'Layanan cuci kering dengan antar jemput',
+            'satuan' => 'kg',
             'is_active' => true,
         ]);
 
