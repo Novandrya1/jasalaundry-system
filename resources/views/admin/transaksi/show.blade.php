@@ -304,6 +304,114 @@
     </div>
 </div>
 
+
+{{-- =========================
+     STRUK INVOICE - KHUSUS CETAK
+========================= --}}
+<div id="receipt-print" class="receipt-print">
+    <div class="receipt-header">
+        <div class="receipt-store">LAUNDRY</div>
+        <div class="receipt-title">STRUK PEMBAYARAN</div>
+        <div class="receipt-address">Terima kasih telah menggunakan layanan kami</div>
+    </div>
+
+    <div class="receipt-divider"></div>
+
+    <div class="receipt-meta">
+        <div class="receipt-row">
+            <span>No. Invoice</span>
+            <strong>{{ $transaksi->kode_invoice }}</strong>
+        </div>
+        <div class="receipt-row">
+            <span>Tanggal</span>
+            <span>{{ $transaksi->created_at->format('d/m/Y H:i') }}</span>
+        </div>
+        <div class="receipt-row">
+            <span>Pelanggan</span>
+            <span>{{ $transaksi->user->name }}</span>
+        </div>
+        @if($transaksi->user->phone)
+        <div class="receipt-row">
+            <span>Telepon</span>
+            <span>{{ $transaksi->user->phone }}</span>
+        </div>
+        @endif
+    </div>
+
+    <div class="receipt-divider"></div>
+
+    <table class="receipt-items">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Qty</th>
+                <th>Jumlah</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($transaksi->detailTransaksis as $detail)
+            <tr>
+                <td class="item-name">
+                    <span>{{ $detail->paket->nama_paket }}</span>
+                    <small>Rp {{ number_format($detail->harga_satuan, 0, ',', '.') }}/{{ $detail->paket->satuan }}</small>
+                </td>
+                <td class="item-qty">{{ $detail->jumlah }} {{ $detail->paket->satuan }}</td>
+                <td class="item-total">Rp {{ number_format($detail->subtotal, 0, ',', '.') }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    @if($transaksi->berat_aktual)
+    <div class="receipt-extra">
+        <span>Berat</span>
+        <strong>{{ $transaksi->berat_aktual }} kg</strong>
+    </div>
+    @endif
+
+    <div class="receipt-divider"></div>
+
+    <div class="receipt-summary">
+        <div class="receipt-row">
+            <span>Subtotal</span>
+            <span>Rp {{ number_format($transaksi->detailTransaksis->sum('subtotal'), 0, ',', '.') }}</span>
+        </div>
+
+        @if($transaksi->diskon > 0)
+        <div class="receipt-row">
+            <span>Diskon</span>
+            <span>-Rp {{ number_format($transaksi->diskon, 0, ',', '.') }}</span>
+        </div>
+        @endif
+
+        <div class="receipt-row receipt-grand-total">
+            <strong>TOTAL</strong>
+            <strong>Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}</strong>
+        </div>
+    </div>
+
+    <div class="receipt-divider"></div>
+
+    <div class="receipt-payment">
+        <span>Status Pembayaran</span>
+        <strong>
+            {{ $transaksi->status_bayar === 'belum_bayar' ? 'BELUM BAYAR' : 'LUNAS' }}
+        </strong>
+    </div>
+
+    @if($transaksi->catatan)
+    <div class="receipt-note">
+        <strong>Catatan:</strong>
+        <span>{{ $transaksi->catatan }}</span>
+    </div>
+    @endif
+
+    <div class="receipt-footer">
+        <strong>TERIMA KASIH</strong>
+        <span>Simpan struk ini sebagai bukti transaksi.</span>
+    </div>
+</div>
+
 <style>
 /* Transaction Icon */
 .transaction-icon {
@@ -682,14 +790,255 @@
     }
 }
 
-/* Print Styles */
+/* =========================================
+   PRINT RECEIPT - THERMAL 80MM
+========================================= */
+
+.receipt-print {
+    display: none;
+}
+
 @media print {
-    .sticky-top, .btn, .order-2 {
-        display: none !important;
+    @page {
+        size: 80mm auto;
+        margin: 0;
     }
-    
-    .order-1 {
-        order: 1 !important;
+
+    html,
+    body {
+        width: 80mm !important;
+        min-width: 80mm !important;
+        max-width: 80mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #fff !important;
+    }
+
+    /*
+     * Sembunyikan halaman aplikasi saat print.
+     * Receipt dibuat visible kembali di bawah.
+     */
+    body * {
+        visibility: hidden !important;
+    }
+
+    .receipt-print,
+    .receipt-print * {
+        visibility: visible !important;
+    }
+
+    .receipt-print {
+        display: block !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 72mm !important;
+        min-width: 72mm !important;
+        max-width: 72mm !important;
+        margin: 0 !important;
+        padding: 4mm 3mm 5mm !important;
+        box-sizing: border-box !important;
+        background: #fff !important;
+        color: #000 !important;
+        font-family: Arial, Helvetica, sans-serif !important;
+        font-size: 9px !important;
+        line-height: 1.3 !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+    .receipt-header {
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    .receipt-store {
+        font-size: 18px !important;
+        line-height: 1.1 !important;
+        font-weight: 800 !important;
+        letter-spacing: 1px !important;
+        margin-bottom: 2px !important;
+    }
+
+    .receipt-title {
+        font-size: 10px !important;
+        font-weight: 700 !important;
+        margin-bottom: 2px !important;
+    }
+
+    .receipt-address {
+        font-size: 8px !important;
+    }
+
+    .receipt-divider {
+        width: 100% !important;
+        border-top: 1px dashed #000 !important;
+        margin: 6px 0 !important;
+        height: 0 !important;
+    }
+
+    .receipt-meta {
+        width: 100% !important;
+    }
+
+    .receipt-row {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: flex-start !important;
+        gap: 5px !important;
+        width: 100% !important;
+        margin: 2px 0 !important;
+    }
+
+    .receipt-row > :first-child {
+        flex: 0 0 auto !important;
+    }
+
+    .receipt-row > :last-child {
+        text-align: right !important;
+        max-width: 60% !important;
+        overflow-wrap: anywhere !important;
+    }
+
+    .receipt-items {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        table-layout: fixed !important;
+        margin: 0 !important;
+    }
+
+    .receipt-items th {
+        font-size: 8px !important;
+        font-weight: 700 !important;
+        padding: 2px 0 4px !important;
+        border-bottom: 1px solid #000 !important;
+    }
+
+    .receipt-items th:nth-child(1) {
+        width: 42% !important;
+        text-align: left !important;
+    }
+
+    .receipt-items th:nth-child(2) {
+        width: 23% !important;
+        text-align: center !important;
+    }
+
+    .receipt-items th:nth-child(3) {
+        width: 35% !important;
+        text-align: right !important;
+    }
+
+    .receipt-items td {
+        font-size: 8.5px !important;
+        padding: 4px 0 !important;
+        vertical-align: top !important;
+        border: 0 !important;
+    }
+
+    .receipt-items td:nth-child(2) {
+        text-align: center !important;
+    }
+
+    .receipt-items td:nth-child(3) {
+        text-align: right !important;
+    }
+
+    .item-name > span {
+        display: block !important;
+        font-weight: 700 !important;
+        overflow-wrap: anywhere !important;
+    }
+
+    .item-name > small {
+        display: block !important;
+        font-size: 7.5px !important;
+        margin-top: 1px !important;
+    }
+
+    .item-qty {
+        overflow-wrap: anywhere !important;
+    }
+
+    .item-total {
+        white-space: nowrap !important;
+        font-weight: 600 !important;
+    }
+
+    .receipt-extra {
+        display: flex !important;
+        justify-content: space-between !important;
+        margin-top: 2px !important;
+        font-size: 8.5px !important;
+    }
+
+    .receipt-summary {
+        width: 100% !important;
+    }
+
+    .receipt-summary .receipt-row {
+        font-size: 9px !important;
+        margin: 3px 0 !important;
+    }
+
+    .receipt-grand-total {
+        margin-top: 6px !important;
+        padding-top: 5px !important;
+        border-top: 1px solid #000 !important;
+        font-size: 12px !important;
+        font-weight: 800 !important;
+    }
+
+    .receipt-payment {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        font-size: 9px !important;
+        margin: 5px 0 !important;
+    }
+
+    .receipt-payment strong {
+        border: 1px solid #000 !important;
+        padding: 2px 5px !important;
+        font-size: 8px !important;
+    }
+
+    .receipt-note {
+        display: block !important;
+        font-size: 8px !important;
+        margin-top: 5px !important;
+        overflow-wrap: anywhere !important;
+    }
+
+    .receipt-note strong {
+        display: inline !important;
+    }
+
+    .receipt-footer {
+        text-align: center !important;
+        margin-top: 10px !important;
+        padding-top: 6px !important;
+        border-top: 1px dashed #000 !important;
+    }
+
+    .receipt-footer strong {
+        display: block !important;
+        font-size: 10px !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    .receipt-footer span {
+        display: block !important;
+        font-size: 7.5px !important;
+        margin-top: 2px !important;
+    }
+
+    .receipt-print,
+    .receipt-print table,
+    .receipt-print tbody,
+    .receipt-print tr {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
     }
 }
 </style>
