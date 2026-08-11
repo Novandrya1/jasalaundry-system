@@ -3,419 +3,1251 @@
 @section('title', 'Riwayat Pesanan')
 
 @section('content')
-<div class="container-fluid px-2 px-md-4">
-    <div class="row">
-        <!-- Left Sidebar - Summary -->
-        <div class="col-lg-4 col-xl-3 mb-4 order-2 order-lg-1">
-            <div class="sticky-top" style="top: 100px;">
-                <!-- Header -->
-                <div class="text-center mb-3 mb-lg-4">
-                    <div class="order-icon mb-2 mb-lg-3">
+<div class="container-fluid px-2 px-md-4 py-2">
+    <div class="row g-4">
+
+        {{-- ================= SIDEBAR ================= --}}
+        <div class="col-lg-4 col-xl-3 order-2 order-lg-1">
+            <div class="sticky-top sidebar-sticky">
+
+                {{-- Header --}}
+                <div class="page-intro text-center mb-4">
+                    <div class="page-icon">
                         @if($tab === 'riwayat')
-                            <i class="bi bi-check-circle"></i>
+                            <i class="bi bi-check2-circle"></i>
                         @else
                             <i class="bi bi-box-seam"></i>
                         @endif
                     </div>
-                    <h3 class="fw-bold mb-1 mb-lg-2 h4 h-lg-3">
+
+                    <h3 class="fw-bold mt-3 mb-1">
                         @if($tab === 'riwayat')
                             Riwayat Selesai
                         @else
                             Pesanan Saya
                         @endif
                     </h3>
-                    <p class="text-muted small">
+
+                    <p class="text-muted small mb-0">
                         @if($tab === 'riwayat')
-                            Transaksi yang sudah selesai
+                            Semua transaksi laundry yang telah selesai
                         @else
-                            Pesanan yang sedang berjalan
+                            Pantau pesanan laundry kamu
                         @endif
                     </p>
                 </div>
 
-                <!-- Quick Stats -->
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-header bg-primary text-white">
-                        <h6 class="mb-0"><i class="bi bi-bar-chart me-2"></i>Statistik</h6>
+                {{-- Statistik --}}
+                <div class="side-card mb-3">
+                    <div class="side-card-header">
+                        <div class="header-icon">
+                            <i class="bi bi-bar-chart-fill"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0 fw-bold">Statistik Pesanan</h6>
+                            <small>Ringkasan transaksi</small>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <div class="summary-item">
-                            <span class="text-muted">Total {{ $tab === 'riwayat' ? 'Riwayat' : 'Pesanan' }}:</span>
-                            <span class="fw-semibold">{{ $showAll && method_exists($transaksis, 'total') ? $transaksis->total() : $transaksis->count() }}</span>
+
+                    <div class="side-card-body">
+                        <div class="stat-row">
+                            <div>
+                                <span class="stat-label">
+                                    Total {{ $tab === 'riwayat' ? 'Riwayat' : 'Pesanan' }}
+                                </span>
+                            </div>
+
+                            <span class="stat-value">
+                                {{ $showAll && method_exists($transaksis, 'total') ? $transaksis->total() : $transaksis->count() }}
+                            </span>
                         </div>
+
                         @if($showAll && method_exists($transaksis, 'currentPage'))
-                        <div class="summary-item">
-                            <span class="text-muted">Halaman:</span>
-                            <span class="fw-semibold text-primary">{{ $transaksis->currentPage() }} dari {{ $transaksis->lastPage() }}</span>
-                        </div>
+                            <div class="stat-row">
+                                <span class="stat-label">Halaman</span>
+                                <span class="stat-value text-primary">
+                                    {{ $transaksis->currentPage() }}
+                                    <small class="text-muted">
+                                        / {{ $transaksis->lastPage() }}
+                                    </small>
+                                </span>
+                            </div>
                         @endif
                     </div>
                 </div>
 
-                <!-- Quick Actions -->
-                <div class="info-card">
-                    <div class="info-header">
-                        <i class="bi bi-lightning"></i>
+                {{-- Quick Action --}}
+                <div class="quick-card">
+                    <div class="quick-card-header">
+                        <i class="bi bi-lightning-charge-fill"></i>
                         <span>Aksi Cepat</span>
                     </div>
+
                     <div class="d-grid gap-2">
-                        <a href="{{ route('pelanggan.order') }}" class="btn btn-primary btn-sm">
-                            <i class="bi bi-plus-circle me-2"></i>Pesan Baru
+                        <a href="{{ route('pelanggan.order') }}"
+                           class="btn btn-primary quick-btn">
+                            <i class="bi bi-plus-circle me-2"></i>
+                            Pesan Laundry
                         </a>
-                        <a href="{{ route('pelanggan.dashboard') }}" class="btn btn-outline-secondary btn-sm">
-                            <i class="bi bi-house me-2"></i>Dashboard
+
+                        <a href="{{ route('pelanggan.dashboard') }}"
+                           class="btn btn-outline-secondary quick-btn">
+                            <i class="bi bi-house me-2"></i>
+                            Kembali ke Dashboard
                         </a>
                     </div>
                 </div>
+
             </div>
         </div>
 
-        <!-- Right Content - History List -->
+
+        {{-- ================= CONTENT ================= --}}
         <div class="col-lg-8 col-xl-9 order-1 order-lg-2">
+
+            {{-- Header Content --}}
+            <div class="content-heading mb-3">
+                <div>
+                    <h4 class="fw-bold mb-1">
+                        @if($tab === 'riwayat')
+                            Riwayat Pesanan
+                        @else
+                            Pesanan Aktif
+                        @endif
+                    </h4>
+
+                    <p class="text-muted mb-0 small">
+                        @if($tab === 'riwayat')
+                            Lihat seluruh transaksi laundry yang telah selesai.
+                        @else
+                            Pantau status pesanan laundry kamu secara berkala.
+                        @endif
+                    </p>
+                </div>
+            </div>
+
+
+            {{-- Info jika hanya 5 --}}
             @if(!$showAll)
-                <div class="alert alert-info d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-info-circle me-2"></i>Menampilkan 5 {{ $tab === 'riwayat' ? 'riwayat' : 'pesanan' }} terbaru</span>
-                    <a href="{{ route('pelanggan.riwayat', ['tab' => $tab, 'all' => 1]) }}" class="btn btn-sm btn-primary">
-                        <i class="bi bi-list me-1"></i>Lihat Semua {{ $tab === 'riwayat' ? 'Riwayat' : 'Pesanan' }}
+                <div class="showing-card mb-4">
+                    <div class="showing-icon">
+                        <i class="bi bi-info-circle-fill"></i>
+                    </div>
+
+                    <div class="flex-grow-1">
+                        <strong>
+                            Menampilkan 5 {{ $tab === 'riwayat' ? 'riwayat' : 'pesanan' }} terbaru
+                        </strong>
+                        <small class="d-block text-muted">
+                            Lihat semua transaksi untuk melihat riwayat lengkap.
+                        </small>
+                    </div>
+
+                    <a href="{{ route('pelanggan.riwayat', ['tab' => $tab, 'all' => 1]) }}"
+                       class="btn btn-primary btn-sm">
+                        <i class="bi bi-list-ul me-1"></i>
+                        Lihat Semua
                     </a>
                 </div>
             @endif
-            
-            <div class="card border-0 shadow-sm">
-                <div class="card-body p-3 p-md-4 p-lg-5">
+
+
+            {{-- History Card --}}
+            <div class="history-card">
+
+                <div class="history-card-header">
+                    <div>
+                        <h5 class="mb-1 fw-bold">
+                            <i class="bi bi-receipt-cutoff text-primary me-2"></i>
+                            Daftar Transaksi
+                        </h5>
+
+                        <small class="text-muted">
+                            Detail pesanan laundry kamu
+                        </small>
+                    </div>
+
+                    <span class="transaction-count">
+                        {{ $showAll && method_exists($transaksis, 'total') ? $transaksis->total() : $transaksis->count() }}
+                        transaksi
+                    </span>
+                </div>
+
+
+                <div class="history-card-body">
+
                     @forelse($transaksis as $transaksi)
+
                         @php
                             $statusClass = '';
                             $statusIcon = '';
-                            $statusBg = '';
-                            
+                            $statusText = '';
+                            $statusColor = '';
+
                             switch($transaksi->status_transaksi) {
                                 case 'request_jemput':
-                                    $statusClass = 'status-request';
-                                    $statusIcon = 'bi-clock';
-                                    $statusBg = 'bg-warning bg-opacity-10 text-warning';
+                                    $statusClass = 'status-warning';
+                                    $statusIcon = 'bi-clock-history';
+                                    $statusText = 'Menunggu Penjemputan';
+                                    $statusColor = 'warning';
                                     break;
+
                                 case 'dijemput_kurir':
-                                    $statusClass = 'status-dijemput';
+                                    $statusClass = 'status-info';
                                     $statusIcon = 'bi-truck';
-                                    $statusBg = 'bg-info bg-opacity-10 text-info';
+                                    $statusText = 'Dijemput Kurir';
+                                    $statusColor = 'info';
                                     break;
+
                                 case 'proses_cuci':
-                                    $statusClass = 'status-proses';
+                                    $statusClass = 'status-primary';
                                     $statusIcon = 'bi-arrow-repeat';
-                                    $statusBg = 'bg-primary bg-opacity-10 text-primary';
+                                    $statusText = 'Sedang Dicuci';
+                                    $statusColor = 'primary';
                                     break;
+
                                 case 'siap_antar':
-                                    $statusClass = 'status-siap';
-                                    $statusIcon = 'bi-box-arrow-up';
-                                    $statusBg = 'bg-success bg-opacity-10 text-success';
+                                    $statusClass = 'status-success';
+                                    $statusIcon = 'bi-box-seam';
+                                    $statusText = 'Siap Diantar';
+                                    $statusColor = 'success';
                                     break;
+
                                 case 'selesai':
-                                    $statusClass = 'status-selesai';
-                                    $statusIcon = 'bi-check-circle';
-                                    $statusBg = 'bg-dark bg-opacity-10 text-dark';
+                                    $statusClass = 'status-dark';
+                                    $statusIcon = 'bi-check-circle-fill';
+                                    $statusText = 'Selesai';
+                                    $statusColor = 'dark';
                                     break;
                             }
                         @endphp
-                        
-                        <div class="history-item mb-4">
-                            <div class="d-flex align-items-start">
-                                <div class="status-icon {{ $statusBg }} me-3">
-                                    <i class="bi {{ $statusIcon }}"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start mb-2">
-                                        <div>
-                                            <h6 class="mb-1 fw-bold">{{ $transaksi->kode_invoice }}</h6>
-                                            <small class="text-muted">
-                                                <i class="bi bi-calendar me-1"></i>{{ $transaksi->created_at->format('d F Y, H:i') }}
-                                            </small>
+
+
+                        {{-- TRANSACTION ITEM --}}
+                        <div class="transaction-item">
+
+                            {{-- Top --}}
+                            <div class="transaction-top">
+
+                                <div class="invoice-wrapper">
+                                    <div class="transaction-icon {{ $statusClass }}">
+                                        <i class="bi {{ $statusIcon }}"></i>
+                                    </div>
+
+                                    <div>
+                                        <div class="invoice-label">
+                                            KODE INVOICE
                                         </div>
-                                        <div class="d-flex gap-2 mt-2 mt-md-0">
-                                            @if($transaksi->status_transaksi === 'request_jemput')
-                                                <span class="status-badge bg-warning text-dark">⏳ Menunggu Penjemputan</span>
-                                            @elseif($transaksi->status_transaksi === 'dijemput_kurir')
-                                                <span class="status-badge bg-info text-white">🚛 Dijemput Kurir</span>
-                                            @elseif($transaksi->status_transaksi === 'proses_cuci')
-                                                <span class="status-badge bg-primary text-white">🧽 Sedang Dicuci</span>
-                                            @elseif($transaksi->status_transaksi === 'siap_antar')
-                                                <span class="status-badge bg-success text-white">📦 Siap Diantar</span>
-                                            @elseif($transaksi->status_transaksi === 'selesai')
-                                                <span class="status-badge bg-dark text-white">✅ Selesai</span>
-                                            @endif
-                                            
-                                            @if($transaksi->status_bayar === 'belum_bayar')
-                                                <span class="status-badge bg-danger text-white">💳 Belum Bayar</span>
-                                            @else
-                                                <span class="status-badge bg-success text-white">💰 Lunas</span>
-                                            @endif
+
+                                        <h6 class="invoice-number mb-1">
+                                            {{ $transaksi->kode_invoice }}
+                                        </h6>
+
+                                        <small class="transaction-date">
+                                            <i class="bi bi-calendar3 me-1"></i>
+                                            {{ $transaksi->created_at->format('d F Y, H:i') }}
+                                        </small>
+                                    </div>
+                                </div>
+
+
+                                {{-- Status --}}
+                                <div class="status-wrapper">
+
+                                    <span class="status-pill {{ $statusClass }}">
+                                        <i class="bi {{ $statusIcon }}"></i>
+                                        {{ $statusText }}
+                                    </span>
+
+                                    @if($transaksi->status_bayar === 'belum_bayar')
+                                        <span class="payment-pill payment-unpaid">
+                                            <i class="bi bi-credit-card"></i>
+                                            Belum Bayar
+                                        </span>
+                                    @else
+                                        <span class="payment-pill payment-paid">
+                                            <i class="bi bi-check-circle-fill"></i>
+                                            Lunas
+                                        </span>
+                                    @endif
+
+                                </div>
+
+                            </div>
+
+
+                            {{-- Divider --}}
+                            <div class="transaction-divider"></div>
+
+
+                            {{-- Body --}}
+                            <div class="transaction-body">
+
+                                {{-- Detail --}}
+                                <div class="transaction-details">
+
+                                    {{-- Address --}}
+                                    <div class="detail-row">
+                                        <div class="detail-icon">
+                                            <i class="bi bi-geo-alt-fill"></i>
+                                        </div>
+
+                                        <div>
+                                            <small class="detail-label">
+                                                Alamat Penjemputan
+                                            </small>
+
+                                            <div class="detail-value">
+                                                {{ Str::limit($transaksi->alamat_jemput, 100) }}
+                                            </div>
                                         </div>
                                     </div>
-                                    
-                                    <div class="row g-3 mb-3">
-                                        <div class="col-md-8">
-                                            <div class="info-item">
-                                                <small class="text-muted d-block">
-                                                    <i class="bi bi-geo-alt me-1"></i>{{ Str::limit($transaksi->alamat_jemput, 80) }}
-                                                </small>
-                                            </div>
-                                            
-                                            @if($transaksi->catatan)
-                                                <div class="info-item">
-                                                    <small class="text-muted d-block">
-                                                        <i class="bi bi-chat-text me-1"></i><em>{{ $transaksi->catatan }}</em>
-                                                    </small>
-                                                </div>
-                                            @endif
-                                            
-                                            <div class="d-flex flex-wrap gap-1 mb-2">
+
+
+                                    {{-- Package --}}
+                                    <div class="detail-row">
+                                        <div class="detail-icon">
+                                            <i class="bi bi-box-seam-fill"></i>
+                                        </div>
+
+                                        <div>
+                                            <small class="detail-label">
+                                                Paket Laundry
+                                            </small>
+
+                                            <div class="package-list">
                                                 @foreach($transaksi->detailTransaksis as $detail)
-                                                    <span class="badge bg-light text-dark border">
-                                                        <i class="bi bi-box me-1"></i>{{ $detail->paket->nama_paket }}
+                                                    <span class="package-tag">
+                                                        {{ $detail->paket->nama_paket }}
                                                     </span>
                                                 @endforeach
                                             </div>
-                                            
-                                            @if($transaksi->kurir)
-                                                <div class="info-item">
-                                                    <small class="text-muted d-block">
-                                                        <i class="bi bi-person-circle me-1"></i>Kurir: {{ $transaksi->kurir->name }}
-                                                    </small>
-                                                </div>
-                                            @endif
-                                        </div>
-                                        
-                                        <div class="col-md-4 text-md-end">
-                                            @if($transaksi->berat_aktual)
-                                                <div class="mb-2">
-                                                    <span class="badge bg-info text-white">
-                                                        <i class="bi bi-weight me-1"></i>{{ $transaksi->berat_aktual }} kg
-                                                    </span>
-                                                </div>
-                                            @endif
-                                            
-                                            <div class="mb-2">
-                                                <h6 class="text-success mb-0">
-                                                    Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}
-                                                </h6>
-                                            </div>
-                                            
-                                            <a href="{{ route('pelanggan.transaksi.show', $transaksi) }}" class="btn btn-outline-primary btn-sm">
-                                                <i class="bi bi-eye me-1"></i>Detail
-                                            </a>
                                         </div>
                                     </div>
+
+
+                                    {{-- Kurir --}}
+                                    @if($transaksi->kurir)
+                                        <div class="detail-row">
+                                            <div class="detail-icon">
+                                                <i class="bi bi-person-fill"></i>
+                                            </div>
+
+                                            <div>
+                                                <small class="detail-label">
+                                                    Kurir
+                                                </small>
+
+                                                <div class="detail-value">
+                                                    {{ $transaksi->kurir->name }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+
+
+                                    {{-- Catatan --}}
+                                    @if($transaksi->catatan)
+                                        <div class="detail-row">
+                                            <div class="detail-icon">
+                                                <i class="bi bi-chat-left-text-fill"></i>
+                                            </div>
+
+                                            <div>
+                                                <small class="detail-label">
+                                                    Catatan
+                                                </small>
+
+                                                <div class="detail-value text-muted">
+                                                    "{{ $transaksi->catatan }}"
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+
                                 </div>
+
+
+                                {{-- Price --}}
+                                <div class="transaction-price">
+
+                                    @if($transaksi->berat_aktual)
+                                        <div class="weight-box">
+                                            <i class="bi bi-speedometer2"></i>
+
+                                            <div>
+                                                <small>Berat Aktual</small>
+                                                <strong>
+                                                    {{ $transaksi->berat_aktual }} kg
+                                                </strong>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <div class="price-label">
+                                        Total Pembayaran
+                                    </div>
+
+                                    <div class="price-value">
+                                        Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}
+                                    </div>
+
+                                    <a href="{{ route('pelanggan.transaksi.show', $transaksi) }}"
+                                       class="btn btn-primary detail-btn">
+                                        <i class="bi bi-eye me-2"></i>
+                                        Lihat Detail
+                                    </a>
+
+                                </div>
+
                             </div>
+
                         </div>
-                        
+
+
                         @if(!$loop->last)
-                            <hr class="my-4">
+                            <div class="transaction-space"></div>
                         @endif
+
                     @empty
-                        <div class="empty-state text-center py-5">
-                            <div class="empty-icon mb-3">
+
+                        {{-- Empty State --}}
+                        <div class="empty-state">
+
+                            <div class="empty-icon">
                                 <i class="bi bi-inbox"></i>
                             </div>
+
                             @if($tab === 'riwayat')
-                                <h5 class="text-muted mb-2">Belum ada riwayat selesai</h5>
-                                <p class="text-muted mb-4">Transaksi yang sudah selesai akan muncul di sini</p>
+
+                                <h5 class="fw-bold text-dark mb-2">
+                                    Belum Ada Riwayat
+                                </h5>
+
+                                <p class="text-muted mb-4">
+                                    Transaksi laundry yang sudah selesai akan muncul di sini.
+                                </p>
+
                             @else
-                                <h5 class="text-muted mb-2">Belum ada pesanan aktif</h5>
-                                <p class="text-muted mb-4">Anda belum memiliki pesanan yang sedang berjalan</p>
+
+                                <h5 class="fw-bold text-dark mb-2">
+                                    Belum Ada Pesanan Aktif
+                                </h5>
+
+                                <p class="text-muted mb-4">
+                                    Kamu belum memiliki pesanan laundry yang sedang berjalan.
+                                </p>
+
                             @endif
-                            <a href="{{ route('pelanggan.order') }}" class="btn btn-primary">
-                                <i class="bi bi-plus-circle me-2"></i>Pesan Sekarang
+
+                            <a href="{{ route('pelanggan.order') }}"
+                               class="btn btn-primary">
+                                <i class="bi bi-plus-circle me-2"></i>
+                                Pesan Laundry Sekarang
                             </a>
+
                         </div>
+
                     @endforelse
 
-                    <!-- Pagination -->
+
+                    {{-- Pagination --}}
                     @if($showAll && method_exists($transaksis, 'hasPages') && $transaksis->hasPages())
-                        <div class="d-flex justify-content-center mt-4">
+
+                        <div class="pagination-wrapper">
                             {{ $transaksis->appends(['tab' => $tab, 'all' => 1])->links() }}
                         </div>
+
                     @endif
+
                 </div>
             </div>
+
         </div>
+
     </div>
 </div>
 
+
 <style>
-/* Layout */
-.order-icon {
-    width: 70px;
-    height: 70px;
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
-    border-radius: 50%;
+
+/* =========================================================
+   GENERAL
+========================================================= */
+
+.sidebar-sticky {
+    top: 90px;
+}
+
+.page-intro {
+    padding: 0.5rem 0;
+}
+
+.page-icon {
+    width: 72px;
+    height: 72px;
+    margin: auto;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
+    border-radius: 22px;
+
+    background: linear-gradient(
+        135deg,
+        #3b82f6,
+        #2563eb
+    );
+
     color: white;
+
     font-size: 2rem;
-    margin: 0 auto;
+
+    box-shadow:
+        0 10px 25px rgba(37, 99, 235, 0.22);
 }
 
-/* Summary */
-.summary-item {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid #f1f5f9;
+
+/* =========================================================
+   SIDEBAR CARD
+========================================================= */
+
+.side-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+
+    border: 1px solid #eef2f7;
+
+    box-shadow:
+        0 5px 20px rgba(15, 23, 42, 0.06);
 }
 
-.summary-item:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-}
-
-/* Info Card */
-.info-card {
-    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-    border: 1px solid #f59e0b;
-    border-radius: 12px;
-    padding: 1.25rem;
-}
-
-.info-header {
+.side-card-header {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-weight: 600;
-    color: #92400e;
-    margin-bottom: 0.75rem;
+    gap: 12px;
+
+    padding: 1rem 1.1rem;
+
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #3b82f6
+    );
+
+    color: white;
 }
 
-/* History Items */
-.history-item {
-    border-bottom: 1px solid #f1f5f9;
-    padding-bottom: 1.5rem;
+.side-card-header small {
+    opacity: 0.85;
 }
 
-.history-item:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-}
+.header-icon {
+    width: 38px;
+    height: 38px;
 
-.status-icon {
-    width: 45px;
-    height: 45px;
-    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.1rem;
+
+    background: rgba(255,255,255,.18);
+
+    border-radius: 10px;
+}
+
+.side-card-body {
+    padding: 1rem 1.1rem;
+}
+
+.stat-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0.8rem 0;
+
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.stat-row:last-child {
+    border-bottom: none;
+}
+
+.stat-label {
+    color: #64748b;
+    font-size: .85rem;
+}
+
+.stat-value {
+    font-weight: 700;
+    color: #1e293b;
+}
+
+
+/* =========================================================
+   QUICK ACTION
+========================================================= */
+
+.quick-card {
+    padding: 1rem;
+
+    border-radius: 16px;
+
+    background: linear-gradient(
+        135deg,
+        #fffbeb,
+        #fef3c7
+    );
+
+    border: 1px solid #fde68a;
+}
+
+.quick-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: .9rem;
+
+    font-weight: 700;
+    color: #92400e;
+}
+
+.quick-card-header i {
+    color: #f59e0b;
+}
+
+.quick-btn {
+    border-radius: 10px;
+    padding: .65rem .8rem;
+}
+
+
+/* =========================================================
+   CONTENT HEADER
+========================================================= */
+
+.content-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: .3rem .2rem;
+}
+
+
+/* =========================================================
+   SHOWING INFO
+========================================================= */
+
+.showing-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: .9rem 1rem;
+
+    border-radius: 14px;
+
+    background: #eff6ff;
+
+    border: 1px solid #bfdbfe;
+
+    color: #1e40af;
+}
+
+.showing-icon {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #dbeafe;
+
+    color: #2563eb;
+
     flex-shrink: 0;
 }
 
-.status-badge {
-    padding: 0.4rem 0.8rem;
-    border-radius: 15px;
-    font-weight: 600;
-    font-size: 0.75rem;
-    white-space: nowrap;
+
+/* =========================================================
+   HISTORY CARD
+========================================================= */
+
+.history-card {
+    background: white;
+
+    border-radius: 18px;
+
+    border: 1px solid #eef2f7;
+
+    box-shadow:
+        0 6px 25px rgba(15, 23, 42, 0.06);
+
+    overflow: hidden;
 }
 
-.info-item {
-    margin-bottom: 0.5rem;
+.history-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 1.25rem 1.5rem;
+
+    border-bottom: 1px solid #eef2f7;
 }
 
-/* Empty State */
-.empty-state {
-    padding: 3rem 2rem;
+.transaction-count {
+    background: #eff6ff;
+    color: #2563eb;
+
+    padding: .4rem .75rem;
+
+    border-radius: 20px;
+
+    font-size: .75rem;
+    font-weight: 700;
 }
 
-.empty-icon {
-    width: 80px;
-    height: 80px;
-    background: #f1f5f9;
-    border-radius: 50%;
+.history-card-body {
+    padding: 1.5rem;
+}
+
+
+/* =========================================================
+   TRANSACTION
+========================================================= */
+
+.transaction-item {
+    padding: .25rem 0;
+}
+
+.transaction-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 1rem;
+}
+
+.invoice-wrapper {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+}
+
+.transaction-icon {
+    width: 48px;
+    height: 48px;
+
+    border-radius: 14px;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #94a3b8;
-    font-size: 2rem;
-    margin: 0 auto;
+
+    font-size: 1.2rem;
+
+    flex-shrink: 0;
 }
 
-/* Pagination */
+.invoice-label {
+    font-size: .65rem;
+    font-weight: 700;
+
+    color: #94a3b8;
+
+    letter-spacing: .7px;
+}
+
+.invoice-number {
+    color: #1e293b;
+    font-size: 1rem;
+}
+
+.transaction-date {
+    color: #94a3b8;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    flex-wrap: wrap;
+
+    gap: 6px;
+}
+
+.status-pill,
+.payment-pill {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+
+    padding: .42rem .7rem;
+
+    border-radius: 20px;
+
+    font-size: .7rem;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+.status-warning {
+    color: #92400e;
+    background: #fef3c7;
+}
+
+.status-info {
+    color: #075985;
+    background: #e0f2fe;
+}
+
+.status-primary {
+    color: #1e40af;
+    background: #dbeafe;
+}
+
+.status-success {
+    color: #166534;
+    background: #dcfce7;
+}
+
+.status-dark {
+    color: #334155;
+    background: #e2e8f0;
+}
+
+.payment-unpaid {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.payment-paid {
+    background: #dcfce7;
+    color: #166534;
+}
+
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
+.transaction-divider {
+    height: 1px;
+
+    background: #f1f5f9;
+
+    margin: 1rem 0;
+}
+
+
+/* =========================================================
+   BODY
+========================================================= */
+
+.transaction-body {
+    display: grid;
+
+    grid-template-columns: 1fr 220px;
+
+    gap: 2rem;
+}
+
+.transaction-details {
+    display: flex;
+    flex-direction: column;
+
+    gap: .9rem;
+}
+
+.detail-row {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 10px;
+}
+
+.detail-icon {
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: #f8fafc;
+
+    color: #64748b;
+
+    flex-shrink: 0;
+}
+
+.detail-label {
+    display: block;
+
+    color: #94a3b8;
+
+    font-size: .68rem;
+
+    margin-bottom: 2px;
+
+    font-weight: 600;
+}
+
+.detail-value {
+    color: #334155;
+
+    font-size: .84rem;
+
+    line-height: 1.5;
+}
+
+.package-list {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 5px;
+}
+
+.package-tag {
+    padding: .3rem .55rem;
+
+    border-radius: 7px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    color: #475569;
+
+    font-size: .7rem;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   PRICE
+========================================================= */
+
+.transaction-price {
+    padding-left: 1.5rem;
+
+    border-left: 1px solid #f1f5f9;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+
+    text-align: right;
+}
+
+.weight-box {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 8px;
+
+    margin-bottom: 1rem;
+
+    color: #0891b2;
+}
+
+.weight-box i {
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    background: #cffafe;
+}
+
+.weight-box small {
+    display: block;
+
+    color: #94a3b8;
+
+    font-size: .65rem;
+}
+
+.weight-box strong {
+    display: block;
+
+    color: #0e7490;
+
+    font-size: .8rem;
+}
+
+.price-label {
+    color: #94a3b8;
+
+    font-size: .7rem;
+
+    margin-bottom: .2rem;
+}
+
+.price-value {
+    color: #16a34a;
+
+    font-size: 1.15rem;
+
+    font-weight: 800;
+
+    margin-bottom: 1rem;
+}
+
+.detail-btn {
+    border-radius: 10px;
+
+    padding: .6rem .8rem;
+
+    font-size: .78rem;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   SPACE
+========================================================= */
+
+.transaction-space {
+    height: 1px;
+
+    background: #f1f5f9;
+
+    margin: 1.5rem 0;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty-state {
+    text-align: center;
+
+    padding: 4rem 1rem;
+}
+
+.empty-icon {
+    width: 85px;
+    height: 85px;
+
+    margin: 0 auto 1.25rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #f1f5f9;
+
+    color: #94a3b8;
+
+    font-size: 2.2rem;
+}
+
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+
+    padding-top: 1.5rem;
+
+    border-top: 1px solid #f1f5f9;
+}
+
 .pagination svg,
 .pagination .w-5,
 .pagination .h-5 {
-    width: 10px !important;
-    height: 10px !important;
-}
-.pagination .inline-flex {
-    padding: 0.25rem 0.4rem !important;
-}
-.pagination .px-2 {
-    padding-left: 0.25rem !important;
-    padding-right: 0.25rem !important;
-}
-.pagination .py-2 {
-    padding-top: 0.25rem !important;
-    padding-bottom: 0.25rem !important;
+    width: 12px !important;
+    height: 12px !important;
 }
 
-/* Responsive */
+
+/* =========================================================
+   RESPONSIVE TABLET
+========================================================= */
+
 @media (max-width: 991px) {
-    .sticky-top {
+
+    .sidebar-sticky {
         position: static !important;
     }
+
+    .transaction-body {
+        grid-template-columns: 1fr;
+    }
+
+    .transaction-price {
+        padding-left: 0;
+
+        padding-top: 1rem;
+
+        border-left: none;
+
+        border-top: 1px solid #f1f5f9;
+
+        text-align: left;
+    }
+
+    .weight-box {
+        justify-content: flex-start;
+    }
+
+    .status-wrapper {
+        justify-content: flex-start;
+    }
+
 }
 
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
 @media (max-width: 768px) {
+
     .container-fluid {
         padding-left: 1rem;
         padding-right: 1rem;
     }
-    
-    .order-icon {
-        width: 60px;
-        height: 60px;
-        font-size: 1.5rem;
-    }
-    
-    .status-icon {
-        width: 40px;
-        height: 40px;
-        font-size: 1rem;
-    }
-    
-    .status-badge {
-        font-size: 0.7rem;
-        padding: 0.3rem 0.6rem;
-    }
-    
-    .card-body {
-        padding: 1.5rem;
-    }
-    
-    .info-card {
+
+    .history-card-header {
         padding: 1rem;
     }
+
+    .history-card-body {
+        padding: 1rem;
+    }
+
+    .transaction-top {
+        flex-direction: column;
+    }
+
+    .status-wrapper {
+        width: 100%;
+    }
+
+    .showing-card {
+        align-items: flex-start;
+
+        flex-wrap: wrap;
+    }
+
+    .showing-card .btn {
+        width: 100%;
+    }
+
 }
 
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
 @media (max-width: 576px) {
+
     .container-fluid {
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
+        padding-left: .6rem;
+        padding-right: .6rem;
     }
-    
-    .card-body {
-        padding: 1rem;
+
+    .page-icon {
+        width: 62px;
+        height: 62px;
+
+        border-radius: 18px;
+
+        font-size: 1.6rem;
     }
-    
-    .status-badge {
-        font-size: 0.65rem;
-        padding: 0.25rem 0.5rem;
+
+    .page-intro h3 {
+        font-size: 1.25rem;
     }
-    
-    .info-card {
-        padding: 0.75rem;
+
+    .history-card {
+        border-radius: 14px;
     }
+
+    .history-card-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: .7rem;
+    }
+
+    .invoice-wrapper {
+        align-items: flex-start;
+    }
+
+    .transaction-icon {
+        width: 42px;
+        height: 42px;
+
+        border-radius: 11px;
+
+        font-size: 1rem;
+    }
+
+    .invoice-number {
+        font-size: .9rem;
+    }
+
+    .status-pill,
+    .payment-pill {
+        font-size: .65rem;
+
+        padding: .35rem .55rem;
+    }
+
+    .detail-value {
+        font-size: .78rem;
+    }
+
+    .price-value {
+        font-size: 1.05rem;
+    }
+
+    .detail-btn {
+        width: 100%;
+    }
+
 }
+
 </style>
 @endsection

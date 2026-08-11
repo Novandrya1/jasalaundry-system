@@ -3,802 +3,1493 @@
 @section('title', 'Dashboard Pelanggan')
 
 @section('content')
+
 <style>
-.hero-section {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 20px;
-    color: white;
-    padding: 2rem 1.5rem;
-    margin-bottom: 2rem;
-    position: relative;
-    overflow: hidden;
-}
+    /* ================================
+       DASHBOARD PELANGGAN
+    ================================= */
 
-.hero-section::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -20%;
-    width: 200px;
-    height: 200px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    z-index: 1;
-}
-
-.hero-content {
-    position: relative;
-    z-index: 2;
-}
-
-.stats-card {
-    background: white;
-    border-radius: 16px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    border: none;
-    transition: all 0.3s ease;
-    margin-bottom: 1.5rem;
-    height: 100%;
-    text-align: center;
-}
-
-.stats-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-}
-
-.stats-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-.quick-action-card {
-    background: white;
-    border-radius: 16px;
-    padding: 2rem 1.5rem;
-    text-align: center;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-    height: 100%;
-    text-decoration: none;
-    color: inherit;
-}
-
-.quick-action-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-    border-color: #667eea;
-    color: inherit;
-    text-decoration: none;
-}
-
-.promo-card {
-    border-radius: 20px;
-    overflow: hidden;
-    position: relative;
-    min-height: 200px;
-}
-
-.promo-bg-pattern {
-    position: absolute;
-    top: -20px;
-    right: -20px;
-    font-size: 8rem;
-    opacity: 0.1;
-    z-index: 1;
-}
-
-.package-card {
-    border: none;
-    border-radius: 12px;
-    transition: all 0.3s ease;
-    height: 100%;
-    background: white;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
-}
-
-.package-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-}
-
-.package-icon {
-    width: 45px;
-    height: 45px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 1.3rem;
-}
-
-.info-card {
-    border: none;
-    border-radius: 16px;
-    background: white;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
-    height: 100%;
-}
-
-.info-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
-}
-
-.section-title {
-    font-weight: 700;
-    color: #2d3748;
-    margin-bottom: 1.5rem;
-    font-size: 1rem;
-}
-
-@media (max-width: 768px) {
-    .hero-section {
-        padding: 1rem 1rem;
-        text-align: center;
-        border-radius: 12px;
-        margin-bottom: 1rem;
+    .customer-page {
+        max-width: 1100px;
+        margin: 0 auto;
     }
-    
-    .hero-section h1, .hero-section h5 {
-        font-size: 14px;
-        margin-bottom: 0.4rem !important;
-        line-height: 1.3;
+
+    /* Hero */
+    .welcome-card {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #2563eb 0%, #4f46e5 55%, #7c3aed 100%);
+        color: white;
+        border-radius: 20px;
+        padding: 28px 30px;
+        margin-bottom: 24px;
+        box-shadow: 0 10px 30px rgba(37, 99, 235, .20);
     }
-    
-    .hero-section p {
-        font-size: 12px;
-        margin-bottom: 0.6rem !important;
-        line-height: 1.4;
+
+    .welcome-card::before {
+        content: "";
+        position: absolute;
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        background: rgba(255,255,255,.08);
+        right: -70px;
+        top: -90px;
     }
-    
-    .hero-section .btn {
-        font-size: 11px;
-        padding: 0.5rem 1rem;
+
+    .welcome-card::after {
+        content: "";
+        position: absolute;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: rgba(255,255,255,.06);
+        right: 100px;
+        bottom: -70px;
     }
-    
-    .stats-card {
-        margin-bottom: 0.8rem;
-        padding: 0.8rem;
+
+    .welcome-content {
+        position: relative;
+        z-index: 2;
     }
-    
-    .stats-card h3, .stats-card h4 {
-        font-size: 1.2rem;
-        margin-bottom: 0.25rem;
+
+    .welcome-title {
+        font-size: 1.45rem;
+        font-weight: 700;
+        margin-bottom: 6px;
     }
-    
-    .stats-card p {
-        font-size: 10px;
-        margin-bottom: 0;
+
+    .welcome-subtitle {
+        margin-bottom: 20px;
+        opacity: .9;
     }
-    
-    .stats-icon {
-        width: 35px;
-        height: 35px;
-        font-size: 1rem;
-        margin-bottom: 0.5rem;
+
+    .btn-order-main {
+        background: white;
+        color: #2563eb;
+        border: none;
+        padding: 11px 20px;
+        border-radius: 10px;
+        font-weight: 700;
+        transition: .2s;
     }
-    
-    .quick-action-card {
-        padding: 0.6rem 0.5rem;
-        margin-bottom: 0.5rem;
+
+    .btn-order-main:hover {
+        background: #f8fafc;
+        color: #1d4ed8;
+        transform: translateY(-2px);
     }
-    
-    .quick-action-card h6 {
-        font-size: 10px;
-        margin-bottom: 0.15rem;
+
+    /* Section */
+    .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
     }
-    
-    .quick-action-card p {
-        font-size: 9px;
-        margin-bottom: 0;
-    }
-    
-    .quick-action-card .stats-icon {
-        width: 30px;
-        height: 30px;
-        font-size: 0.9rem;
-        margin-bottom: 0.3rem;
-    }
-    
+
     .section-title {
-        font-size: 12px;
-        margin-bottom: 0.75rem;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
     }
-    
-    .promo-card {
-        padding: 1rem !important;
-        min-height: auto;
+
+    .section-link {
+        font-size: .85rem;
+        text-decoration: none;
+        color: #2563eb;
+        font-weight: 600;
     }
-    
-    .promo-card h3 {
-        font-size: 11px;
-        margin-bottom: 0.5rem;
+
+    /* Stats */
+    .stat-card {
+        background: white;
+        border-radius: 16px;
+        padding: 18px;
+        border: 1px solid #e5e7eb;
+        height: 100%;
+        transition: .2s;
     }
-    
-    .promo-card p {
-        font-size: 11px;
-        margin-bottom: 0.5rem;
+
+    .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,.08);
     }
-    
-    .promo-card .btn {
-        font-size: 11px;
-        padding: 0.4rem 0.8rem;
+
+    .stat-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        margin-bottom: 12px;
     }
-    
-    .promo-card small {
-        font-size: 11px;
+
+    .stat-number {
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 2px;
     }
-    
-    .promo-card .h4 {
-        font-size: 11px;
+
+    .stat-label {
+        font-size: .8rem;
+        color: #64748b;
+        margin: 0;
     }
-    
-    .promo-card .badge {
-        padding: 0.3rem 0.5rem;
-        margin-bottom: 0.5rem;
+
+    /* Active order */
+    .order-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 18px;
+        margin-bottom: 12px;
+        transition: .2s;
     }
-    
-    .package-card .card-body {
-        padding: 0.6rem;
+
+    .order-card:hover {
+        box-shadow: 0 8px 25px rgba(0,0,0,.07);
     }
-    
-    .package-card h6 {
-        font-size: 10px;
-        margin-bottom: 0.2rem;
-        line-height: 1.2;
+
+    .invoice {
+        font-weight: 700;
+        color: #1e293b;
     }
-    
-    .package-card .h5 {
-        font-size: 11px;
-        margin-bottom: 0.1rem;
+
+    .order-date {
+        color: #64748b;
+        font-size: .8rem;
     }
-    
-    .package-card .btn {
-        font-size: 9px;
-        padding: 0.25rem 0.2rem;
+
+    .order-price {
+        color: #16a34a;
+        font-size: 1rem;
+        font-weight: 700;
     }
-    
-    .package-card small {
-        font-size: 9px;
+
+    .status-badge {
+        border-radius: 20px;
+        padding: 6px 10px;
+        font-size: .72rem;
+        font-weight: 600;
     }
-    
-    .package-icon {
-        width: 30px;
-        height: 30px;
-        font-size: 0.9rem;
-        margin-bottom: 0.3rem;
+
+    /* Quick menu */
+    .quick-card {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 20px 15px;
+        text-align: center;
+        height: 100%;
+        transition: .2s;
     }
-    
-    .info-card .card-body {
-        padding: 0.6rem;
+
+    .quick-card:hover {
+        color: inherit;
+        transform: translateY(-3px);
+        border-color: #93c5fd;
+        box-shadow: 0 8px 25px rgba(0,0,0,.07);
     }
-    
-    .info-card h6 {
-        font-size: 11px;
-        margin-bottom: 0.3rem;
+
+    .quick-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 12px;
+        font-size: 1.3rem;
+        color: white;
     }
-    
-    .info-card small, .info-card p, .info-card li, .info-card span {
-        font-size: 10px;
+
+    .quick-title {
+        font-size: .9rem;
+        font-weight: 700;
+        margin-bottom: 4px;
     }
-    
-    .info-card .btn {
-        font-size: 10px;
-        padding: 0.3rem 0.6rem;
+
+    .quick-description {
+        color: #64748b;
+        font-size: .75rem;
+        margin: 0;
     }
-    
-    .info-card .stats-icon {
-        width: 30px;
-        height: 30px;
-        font-size: 0.9rem;
-        margin-bottom: 0.3rem;
+
+    /* Service */
+    .service-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 18px;
+        height: 100%;
+        transition: .2s;
     }
-    
-    .badge {
-        font-size: 9px;
+
+    .service-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,.07);
     }
-    
-    .card-body h6 {
-        font-size: 11px;
-        margin-bottom: 0.3rem;
+
+    .service-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.15rem;
+        margin-bottom: 13px;
     }
-    
-    .card-body p, .card-body small, .card-body span {
-        font-size: 10px;
-        margin-bottom: 0.3rem;
+
+    .service-name {
+        font-weight: 700;
+        font-size: .92rem;
+        margin-bottom: 5px;
+        color: #1e293b;
     }
-    
-    .row.mb-4 {
-        margin-bottom: 0.75rem !important;
+
+    .service-description {
+        color: #64748b;
+        font-size: .75rem;
+        margin-bottom: 12px;
     }
-    
-    .row.mb-3 {
-        margin-bottom: 0.5rem !important;
+
+    .service-price {
+        color: #16a34a;
+        font-size: 1rem;
+        font-weight: 700;
     }
-}
+
+    .service-unit {
+        color: #64748b;
+        font-size: .7rem;
+    }
+
+    /* Promo */
+    .promo-banner {
+        background: linear-gradient(135deg, #7c3aed, #4f46e5);
+        border-radius: 18px;
+        color: white;
+        padding: 22px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .promo-banner::after {
+        content: "\f3e5";
+        font-family: bootstrap-icons;
+        position: absolute;
+        right: 25px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 6rem;
+        opacity: .10;
+    }
+
+    .promo-banner-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    /* How it works */
+    .step-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 16px;
+        height: 100%;
+    }
+
+    .step-number {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #eff6ff;
+        color: #2563eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: .85rem;
+        margin-bottom: 10px;
+    }
+
+    .step-title {
+        font-weight: 700;
+        font-size: .85rem;
+        margin-bottom: 5px;
+    }
+
+    .step-text {
+        color: #64748b;
+        font-size: .75rem;
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    /* Info */
+    .info-box {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 20px;
+    }
+
+    .info-list {
+        margin: 0;
+        padding-left: 18px;
+    }
+
+    .info-list li {
+        color: #64748b;
+        font-size: .8rem;
+        margin-bottom: 8px;
+    }
+
+    /* Empty */
+    .empty-order {
+        text-align: center;
+        padding: 30px 20px;
+        background: white;
+        border: 1px dashed #cbd5e1;
+        border-radius: 16px;
+    }
+
+    .empty-order-icon {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        background: #eff6ff;
+        color: #2563eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 12px;
+        font-size: 1.3rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+
+        .customer-page {
+            padding: 0 2px;
+        }
+
+        .welcome-card {
+            padding: 22px 18px;
+            border-radius: 16px;
+            margin-bottom: 18px;
+        }
+
+        .welcome-title {
+            font-size: 1.15rem;
+        }
+
+        .welcome-subtitle {
+            font-size: .8rem;
+            margin-bottom: 15px;
+        }
+
+        .btn-order-main {
+            width: 100%;
+            font-size: .85rem;
+        }
+
+        .section-title {
+            font-size: .95rem;
+        }
+
+        .section-link {
+            font-size: .75rem;
+        }
+
+        .stat-card {
+            padding: 14px;
+        }
+
+        .stat-icon {
+            width: 36px;
+            height: 36px;
+            font-size: .95rem;
+        }
+
+        .stat-number {
+            font-size: 1.15rem;
+        }
+
+        .stat-label {
+            font-size: .7rem;
+        }
+
+        .quick-card {
+            padding: 15px 8px;
+        }
+
+        .quick-icon {
+            width: 42px;
+            height: 42px;
+            font-size: 1.1rem;
+        }
+
+        .quick-title {
+            font-size: .75rem;
+        }
+
+        .quick-description {
+            font-size: .65rem;
+        }
+
+        .service-card {
+            padding: 15px;
+        }
+
+        .service-name {
+            font-size: .82rem;
+        }
+
+        .service-description {
+            font-size: .68rem;
+        }
+
+        .service-price {
+            font-size: .9rem;
+        }
+
+        .order-card {
+            padding: 15px;
+        }
+
+        .invoice {
+            font-size: .85rem;
+        }
+
+        .order-date {
+            font-size: .7rem;
+        }
+
+        .order-price {
+            font-size: .9rem;
+        }
+
+        .status-badge {
+            font-size: .65rem;
+            padding: 5px 8px;
+        }
+
+        .step-card {
+            padding: 14px;
+        }
+
+        .promo-banner {
+            padding: 18px;
+        }
+
+        .promo-banner h5 {
+            font-size: .95rem;
+        }
+
+        .promo-banner p {
+            font-size: .75rem;
+        }
+    }
 </style>
 
-<!-- Hero Section -->
-<div class="hero-section">
-    <div class="hero-content">
-        <div class="row align-items-center">
-            <div class="col-12">
-                <h5 class="mb-2 fw-bold">Halo, {{ auth()->user()->name }}! 👋</h5>
-                <p class="mb-0 opacity-90">Kelola pesanan laundry Anda dengan mudah</p>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Statistics Cards -->
-<div class="row mb-3">
-    <div class="col-6 mb-3">
-        <div class="stats-card">
-            <div class="stats-icon mx-auto" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-                <i class="bi bi-receipt"></i>
-            </div>
-            <h4 class="mb-1">{{ $totalPesanan }}</h4>
-            <p class="text-muted mb-0 small">Total Pesanan</p>
-        </div>
-    </div>
-    <div class="col-6 mb-3">
-        <div class="stats-card">
-            <div class="stats-icon mx-auto" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
-                <i class="bi bi-clock"></i>
-            </div>
-            <h4 class="mb-1">{{ $pesananAktif }}</h4>
-            <p class="text-muted mb-0 small">Pesanan Aktif</p>
-        </div>
-    </div>
-    <div class="col-6 mb-3">
-        <div class="stats-card">
-            <div class="stats-icon mx-auto" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white;">
-                <i class="bi bi-check-circle"></i>
-            </div>
-            <h4 class="mb-1">{{ $pesananSelesai }}</h4>
-            <p class="text-muted mb-0 small">Pesanan Selesai</p>
-        </div>
-    </div>
-    <div class="col-6 mb-3">
-        <div class="stats-card">
-            <div class="stats-icon mx-auto" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #333;">
-                <i class="bi bi-gift"></i>
-            </div>
-            <h4 class="mb-1">{{ $promoTersedia }}</h4>
-            <p class="text-muted mb-0 small">Promo Tersedia</p>
-        </div>
-    </div>
-</div>
+<div class="customer-page">
 
-<!-- Quick Actions -->
-<h6 class="section-title">Aksi Cepat</h6>
-<div class="row mb-3">
-    <div class="col-4">
-        <a href="{{ route('pelanggan.order') }}" class="quick-action-card d-block">
-            <div class="stats-icon mx-auto" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-                <i class="bi bi-plus-circle"></i>
-            </div>
-            <h6 class="fw-bold mb-1 small">Pesan Laundry</h6>
-            <p class="text-muted mb-0" style="font-size: 9px;">Buat pesanan baru</p>
-        </a>
-    </div>
-    <div class="col-4">
-        <a href="{{ route('pelanggan.riwayat', ['tab' => 'pesanan']) }}" class="quick-action-card d-block">
-            <div class="stats-icon mx-auto" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
-                <i class="bi bi-clock-history"></i>
-            </div>
-            <h6 class="fw-bold mb-1 small">Pesanan Saya</h6>
-            <p class="text-muted mb-0" style="font-size: 9px;">Lihat pesanan</p>
-        </a>
-    </div>
-    <div class="col-4">
-        <button class="quick-action-card w-100 border-0" onclick="scrollToPromo()">
-            <div class="stats-icon mx-auto" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white;">
-                <i class="bi bi-gift"></i>
-            </div>
-            <h6 class="fw-bold mb-1 small">Lihat Promo</h6>
-            <p class="text-muted mb-0" style="font-size: 9px;">Klaim promo</p>
-        </button>
-    </div>
-</div>
+    {{-- ==========================================
+         WELCOME
+    =========================================== --}}
+    <div class="welcome-card">
+        <div class="welcome-content">
 
-<!-- Pesanan Saya -->
-@if($pesananSaya && $pesananSaya->count() > 0)
-<h6 class="section-title">Pesanan Saya</h6>
-@foreach($pesananSaya->take(2) as $transaksi)
-<div class="card border-0 shadow-sm mb-2">
-    <div class="card-body p-3">
-        <div class="d-flex justify-content-between align-items-start mb-2">
-            <div>
-                <h6 class="fw-bold mb-1 small">{{ $transaksi->kode_invoice }}</h6>
-                <small class="text-muted d-block">{{ $transaksi->created_at->format('d M Y, H:i') }}</small>
+            <div class="welcome-title">
+                Halo, {{ auth()->user()->name }}! 👋
             </div>
-            <div>
-                @if($transaksi->status_transaksi === 'request_jemput')
-                    <span class="badge bg-warning text-dark" style="font-size: 9px;">Menunggu</span>
-                @elseif($transaksi->status_transaksi === 'dijemput_kurir')
-                    <span class="badge bg-info" style="font-size: 9px;">Dijemput</span>
-                @elseif($transaksi->status_transaksi === 'proses_cuci')
-                    <span class="badge bg-primary" style="font-size: 9px;">Dicuci</span>
-                @elseif($transaksi->status_transaksi === 'siap_antar')
-                    <span class="badge bg-success" style="font-size: 9px;">Siap Antar</span>
-                @endif
+
+            <div class="welcome-subtitle">
+                Laundry jadi lebih mudah. Pesan sekarang, kami yang urus.
             </div>
+
+            <a href="{{ route('pelanggan.order') }}"
+               class="btn btn-order-main">
+                <i class="bi bi-plus-circle me-1"></i>
+                Pesan Laundry Sekarang
+            </a>
+
         </div>
-        <p class="text-success fw-bold mb-0">Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}</p>
     </div>
-</div>
-@endforeach
-<div class="text-center mb-3">
-    <a href="{{ route('pelanggan.riwayat', ['tab' => 'pesanan']) }}" class="btn btn-outline-primary btn-sm">Lihat Pesanan yang sedang berjalan</a>
-</div>
-@endif
 
-<!-- Promo Carousel -->
-@if($promos && $promos->count() > 0)
-<div id="promo-section" class="mb-3">
-    <div class="card border-0 shadow-sm" style="background: linear-gradient(135deg, #764ba2 0%, #667eea 100%); color: white;">
-        <div class="card-body p-3">
-            <div class="row align-items-center">
-                <div class="col-8">
-                    <h6 class="fw-bold mb-2">Lihat Promo</h6>
-                    <p class="mb-2 small">Klaim promo menarik</p>
-                    <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#promoModal">Klaim Sekarang</button>
+
+    {{-- ==========================================
+         STATUS RINGKAS
+    =========================================== --}}
+    <div class="section-header">
+        <h5 class="section-title">Ringkasan Pesanan</h5>
+    </div>
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+
+                <div class="stat-icon bg-primary-subtle text-primary">
+                    <i class="bi bi-receipt"></i>
                 </div>
-                <div class="col-4 text-end">
-                    <i class="bi bi-gift" style="font-size: 4rem; opacity: 0.3;"></i>
+
+                <div class="stat-number">
+                    {{ $totalPesanan }}
                 </div>
+
+                <p class="stat-label">
+                    Total Pesanan
+                </p>
+
             </div>
         </div>
-    </div>
-</div>
 
-<!-- Promo Modal -->
-<div class="modal fade" id="promoModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Promo Tersedia</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+
+                <div class="stat-icon bg-warning-subtle text-warning">
+                    <i class="bi bi-hourglass-split"></i>
+                </div>
+
+                <div class="stat-number">
+                    {{ $pesananAktif }}
+                </div>
+
+                <p class="stat-label">
+                    Sedang Diproses
+                </p>
+
             </div>
-            <div class="modal-body">
-                @foreach($promos as $promo)
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h6 class="fw-bold">{{ $promo->judul }}</h6>
-                        <p class="small mb-2">{{ $promo->deskripsi }}</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="badge bg-success">{{ $promo->diskon_text }}</span>
-                            <button id="btn-klaim-{{ $promo->id }}" class="btn btn-primary btn-sm" onclick="klaimPromo({{ $promo->id }})">
-                                <span class="btn-text">Klaim</span>
-                                <span class="btn-loading d-none">
-                                    <span class="spinner-border spinner-border-sm"></span>
-                                </span>
-                            </button>
+        </div>
+
+
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+
+                <div class="stat-icon bg-success-subtle text-success">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+
+                <div class="stat-number">
+                    {{ $pesananSelesai }}
+                </div>
+
+                <p class="stat-label">
+                    Selesai
+                </p>
+
+            </div>
+        </div>
+
+
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+
+                <div class="stat-icon bg-danger-subtle text-danger">
+                    <i class="bi bi-tag"></i>
+                </div>
+
+                <div class="stat-number">
+                    {{ $promoTersedia }}
+                </div>
+
+                <p class="stat-label">
+                    Promo Tersedia
+                </p>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    {{-- ==========================================
+         PESANAN AKTIF
+    =========================================== --}}
+    <div class="section-header">
+
+        <h5 class="section-title">
+            <i class="bi bi-bag-check me-1 text-primary"></i>
+            Pesanan Saya
+        </h5>
+
+        <a href="{{ route('pelanggan.riwayat', ['tab' => 'pesanan']) }}"
+           class="section-link">
+            Lihat semua
+            <i class="bi bi-arrow-right"></i>
+        </a>
+
+    </div>
+
+
+    @if($pesananSaya && $pesananSaya->count() > 0)
+
+        @foreach($pesananSaya->take(3) as $transaksi)
+
+            <div class="order-card">
+
+                <div class="row align-items-center">
+
+                    <div class="col-8">
+
+                        <div class="invoice">
+                            {{ $transaksi->kode_invoice }}
                         </div>
+
+                        <div class="order-date mb-2">
+                            <i class="bi bi-calendar3 me-1"></i>
+                            {{ $transaksi->created_at->format('d M Y, H:i') }}
+                        </div>
+
+                        <div class="order-price">
+                            Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}
+                        </div>
+
                     </div>
-                </div>
-                @endforeach
-            </div>
-        </div>
-    </div>
-</div>
-@endif
 
-<!-- Paket Laundry -->
-<h6 class="section-title">Paket Laundry</h6>
-<div class="row mb-3">
-    <div class="col-6 mb-3">
-        <div class="package-card">
-            <div class="card-body text-center p-3">
-                <div class="package-icon mx-auto mb-2">
-                    <i class="bi bi-fire"></i>
-                </div>
-                <h6 class="fw-bold mb-2 small">Cuci Kering + Setrika</h6>
-                <div class="mb-2">
-                    <span class="h5 text-success fw-bold d-block mb-0">Rp 7.000</span>
-                    <small class="text-muted">per kg</small>
-                </div>
-                <a href="{{ route('pelanggan.order', ['paket' => 'cuci-kering-setrika']) }}" class="btn btn-primary btn-sm w-100">Pilih</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-6 mb-3">
-        <div class="package-card">
-            <div class="card-body text-center p-3">
-                <div class="package-icon mx-auto mb-2">
-                    <i class="bi bi-fire"></i>
-                </div>
-                <h6 class="fw-bold mb-2 small">Laundry Cepat</h6>
-                <div class="mb-2">
-                    <span class="h5 text-success fw-bold d-block mb-0">Rp 9.000</span>
-                    <small class="text-muted">per kg</small>
-                </div>
-                <a href="{{ route('pelanggan.order', ['paket' => 'laundry-cepat']) }}" class="btn btn-primary btn-sm w-100">Pilih</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-6 mb-3">
-        <div class="package-card">
-            <div class="card-body text-center p-3">
-                <div class="package-icon mx-auto mb-2">
-                    <i class="bi bi-fire"></i>
-                </div>
-                <h6 class="fw-bold mb-2 small">Setrika Wangi + Lipat</h6>
-                <div class="mb-2">
-                    <span class="h5 text-success fw-bold d-block mb-0">Rp 5.000</span>
-                    <small class="text-muted">per kg</small>
-                </div>
-                <a href="{{ route('pelanggan.order', ['paket' => 'setrika-wangi-lipat']) }}" class="btn btn-primary btn-sm w-100">Pilih</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-6 mb-3">
-        <div class="package-card">
-            <div class="card-body text-center p-3">
-                <div class="package-icon mx-auto mb-2">
-                    <i class="bi bi-fire"></i>
-                </div>
-                <h6 class="fw-bold mb-2 small">Cuci Kering</h6>
-                <div class="mb-2">
-                    <span class="h5 text-success fw-bold d-block mb-0">Rp 6.000</span>
-                    <small class="text-muted">per kg</small>
-                </div>
-                <a href="{{ route('pelanggan.order', ['paket' => 'cuci-kering']) }}" class="btn btn-primary btn-sm w-100">Pilih</a>
-            </div>
-        </div>
-    </div>
-</div>
+                    <div class="col-4 text-end">
 
-<!-- Paket Jemput & Antar -->
-<h6 class="section-title">Paket Jemput & Antar</h6>
-<div class="row mb-3">
-    <div class="col-6 mb-3">
-        <div class="package-card">
-            <div class="card-body text-center p-3">
-                <div class="package-icon mx-auto mb-2">
-                    <i class="bi bi-fire"></i>
-                </div>
-                <h6 class="fw-bold mb-2 small">Cuci Express</h6>
-                <div class="mb-2">
-                    <span class="h5 text-success fw-bold d-block mb-0">Rp 13.000</span>
-                    <small class="text-muted">per kg</small>
-                </div>
-                <a href="{{ route('pelanggan.order', ['paket' => 'cuci-express']) }}" class="btn btn-primary btn-sm w-100">Pilih</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-6 mb-3">
-        <div class="package-card">
-            <div class="card-body text-center p-3">
-                <div class="package-icon mx-auto mb-2">
-                    <i class="bi bi-fire"></i>
-                </div>
-                <h6 class="fw-bold mb-2 small">Cuci Karpet & Bed Cover</h6>
-                <div class="mb-2">
-                    <span class="h5 text-success fw-bold d-block mb-0">Rp 20.000</span>
-                    <small class="text-muted">per kg</small>
-                </div>
-                <a href="{{ route('pelanggan.order', ['paket' => 'cuci-karpet-bed-cover']) }}" class="btn btn-primary btn-sm w-100">Pilih</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-6 mb-3">
-        <div class="package-card">
-            <div class="card-body text-center p-3">
-                <div class="package-icon mx-auto mb-2">
-                    <i class="bi bi-fire"></i>
-                </div>
-                <h6 class="fw-bold mb-2 small">Setrika Wangi + Lipat</h6>
-                <div class="mb-2">
-                    <span class="h5 text-success fw-bold d-block mb-0">Rp 7.500</span>
-                    <small class="text-muted">per kg</small>
-                </div>
-                <a href="{{ route('pelanggan.order', ['paket' => 'setrika-wangi-lipat-2']) }}" class="btn btn-primary btn-sm w-100">Pilih</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-6 mb-3">
-        <div class="package-card">
-            <div class="card-body text-center p-3">
-                <div class="package-icon mx-auto mb-2">
-                    <i class="bi bi-fire"></i>
-                </div>
-                <h6 class="fw-bold mb-2 small">Cuci Kering</h6>
-                <div class="mb-2">
-                    <span class="h5 text-success fw-bold d-block mb-0">Rp 6.000</span>
-                    <small class="text-muted">per kg</small>
-                </div>
-                <a href="{{ route('pelanggan.order', ['paket' => 'cuci-kering-2']) }}" class="btn btn-primary btn-sm w-100">Pilih</a>
-            </div>
-        </div>
-    </div>
-</div>
+                        @if($transaksi->status_transaksi === 'request_jemput')
 
-<!-- Informasi Layanan -->
-<div class="info-card mb-3">
-    <div class="card-body p-3">
-        <h6 class="fw-bold mb-3">Paket Jemput & Antar</h6>
-        <p class="small mb-2"><strong>A. Untuk Layanan Jemput & Antar (Pickup)</strong></p>
-        <ol class="small ps-3 mb-3">
-            <li class="mb-1">Pilih Paket Jemput & Antar: Pilih layanan yang bersesuaian dengan kebutuhan rumah tangga Anda</li>
-            <li class="mb-1">Tentukan Lokasi: Masukkan alamat tempat penjemputan dan pengantaran</li>
-            <li class="mb-1">Serahkan ke Kurir: Kurir akan tiba datang untuk menjemput di alamat yang telah ditentukan</li>
-            <li class="mb-1">Pembayaran: Cek status pesanan di menu "Pesanan Saya" dan lakukan pembayaran setelah laundry selesai</li>
-        </ol>
-        
-        <p class="small mb-2"><strong>B. Untuk Layanan Antar Sendiri (Self-Drop)</strong></p>
-        <ol class="small ps-3">
-            <li class="mb-1">Pilih Paket Laundry: Pilih layanan yang sesuai kebutuhan</li>
-            <li class="mb-1">Antar ke Outlet: Bawa pakaian ke lokasi kami terdekat</li>
-            <li class="mb-1">Proses Selesai: Pakaian akan segera diproses setelah tiba</li>
-            <li class="mb-1">Ambil Selesai: Kurir akan menghubungi Anda saat laundry selesai atau Anda bisa ambil sendiri</li>
-        </ol>
-    </div>
-</div>
+                            <span class="badge bg-warning text-dark status-badge">
+                                <i class="bi bi-clock me-1"></i>
+                                Menunggu
+                            </span>
 
-<!-- Jam Operasional -->
-<div class="info-card mb-3">
-    <div class="card-body p-3">
-        <h6 class="fw-bold mb-3"><i class="bi bi-clock text-success me-2"></i>Jam Operasional</h6>
-        <div class="d-flex justify-content-between mb-2">
-            <span class="small">Senin - Jumat</span>
-            <span class="small text-muted">08:00 - 20:00</span>
-        </div>
-        <div class="d-flex justify-content-between mb-2">
-            <span class="small">Sabtu</span>
-            <span class="small text-muted">08:00 - 18:00</span>
-        </div>
-        <div class="d-flex justify-content-between">
-            <span class="small">Minggu</span>
-            <span class="small text-muted">09:00 - 17:00</span>
-        </div>
-        <hr class="my-2">
-        <small class="text-muted">Penjemputan & Pengantaran sesuai jadwal</small>
-    </div>
-</div>
+                        @elseif($transaksi->status_transaksi === 'dijemput_kurir')
 
-<div class="row mb-3">
-    <div class="col-12">
-        <div class="info-card" style="border-left: 4px solid #dc3545;">
-            <div class="card-body p-3">
-                <h6 class="fw-bold mb-2 text-danger">
-                    <i class="bi bi-exclamation-triangle me-2"></i>
-                    Barang Tidak Diterima
+                            <span class="badge bg-info status-badge">
+                                <i class="bi bi-truck me-1"></i>
+                                Dijemput
+                            </span>
+
+                        @elseif($transaksi->status_transaksi === 'proses_cuci')
+
+                            <span class="badge bg-primary status-badge">
+                                <i class="bi bi-droplet me-1"></i>
+                                Dicuci
+                            </span>
+
+                        @elseif($transaksi->status_transaksi === 'siap_antar')
+
+                            <span class="badge bg-success status-badge">
+                                <i class="bi bi-box-seam me-1"></i>
+                                Siap Antar
+                            </span>
+
+                        @elseif($transaksi->status_transaksi === 'selesai')
+
+                            <span class="badge bg-success status-badge">
+                                <i class="bi bi-check-circle me-1"></i>
+                                Selesai
+                            </span>
+
+                        @else
+
+                            <span class="badge bg-secondary status-badge">
+                                {{ ucfirst(str_replace('_', ' ', $transaksi->status_transaksi)) }}
+                            </span>
+
+                        @endif
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        @endforeach
+
+    @else
+
+        <div class="empty-order mb-4">
+
+            <div class="empty-order-icon">
+                <i class="bi bi-bag"></i>
+            </div>
+
+            <h6 class="fw-bold">
+                Belum ada pesanan
+            </h6>
+
+            <p class="text-muted small mb-3">
+                Yuk, mulai pesan laundry sekarang.
+            </p>
+
+            <a href="{{ route('pelanggan.order') }}"
+               class="btn btn-primary btn-sm px-3">
+
+                <i class="bi bi-plus-circle me-1"></i>
+                Pesan Laundry
+
+            </a>
+
+        </div>
+
+    @endif
+
+
+    {{-- ==========================================
+         AKSI CEPAT
+    =========================================== --}}
+    <div class="section-header mt-4">
+
+        <h5 class="section-title">
+            Akses Cepat
+        </h5>
+
+    </div>
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-4">
+
+            <a href="{{ route('pelanggan.order') }}"
+               class="quick-card">
+
+                <div class="quick-icon"
+                     style="background: linear-gradient(135deg,#2563eb,#4f46e5);">
+
+                    <i class="bi bi-plus-lg"></i>
+
+                </div>
+
+                <div class="quick-title">
+                    Pesan
+                </div>
+
+                <p class="quick-description">
+                    Buat pesanan baru
+                </p>
+
+            </a>
+
+        </div>
+
+
+        <div class="col-4">
+
+            <a href="{{ route('pelanggan.riwayat', ['tab' => 'pesanan']) }}"
+               class="quick-card">
+
+                <div class="quick-icon"
+                     style="background: linear-gradient(135deg,#f59e0b,#f97316);">
+
+                    <i class="bi bi-box-seam"></i>
+
+                </div>
+
+                <div class="quick-title">
+                    Pesanan
+                </div>
+
+                <p class="quick-description">
+                    Cek pesanan aktif
+                </p>
+
+            </a>
+
+        </div>
+
+
+        <div class="col-4">
+
+            <a href="{{ route('pelanggan.riwayat', ['tab' => 'riwayat']) }}"
+               class="quick-card">
+
+                <div class="quick-icon"
+                     style="background: linear-gradient(135deg,#10b981,#059669);">
+
+                    <i class="bi bi-clock-history"></i>
+
+                </div>
+
+                <div class="quick-title">
+                    Riwayat
+                </div>
+
+                <p class="quick-description">
+                    Lihat pesanan lama
+                </p>
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    {{-- ==========================================
+         PROMO
+    =========================================== --}}
+    @if($promos && $promos->count() > 0)
+
+        <div class="section-header">
+
+            <h5 class="section-title">
+                <i class="bi bi-gift me-1 text-danger"></i>
+                Promo Untuk Anda
+            </h5>
+
+        </div>
+
+        <div class="promo-banner mb-4">
+
+            <div class="promo-banner-content">
+
+                <h5 class="fw-bold mb-2">
+                    Ada promo menarik! 🎉
+                </h5>
+
+                <p class="mb-3 opacity-90">
+                    Dapatkan harga lebih hemat untuk laundry Anda.
+                </p>
+
+                <button class="btn btn-light btn-sm fw-semibold"
+                        data-bs-toggle="modal"
+                        data-bs-target="#promoModal">
+
+                    <i class="bi bi-gift me-1"></i>
+                    Lihat Promo
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        {{-- Promo Modal --}}
+        <div class="modal fade"
+             id="promoModal"
+             tabindex="-1">
+
+            <div class="modal-dialog modal-dialog-centered">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+
+                        <h5 class="modal-title fw-bold">
+                            <i class="bi bi-gift text-primary me-2"></i>
+                            Promo Tersedia
+                        </h5>
+
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal">
+                        </button>
+
+                    </div>
+
+                    <div class="modal-body">
+
+                        @foreach($promos as $promo)
+
+                            <div class="border rounded-3 p-3 mb-3">
+
+                                <div class="d-flex justify-content-between align-items-start">
+
+                                    <div>
+
+                                        <h6 class="fw-bold mb-1">
+                                            {{ $promo->judul }}
+                                        </h6>
+
+                                        <p class="small text-muted mb-2">
+                                            {{ $promo->deskripsi }}
+                                        </p>
+
+                                        <span class="badge bg-success">
+                                            {{ $promo->diskon_text }}
+                                        </span>
+
+                                    </div>
+
+                                    <button id="btn-klaim-{{ $promo->id }}"
+                                            class="btn btn-primary btn-sm"
+                                            onclick="klaimPromo({{ $promo->id }})">
+
+                                        <span class="btn-text">
+                                            Klaim
+                                        </span>
+
+                                        <span class="btn-loading d-none">
+                                            <span class="spinner-border spinner-border-sm"></span>
+                                        </span>
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        @endforeach
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    @endif
+
+
+    {{-- ==========================================
+         LAYANAN LAUNDRY
+    =========================================== --}}
+    <div class="section-header mt-4">
+
+        <h5 class="section-title">
+            Pilih Layanan Laundry
+        </h5>
+
+        <a href="{{ route('pelanggan.order') }}"
+           class="section-link">
+
+            Semua layanan
+            <i class="bi bi-arrow-right"></i>
+
+        </a>
+
+    </div>
+
+
+    <div class="row g-3 mb-4">
+
+        {{-- Cuci Kering + Setrika --}}
+        <div class="col-6 col-md-3">
+
+            <div class="service-card">
+
+                <div class="service-icon"
+                     style="background: linear-gradient(135deg,#2563eb,#4f46e5);">
+
+                    <i class="bi bi-stars"></i>
+
+                </div>
+
+                <div class="service-name">
+                    Cuci + Setrika
+                </div>
+
+                <div class="service-description">
+                    Bersih, kering dan siap dipakai.
+                </div>
+
+                <div class="service-price">
+                    Rp 7.000
+                </div>
+
+                <div class="service-unit mb-3">
+                    per kg
+                </div>
+
+                <a href="{{ route('pelanggan.order', ['paket' => 'cuci-kering-setrika']) }}"
+                   class="btn btn-primary btn-sm w-100">
+
+                    Pilih
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        {{-- Laundry Cepat --}}
+        <div class="col-6 col-md-3">
+
+            <div class="service-card">
+
+                <div class="service-icon"
+                     style="background: linear-gradient(135deg,#f97316,#ef4444);">
+
+                    <i class="bi bi-lightning-charge"></i>
+
+                </div>
+
+                <div class="service-name">
+                    Laundry Cepat
+                </div>
+
+                <div class="service-description">
+                    Cocok untuk kebutuhan mendesak.
+                </div>
+
+                <div class="service-price">
+                    Rp 9.000
+                </div>
+
+                <div class="service-unit mb-3">
+                    per kg
+                </div>
+
+                <a href="{{ route('pelanggan.order', ['paket' => 'laundry-cepat']) }}"
+                   class="btn btn-primary btn-sm w-100">
+
+                    Pilih
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        {{-- Setrika --}}
+        <div class="col-6 col-md-3">
+
+            <div class="service-card">
+
+                <div class="service-icon"
+                     style="background: linear-gradient(135deg,#10b981,#059669);">
+
+                    <i class="bi bi-brightness-high"></i>
+
+                </div>
+
+                <div class="service-name">
+                    Setrika + Lipat
+                </div>
+
+                <div class="service-description">
+                    Rapi, wangi dan siap disimpan.
+                </div>
+
+                <div class="service-price">
+                    Rp 5.000
+                </div>
+
+                <div class="service-unit mb-3">
+                    per kg
+                </div>
+
+                <a href="{{ route('pelanggan.order', ['paket' => 'setrika-wangi-lipat']) }}"
+                   class="btn btn-primary btn-sm w-100">
+
+                    Pilih
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        {{-- Cuci Kering --}}
+        <div class="col-6 col-md-3">
+
+            <div class="service-card">
+
+                <div class="service-icon"
+                     style="background: linear-gradient(135deg,#8b5cf6,#7c3aed);">
+
+                    <i class="bi bi-droplet"></i>
+
+                </div>
+
+                <div class="service-name">
+                    Cuci Kering
+                </div>
+
+                <div class="service-description">
+                    Cucian bersih dan kering.
+                </div>
+
+                <div class="service-price">
+                    Rp 6.000
+                </div>
+
+                <div class="service-unit mb-3">
+                    per kg
+                </div>
+
+                <a href="{{ route('pelanggan.order', ['paket' => 'cuci-kering']) }}"
+                   class="btn btn-primary btn-sm w-100">
+
+                    Pilih
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    {{-- ==========================================
+         JEMPUT & ANTAR
+    =========================================== --}}
+    <div class="info-box mb-4">
+
+        <div class="d-flex align-items-start">
+
+            <div class="stat-icon bg-primary-subtle text-primary me-3 mb-0">
+                <i class="bi bi-truck"></i>
+            </div>
+
+            <div>
+
+                <h6 class="fw-bold mb-1">
+                    Butuh Laundry Jemput & Antar?
                 </h6>
-                <ul class="small ps-3 mb-0">
-                    <li>Pakaian dalam</li>
-                    <li>Barang kulit/suede</li>
-                    <li>Noda cat/oli berat</li>
-                </ul>
+
+                <p class="text-muted small mb-3">
+                    Tidak perlu datang ke outlet. Kurir kami akan menjemput
+                    dan mengantarkan laundry ke alamat Anda.
+                </p>
+
+                <a href="{{ route('pelanggan.order') }}"
+                   class="btn btn-primary btn-sm">
+
+                    <i class="bi bi-truck me-1"></i>
+                    Pesan Jemput & Antar
+
+                </a>
+
             </div>
+
         </div>
+
     </div>
+
+
+    {{-- ==========================================
+         CARA PESAN
+    =========================================== --}}
+    <div class="section-header">
+
+        <h5 class="section-title">
+            Cara Pesan Laundry
+        </h5>
+
+    </div>
+
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-6 col-md-3">
+
+            <div class="step-card">
+
+                <div class="step-number">
+                    1
+                </div>
+
+                <div class="step-title">
+                    Pilih Layanan
+                </div>
+
+                <p class="step-text">
+                    Pilih paket laundry sesuai kebutuhan.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-6 col-md-3">
+
+            <div class="step-card">
+
+                <div class="step-number">
+                    2
+                </div>
+
+                <div class="step-title">
+                    Isi Pesanan
+                </div>
+
+                <p class="step-text">
+                    Masukkan detail dan alamat jika menggunakan kurir.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-6 col-md-3">
+
+            <div class="step-card">
+
+                <div class="step-number">
+                    3
+                </div>
+
+                <div class="step-title">
+                    Laundry Diproses
+                </div>
+
+                <p class="step-text">
+                    Pantau status laundry melalui menu Pesanan Saya.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-6 col-md-3">
+
+            <div class="step-card">
+
+                <div class="step-number">
+                    4
+                </div>
+
+                <div class="step-title">
+                    Selesai
+                </div>
+
+                <p class="step-text">
+                    Laundry siap diambil atau diantar kembali.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    {{-- ==========================================
+         INFORMASI
+    =========================================== --}}
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-6">
+
+            <div class="info-box h-100">
+
+                <h6 class="fw-bold mb-3">
+                    <i class="bi bi-clock text-primary me-2"></i>
+                    Jam Operasional
+                </h6>
+
+                <div class="d-flex justify-content-between mb-2">
+
+                    <span class="small">
+                        Senin - Jumat
+                    </span>
+
+                    <span class="small text-muted">
+                        08:00 - 20:00
+                    </span>
+
+                </div>
+
+                <div class="d-flex justify-content-between mb-2">
+
+                    <span class="small">
+                        Sabtu
+                    </span>
+
+                    <span class="small text-muted">
+                        08:00 - 18:00
+                    </span>
+
+                </div>
+
+                <div class="d-flex justify-content-between">
+
+                    <span class="small">
+                        Minggu
+                    </span>
+
+                    <span class="small text-muted">
+                        09:00 - 17:00
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6">
+
+            <div class="info-box h-100">
+
+                <h6 class="fw-bold mb-3 text-danger">
+                    <i class="bi bi-exclamation-circle me-2"></i>
+                    Barang yang Tidak Diterima
+                </h6>
+
+                <ul class="info-list">
+
+                    <li>
+                        Pakaian dalam
+                    </li>
+
+                    <li>
+                        Barang berbahan kulit / suede
+                    </li>
+
+                    <li>
+                        Barang dengan noda cat atau oli berat
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    {{-- ==========================================
+         PENUTUP
+    =========================================== --}}
+    <div class="text-center py-3 mb-3">
+
+        <h6 class="fw-bold">
+            Laundry lebih mudah bersama JasaLaundry ✨
+        </h6>
+
+        <p class="text-muted small mb-3">
+            Pesan sekarang dan biarkan kami mengurus laundry Anda.
+        </p>
+
+        <a href="{{ route('pelanggan.order') }}"
+           class="btn btn-primary px-4">
+
+            <i class="bi bi-plus-circle me-1"></i>
+            Mulai Pesan Laundry
+
+        </a>
+
+    </div>
+
 </div>
 
-<!-- Tentang Kami -->
-<div class="row">
-    <div class="col-12">
-        <div class="info-card" style="background: white; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
-            <div class="card-body p-3">
-                <h6 class="fw-bold mb-3">Tentang Kami</h6>
-                <div class="row align-items-center mb-3">
-                    <div class="col-7">
-                        <p class="text-muted mb-0 small" style="line-height: 1.5;">
-                            JasaLaundry adalah layanan laundry antar-jemput terpercaya dengan pengalaman 3+ tahun. Kami menggunakan teknologi modern dan deterjen berkualitas untuk hasil terbaik. Mau laundry jadi lebih gampang? Yuk, cobain layanan kami! Kamu bisa pesan lewat aplikasi, terus kami jemput dan antar langsung ke rumahmu. Praktis banget, kan? Mau laundry jadi lebih gampang? Yuk, cobain layanan kami! Kamu bisa pesan lewat aplikasi, terus kami jemput dan antar langsung ke rumahmu. Praktis banget, kan? Jadi, tunggu apa lagi? Yuk, langsung aja cobain dan rasain kemudahan laundry bersama JasaLaundry!
-                        </p>
-                    </div>
-                    <div class="col-5 text-center">
-                        <img src="https://via.placeholder.com/150x100/667eea/ffffff?text=Laundry" alt="Laundry" class="img-fluid rounded" style="max-height: 100px;">
-                    </div>
-                </div>
-                
-                <h6 class="fw-bold mb-3">Mengapa Memilih Kami?</h6>
-                <div class="row text-center mb-3">
-                    <div class="col-3">
-                        <div class="mb-2">
-                            <i class="bi bi-bar-chart text-primary" style="font-size: 1.5rem;"></i>
-                        </div>
-                        <small class="d-block fw-semibold">Kualitas Terjamin</small>
-                    </div>
-                    <div class="col-3">
-                        <div class="mb-2">
-                            <i class="bi bi-shield-check text-primary" style="font-size: 1.5rem;"></i>
-                        </div>
-                        <small class="d-block fw-semibold">Fleksibilitas Layanan</small>
-                    </div>
-                    <div class="col-3">
-                        <div class="mb-2">
-                            <i class="bi bi-clock text-primary" style="font-size: 1.5rem;"></i>
-                        </div>
-                        <small class="d-block fw-semibold">Kecepatan & Ketepatan</small>
-                    </div>
-                    <div class="col-3">
-                        <div class="mb-2">
-                            <i class="bi bi-headset text-primary" style="font-size: 1.5rem;"></i>
-                        </div>
-                        <small class="d-block fw-semibold">Transparan Status</small>
-                    </div>
-                </div>
-                
-                <div class="text-center">
-                    <h6 class="fw-bold mb-2">Lokasi Kami</h6>
-                    <p class="text-muted mb-0 small">Cirebon, Jawa Barat, Indonesia<br>Cirebon, Jawa Timur 61213</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
 @endsection
 
+
 @section('scripts')
+
 <script>
+
 function klaimPromo(promoId) {
-    if (confirm('Yakin ingin mengklaim promo ini? Anda akan mendapat kode promo setelah disetujui admin.')) {
-        const btn = document.getElementById(`btn-klaim-${promoId}`);
-        const btnText = btn.querySelector('.btn-text');
-        const btnLoading = btn.querySelector('.btn-loading');
-        
-        // Show loading state
-        btn.disabled = true;
-        btnText.classList.add('d-none');
-        btnLoading.classList.remove('d-none');
-        
-        fetch('/pelanggan/promo/klaim', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({ promo_id: promoId })
+
+    if (!confirm(
+        'Yakin ingin mengklaim promo ini? Anda akan mendapat kode promo setelah disetujui admin.'
+    )) {
+        return;
+    }
+
+    const btn = document.getElementById(`btn-klaim-${promoId}`);
+
+    if (!btn) {
+        return;
+    }
+
+    const btnText = btn.querySelector('.btn-text');
+    const btnLoading = btn.querySelector('.btn-loading');
+
+    btn.disabled = true;
+
+    btnText.classList.add('d-none');
+    btnLoading.classList.remove('d-none');
+
+    fetch('/pelanggan/promo/klaim', {
+
+        method: 'POST',
+
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN':
+                document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute('content')
+        },
+
+        body: JSON.stringify({
+            promo_id: promoId
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Promo berhasil diklaim! Admin akan memvalidasi dan mengirim kode promo via WhatsApp.');
-                const modal = bootstrap.Modal.getInstance(document.getElementById('promoModal'));
-                if (modal) modal.hide();
-                location.reload();
-            } else {
-                alert(data.message || 'Gagal mengklaim promo.');
-                // Reset button state
-                btn.disabled = false;
-                btnText.classList.remove('d-none');
-                btnLoading.classList.add('d-none');
+
+    })
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        if (data.success) {
+
+            alert(
+                'Promo berhasil diklaim! Admin akan memvalidasi dan mengirim kode promo via WhatsApp.'
+            );
+
+            const modalElement =
+                document.getElementById('promoModal');
+
+            const modal =
+                bootstrap.Modal.getInstance(modalElement);
+
+            if (modal) {
+                modal.hide();
             }
-        })
-        .catch(error => {
-            alert('Terjadi kesalahan. Silakan coba lagi.');
-            // Reset button state
-            btn.disabled = false;
-            btnText.classList.remove('d-none');
-            btnLoading.classList.add('d-none');
-        });
+
+            location.reload();
+
+        } else {
+
+            alert(
+                data.message ||
+                'Gagal mengklaim promo.'
+            );
+
+            resetPromoButton();
+
+        }
+
+    })
+
+    .catch(error => {
+
+        console.error(error);
+
+        alert(
+            'Terjadi kesalahan. Silakan coba lagi.'
+        );
+
+        resetPromoButton();
+
+    });
+
+
+    function resetPromoButton() {
+
+        btn.disabled = false;
+
+        btnText.classList.remove('d-none');
+        btnLoading.classList.add('d-none');
+
     }
 }
 
-function scrollToPromo() {
-    const promoSection = document.getElementById('promo-section');
-    if (promoSection) {
-        promoSection.scrollIntoView({ 
-            behavior: 'smooth',
-            block: 'start'
-        });
-    } else {
-        alert('Belum ada promo tersedia saat ini.');
-    }
-}
 </script>
+
 @endsection
